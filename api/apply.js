@@ -26,12 +26,12 @@ module.exports = async (req, res) => {
 
   // ── 환경변수 확인 ──
   const NOTION_API_KEY = process.env.NOTION_API_KEY;
-  const DB_APPLICANTS = process.env.NOTION_DB_APPLICANTS;
+  const DB_APPLICANTS = process.env.NOTION_DB_APPLICATIONS;
 
   if (!NOTION_API_KEY || !DB_APPLICANTS) {
     return res.status(500).json({
       ok: false,
-      error: 'Vercel 환경변수가 설정되지 않았습니다 (NOTION_API_KEY, NOTION_DB_APPLICANTS)'
+      error: 'Vercel 환경변수가 설정되지 않았습니다 (NOTION_API_KEY, NOTION_DB_APPLICATIONS)'
     });
   }
 
