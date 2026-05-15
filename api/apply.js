@@ -70,10 +70,8 @@ module.exports = async (req, res) => {
       '소속 기관': {
         rich_text: [{ text: { content: String(org || '') } }]
       },
-      // 직종 (Rich text)
-      '직종': {
-        rich_text: [{ text: { content: String(job || '') } }]
-      },
+      // 직종 (Select 타입) — 값이 있을 때만 포함
+      ...(job ? { '직종': { select: { name: String(job) } } } : {}),
       // 문의 사항 (Rich text) — 사용자 비고
       '문의 사항': {
         rich_text: [{ text: { content: String(note || '') } }]
