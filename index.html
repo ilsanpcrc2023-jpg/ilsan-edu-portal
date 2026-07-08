@@ -4,15 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>NHIMC 지역사회 통합 교육 운영 시스템</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js" defer></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>(function(){ if(window.emailjs){ emailjs.init({ publicKey: 'jwhaRudRf6ZTXCmF8' }); } })();</script>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
   --bg:#F7F8FA; --surface:#fff; --bd:#E5E7EB; --bd2:#F3F4F6;
   --navy:#1B3A6B; --blue:#2563EB; --blue-lt:#EFF6FF;
-  --tx:#111827; --tx2:#4B5563; --tx3:#9CA3AF;
+  --tx:#0B1220; --tx2:#374151; --tx3:#6B7280;
   --green:#059669; --red:#DC2626; --amber:#F59E0B;
   --r:10px; --r-sm:6px;
   --sh:0 1px 3px rgba(0,0,0,.06),0 4px 16px rgba(0,0,0,.04);
@@ -20,7 +22,7 @@
   --ease:.15s ease;
   --font:'Noto Sans KR',-apple-system,'Apple SD Gothic Neo',sans-serif;
 }
-body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100vh;font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100vh;font-size:16px;line-height:1.6;font-weight:500;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
 
 /* ── SLOGAN ── */
 /* ── SLOGAN ── */
@@ -56,16 +58,159 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 .hd-btn:hover{color:var(--tx);border-color:var(--tx3)}
 
 /* ── NAV ── */
-.nav-bar{background:var(--surface);border-bottom:1px solid var(--bd)}
-.nav{display:flex;max-width:1240px;margin:0 auto;padding:0 24px;overflow-x:auto;scrollbar-width:none}
+.nav-bar{background:var(--surface);border-bottom:1px solid var(--bd);position:sticky;top:61px;z-index:90}
+.nav{display:flex;max-width:1240px;margin:0 auto;padding:0 24px;overflow:visible;scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
-.nb{flex-shrink:0;background:none;border:none;border-bottom:2px solid transparent;padding:12px 16px;font-size:13px;font-weight:500;color:var(--tx3);cursor:pointer;font-family:inherit;transition:var(--ease);white-space:nowrap}
-.nb:hover{color:var(--tx)}
-.nb.on{color:var(--navy);border-bottom-color:var(--navy);font-weight:700}
+.nb{flex-shrink:0;background:none;border:none;border-bottom:2px solid transparent;padding:13px 17px;font-size:15px;font-weight:700;color:var(--navy);cursor:pointer;font-family:inherit;transition:var(--ease);white-space:nowrap}
+.nb:hover{color:#0B4DA2}
+.nb.on{color:#0B4DA2;border-bottom-color:#0B4DA2;font-weight:800}
+
+/* ── DROPDOWN NAV ── */
+.nav{align-items:flex-start}
+.nav-grp{position:relative;flex-shrink:0}
+.nav-grp:hover::after{content:"";position:absolute;left:0;right:0;top:100%;height:3px;z-index:199}
+.nav-grp>.nb{width:100%}
+.nav-grp>.nb::after{content:"▾";font-size:9px;margin-left:5px;opacity:.5}
+.nav-drop{position:absolute;top:100%;margin-top:-1px;left:0;min-width:210px;background:linear-gradient(180deg,#F4F8FF 0%,#FFFFFF 55%);border:1px solid #CADCF5;border-top:3px solid #0B4DA2;border-radius:0 0 var(--r) var(--r);box-shadow:0 12px 30px rgba(11,77,162,.18),0 2px 8px rgba(11,77,162,.08);padding:8px;opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity var(--ease),transform var(--ease),visibility var(--ease);z-index:200}
+.nav-grp:hover>.nav-drop{opacity:1;visibility:visible;transform:translateY(0)}
+.nd-item{display:block;width:100%;text-align:left;background:none;border:none;padding:10px 12px;font-size:13px;color:#334155;font-weight:600;cursor:pointer;font-family:inherit;border-radius:var(--r-sm);white-space:nowrap;transition:var(--ease)}
+.nd-item:hover{background:#0B4DA2;color:#fff}
+.nd-sub{font-size:10.5px;color:#0B4DA2;font-weight:800;letter-spacing:.03em;padding:8px 12px 4px;margin-top:4px;border-top:1px solid #DCEAFB}
+.nd-sub:first-child{border-top:none;margin-top:0}
+.nav-grp>.nb.on{color:#0B4DA2;border-bottom-color:#0B4DA2;font-weight:800}
+@media(max-width:820px){.nav{align-items:center;overflow-x:auto;overflow-y:visible}.nav-drop{position:absolute;top:100%;margin-top:-1px;left:0;min-width:190px;opacity:1;visibility:visible;transform:none;display:none;box-shadow:0 12px 30px rgba(11,77,162,.18);border:1px solid #CADCF5;border-top:3px solid #0B4DA2;border-radius:0 0 var(--r) var(--r);padding:8px}.nav-grp.open>.nav-drop{display:block}.nav-grp:hover>.nav-drop{display:none}.nav-grp.open:hover>.nav-drop{display:block}}
 
 /* ── MAIN WRAPPER ── */
 .main{max-width:1240px;margin:0 auto;padding:0 24px 60px}
 .pg{display:none}.pg.on{display:block}
+
+/* ── 교육일정 탭 & 연간표 ── */
+.cal-tabs{display:flex;gap:8px;margin-bottom:18px;border-bottom:2px solid var(--bd)}
+.cal-tab{background:none;border:none;padding:10px 18px;font-size:14.5px;font-weight:700;color:var(--tx3);cursor:pointer;font-family:inherit;border-bottom:3px solid transparent;margin-bottom:-2px;transition:var(--ease)}
+.cal-tab:hover{color:var(--tx)}
+.cal-tab.on{color:#0B4DA2;border-bottom-color:#0B4DA2}
+.yr-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-bottom:14px}
+.yr-leg-item{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--tx2);font-weight:600}
+.yr-leg-dot{width:11px;height:11px;border-radius:50%;flex-shrink:0}
+.yr-table-wrap{overflow-x:auto;border:1px solid var(--bd);border-radius:10px;background:var(--surface)}
+.yr-table{border-collapse:collapse;width:100%;min-width:760px;font-size:12.5px}
+.yr-table th{background:#0B4DA2;color:#fff;font-weight:700;padding:8px 6px;text-align:center;position:sticky;top:0;border-right:1px solid rgba(255,255,255,.15)}
+.yr-table th.yr-th-name{text-align:left;padding-left:14px;min-width:220px}
+.yr-table th.yr-th-mon{width:30px;font-size:11px}
+.yr-table td{border-bottom:1px solid var(--bd2);border-right:1px solid var(--bd2);padding:7px 6px;text-align:center;vertical-align:middle}
+.yr-cat-row td{background:#EDF3FC;font-weight:800;color:#0B4DA2;text-align:left;padding:8px 14px;font-size:13px;border-top:2px solid #CADCF5}
+.yr-mid{font-weight:700;color:#334155;text-align:left;padding-left:14px}
+.yr-title{text-align:left;padding-left:14px;color:#374151;line-height:1.4}
+.yr-title small{color:var(--tx3);font-weight:600}
+.yr-dot{display:inline-block;width:9px;height:9px;border-radius:50%}
+.yr-note{font-size:12px;color:var(--tx3);margin-top:12px;line-height:1.7}
+
+/* ── 담당자 연락처 ── */.contact-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.contact-card{display:flex;align-items:center;gap:14px;background:var(--surface);border:1px solid var(--bd);border-radius:12px;padding:16px 18px;transition:box-shadow var(--ease),transform var(--ease)}
+.contact-card:hover{box-shadow:var(--sh);transform:translateY(-2px)}
+.contact-ico{width:46px;height:46px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.contact-info{flex:1;min-width:0}
+.contact-name{font-size:14.5px;font-weight:800;color:#0B1220;line-height:1.35}
+.contact-tel{font-size:16px;font-weight:800;letter-spacing:.01em;margin-top:3px}
+.contact-tel a{text-decoration:none}
+.contact-note{font-size:12.5px;color:#6B7280;margin-top:16px;padding:12px 16px;background:#F0F6FF;border:1px solid #DCEAFB;border-radius:8px;line-height:1.7}
+@media(max-width:600px){.contact-grid{grid-template-columns:1fr}}
+
+/* ── 오시는 길 ── */
+.map-wrap{margin-bottom:18px}
+.map-links{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.map-link{display:inline-flex;align-items:center;gap:5px;font-size:13px;font-weight:600;color:#0B4DA2;background:#EDF3FC;border:1px solid #CADCF5;padding:7px 13px;border-radius:20px;text-decoration:none;transition:var(--ease)}
+.map-link:hover{background:#0B4DA2;color:#fff;border-color:#0B4DA2}
+.way-addr{background:#F0F6FF;border:1px solid #CADCF5;border-left:4px solid #0B4DA2;border-radius:10px;padding:16px 20px;margin-bottom:22px}
+.way-addr-main{font-size:16px;font-weight:800;color:#0B1220}
+.way-addr-zip{font-size:13px;font-weight:500;color:#64748B}
+.way-addr-tel{font-size:13px;color:#374151;margin-top:5px;font-weight:600}
+.way-block{background:var(--surface);border:1px solid var(--bd);border-radius:12px;padding:18px 20px;margin-bottom:14px}
+.way-hd{display:flex;align-items:center;gap:9px;font-size:16px;font-weight:800;color:#0B1220;margin-bottom:14px;padding-bottom:12px;border-bottom:2px solid #EDF3FC}
+.way-ico{font-size:20px}
+.way-row{display:flex;gap:14px;padding:8px 0;font-size:14px;line-height:1.6}
+.way-row-t{flex-shrink:0;width:110px;font-weight:700;color:#0B4DA2}
+.way-row-d{color:#374151;flex:1}
+.way-note{font-size:12.5px;color:#6B7280;margin-top:10px;padding-top:10px;border-top:1px dashed var(--bd)}
+.way-table{border:1px solid var(--bd);border-radius:8px;overflow:hidden}
+.way-th{display:grid;grid-template-columns:1fr 1.6fr;background:#F0F6FF;font-size:13px;font-weight:800;color:#0B4DA2}
+.way-th>div{padding:10px 14px}
+.way-td{display:grid;grid-template-columns:1fr 1.6fr;border-top:1px solid var(--bd2);font-size:13.5px}
+.way-td>div{padding:11px 14px;color:#374151;line-height:1.55}
+.way-td-l{font-weight:700;color:#0B1220}
+.line-badge{display:inline-block;font-size:12px;font-weight:800;color:#fff;padding:2px 9px;border-radius:12px}
+.line-3{background:#EF7C1C}
+.way-park-txt{font-size:13.5px;color:#374151;line-height:1.75;margin-bottom:12px}
+@media(max-width:600px){.way-row{flex-direction:column;gap:2px}.way-row-t{width:auto}.way-th,.way-td{grid-template-columns:1fr 1.4fr}}
+
+/* ── HOME ── */
+.home-hero{position:relative;border-radius:16px;overflow:hidden;margin-bottom:28px;background:linear-gradient(120deg,#EAF2FF 0%,#DDEBFF 45%,#E8F7F0 100%);border:1px solid #DBE7F5;min-height:340px;display:flex;align-items:center}
+.home-hero-bg{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.home-hero-in{position:relative;z-index:2;padding:44px 52px;display:flex;justify-content:space-between;align-items:center;width:100%;gap:32px;flex-wrap:nowrap}
+.hh-left{flex:0 0 auto;max-width:460px}
+.hh-slogan{display:flex;flex-direction:column;gap:10px;margin-bottom:22px}
+.hh-slg-row{display:flex;align-items:baseline;gap:14px}
+.hh-slg-word{font-size:40px;font-weight:900;color:#0B4DA2;letter-spacing:-.02em;line-height:1}
+.hh-slg-on{font-size:40px;font-weight:900;color:#FFD100;letter-spacing:-.02em;line-height:1;text-shadow:0 1px 3px rgba(0,0,0,.12)}
+.hh-desc{font-size:14px;color:#334155;line-height:1.9;font-weight:500;white-space:nowrap}
+.hh-right{background:rgba(255,255,255,.82);backdrop-filter:blur(4px);border:1px solid #CFE0F3;border-radius:14px;padding:26px 30px;max-width:420px;flex:0 1 auto}
+.hh-right-t{font-size:16px;font-weight:800;color:#0B4DA2;margin-bottom:12px}
+.hh-right-p{display:flex;flex-direction:column;gap:12px}
+.hhp-lead{font-size:20px;font-weight:900;color:#0A2C5E;line-height:1.4;letter-spacing:-.03em}
+.hhp-body{font-size:13.5px;font-weight:500;color:#475569;line-height:1.85}
+.hero-node{position:absolute;border-radius:50%;background:radial-gradient(circle at 35% 30%,#3B82F6,#0B4DA2);opacity:.12}
+.hero-line{position:absolute;height:1.5px;background:linear-gradient(90deg,transparent,#0B4DA2,transparent);opacity:.18}
+
+/* ── 히어로 부서 통합 애니메이션 ── */
+.hh-art{flex:0 0 auto;width:300px;height:300px;display:flex;align-items:center;justify-content:center;opacity:.82}
+.hh-art svg{width:100%;height:100%;overflow:visible}
+.ha-i{font-size:23px}
+@keyframes haConv{0%{transform:translate(0,0);opacity:.95}45%,55%{transform:translate(var(--dx),var(--dy));opacity:.18}100%{transform:translate(0,0);opacity:.95}}
+@keyframes haHub{0%,100%{transform:scale(1)}48%,60%{transform:scale(1.12)}}
+@keyframes haRing{0%,40%{transform:scale(.4);opacity:0}55%{opacity:.5}100%{transform:scale(1.5);opacity:0}}
+@keyframes haFlow{to{stroke-dashoffset:-14}}
+.ha-flow{stroke-dasharray:2 5;opacity:.35}
+@media (prefers-reduced-motion: no-preference){
+  .ha-d{animation:haConv 9s ease-in-out infinite}
+  .ha-hub{animation:haHub 9s ease-in-out infinite;transform-origin:150px 150px}
+  .ha-ring{animation:haRing 9s ease-in-out infinite;transform-origin:150px 150px}
+  .ha-flow{animation:haFlow 3s linear infinite}
+}
+@media(max-width:980px){.hh-art{display:none}.home-hero-in{flex-wrap:wrap;justify-content:flex-start}.hh-left,.hh-right{flex:1 1 100%;max-width:none}}
+
+.home-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:30px}
+.hcat{position:relative;border-radius:14px;padding:26px 24px 24px;cursor:pointer;border:1px solid var(--bd);background:var(--surface);transition:transform var(--ease),box-shadow var(--ease),border-color var(--ease);overflow:hidden}
+.hcat:hover{transform:translateY(-4px);box-shadow:var(--sh-lg);border-color:transparent}
+.hcat-ico{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:16px}
+.hcat-t{font-size:18px;font-weight:800;color:var(--tx);margin-bottom:6px}
+.hcat-d{font-size:12.5px;color:var(--tx2);line-height:1.7;margin-bottom:16px;min-height:44px}
+.hcat-n{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700}
+.hcat-count{position:absolute;top:22px;right:22px;font-size:12px;color:var(--tx3);font-weight:600}
+.hcat.c-hlth{--hc:#0B7C4A;--hcbg:#E7F6EE}
+.hcat.c-infc{--hc:#0B4DA2;--hcbg:#E7F0FB}
+.hcat.c-emrg{--hc:#C2410C;--hcbg:#FBEDE4}
+.hcat .hcat-ico{background:var(--hcbg);color:var(--hc)}
+.hcat .hcat-n{color:var(--hc)}
+.hcat:hover{border-top:3px solid var(--hc)}
+
+.home-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:30px}
+.hq{display:flex;flex-direction:column;gap:8px;padding:20px 18px;border-radius:12px;background:var(--surface);border:1px solid var(--bd);cursor:pointer;transition:box-shadow var(--ease),transform var(--ease)}
+.hq:hover{box-shadow:var(--sh);transform:translateY(-2px)}
+.hq-ico{font-size:22px}
+.hq-t{font-size:14px;font-weight:700;color:var(--tx)}
+.hq-d{font-size:11.5px;color:var(--tx3)}
+
+.home-notice{background:var(--surface);border:1px solid var(--bd);border-radius:12px;padding:22px 24px}
+.hn-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.hn-head-t{font-size:15px;font-weight:800;color:var(--tx)}
+.hn-more{font-size:12px;color:var(--blue);cursor:pointer;font-weight:600}
+.hn-item{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--bd2);font-size:13px}
+.hn-item:last-child{border-bottom:none}
+.hn-tag{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0}
+.hn-txt{color:var(--tx);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hn-date{font-size:11.5px;color:var(--tx3);flex-shrink:0}
+
+@media(max-width:820px){.home-cats{grid-template-columns:1fr}.home-quick{grid-template-columns:repeat(2,1fr)}.home-hero-in{padding:32px 28px}.hh-slg-word,.hh-slg-on{font-size:30px}}
 
 /* ── PAGE TITLE ── */
 .pg-title{padding:28px 0 20px}
@@ -262,13 +407,15 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 .qi-badge{position:absolute;top:-10px;left:16px;background:#2563EB;color:#fff;font-size:11px;font-weight:700;padding:3px 12px;border-radius:20px;letter-spacing:.04em}
 .qi-title{font-size:16px;font-weight:900;color:var(--navy);margin-bottom:4px;margin-top:8px}
 .qi-sub{font-size:12px;color:var(--tx2);margin-bottom:16px}
-.qi-kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+.qi-kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
 .qi-kpi{background:var(--bg);border-radius:var(--r-sm);padding:14px;text-align:center}
 .qi-kpi-n{font-size:24px;font-weight:900}
 .qi-kpi-n.green{color:var(--green)}
 .qi-kpi-n.blue{color:#2563EB}
 .qi-kpi-n.red{color:var(--red)}
 .qi-kpi-n.navy{color:var(--navy)}
+.qi-kpi-n.orange{color:#D97706}
+.qi-kpi-delta{font-size:11px;color:var(--tx3);font-weight:600;margin-top:2px}
 .qi-kpi-l{font-size:11px;color:var(--tx2);margin-top:3px}
 .qi-kpi-arrow{font-size:13px;color:var(--green);font-weight:700}
 .qi-collab-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px}
@@ -432,7 +579,7 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 .type-badge.통합{background:#FFF8E1;color:#D97706;border:1px solid #FDE68A}
 .type-badge.공동{background:#F0FDF4;color:#059669;border:1px solid #A7F3D0}
 .type-badge.부서{background:var(--db,#EEF2F9);color:var(--dc,#1B3A6B);border:1px solid transparent}
-.type-filter-wrap{display:flex;gap:6px;margin-bottom:14px}
+.type-filter-wrap{display:flex;gap:6px;margin-bottom:14px;overflow-x:auto;scrollbar-width:none;flex-wrap:nowrap}
 .tf-btn{padding:6px 16px;border-radius:20px;border:none;font-size:12px;font-weight:600;font-family:inherit;cursor:pointer;transition:var(--ease);white-space:nowrap}
 .tf-btn.all{background:#E5E7EB;color:#374151}.tf-btn.all.on,.tf-btn.all:hover{background:#374151;color:#fff}
 .tf-btn.통합{background:#FFF8E1;color:#D97706;border:1px solid #FDE68A}.tf-btn.통합.on,.tf-btn.통합:hover{background:#D97706;color:#fff;border-color:#D97706}
@@ -623,6 +770,7 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 .dept-hn{font-size:16px;font-weight:700}
 .dept-hs{font-size:12px;color:var(--tx2);margin-top:2px}
 .dept-kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
+.dept-kpis-edu{margin-bottom:14px}
 .dept-kpi{background:var(--bg);border-radius:8px;padding:10px;text-align:center}
 .dept-kpi-n{font-size:18px;font-weight:700}
 .dept-kpi-l{font-size:10px;color:var(--tx2);margin-top:2px}
@@ -634,6 +782,13 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 .dept-info-site{font-size:11px;color:var(--tx3);cursor:pointer;padding:3px 8px;border:1px solid var(--bd);border-radius:5px;background:var(--surface);text-decoration:none;transition:var(--ease)}
 .dept-info-site:hover{background:var(--bg);color:var(--tx2)}
 .dept-info-body{font-size:13px;line-height:1.8;color:var(--tx2)}
+.dept-biz{margin:14px 0 4px}
+.dept-biz-hd{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:800;color:var(--tx);margin-bottom:8px}
+.dept-biz-hd .db-bar{width:3px;height:13px;border-radius:2px}
+.dept-biz-target{font-size:12.5px;color:var(--tx2);line-height:1.75;padding:2px 0 4px 10px}
+.dept-biz-list{display:grid;gap:6px;margin-top:2px}
+.dept-biz-item{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--tx2);line-height:1.6}
+.dept-biz-item .db-dot{flex-shrink:0;width:5px;height:5px;border-radius:50%;margin-top:7px}
 .dept-role-wrap{display:flex;flex-wrap:wrap;gap:5px;margin:10px 0}
 .dept-role-tag{font-size:11px;padding:3px 11px;border-radius:20px;font-weight:600}
 .dept-recent{font-size:12px;color:var(--tx2);background:var(--bg);border-radius:8px;padding:9px 13px;margin-top:8px}
@@ -646,22 +801,10 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 </head>
 <body>
 
-<!-- SLOGAN BAR -->
-<div class="slogan-bar">
-  <div style="font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.06em;margin-bottom:6px;font-weight:500">국민건강보험 일산병원 · 8개 부서 통합 교육 협업</div>
-  <div class="slogan-inner">
-    <span class="slogan-item"><span class="s-word">지역</span><span class="s-on">ON!</span></span>
-    <span class="slogan-div">◆</span>
-    <span class="slogan-item"><span class="s-word">교육</span><span class="s-on">ON!</span></span>
-    <span class="slogan-div">◆</span>
-    <span class="slogan-item"><span class="s-word">가치</span><span class="s-on">ON!</span></span>
-  </div>
-</div>
-
 <!-- HEADER -->
 <header class="hd">
   <div class="hd-in">
-    <a href="#" onclick="pg('guide',document.querySelectorAll('.nb')[0])" style="display:flex;align-items:center;gap:14px;text-decoration:none">
+    <a href="#" onclick="pg('home',document.querySelector('[data-nav=home]'))" style="display:flex;align-items:center;gap:14px;text-decoration:none">
       <img src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCABbALYDASIAAhEBAxEB/8QAHQABAAICAwEBAAAAAAAAAAAAAAYHBAgCBQkDAf/EAD4QAAEDAwIEAQgIBQMFAAAAAAECAwQABREGEgcTITEUFSI3QVFxdbMXMlRWoqXR0xYjQmGBUpGhU2KCsfD/xAAaAQEAAgMBAAAAAAAAAAAAAAAAAQUCAwYE/8QAMREAAgECAgcHBAIDAAAAAAAAAAECAxEEIQUSExQxUZEGQVJxocHwIlNhgTJCQ9Hh/9oADAMBAAIRAxEAPwDculKUApSlAKUpQClKUApSlAKUpQClKUApSlAKUpQClKUApSlAKUpQClKUBGeLHos1b8Em/IXXnpXoXxY9Fmrfgk35C60G01BTcLshlyN4lpKStxvxrcUqA6dHHPNByR6jmut7OtRo1G+fsc7ppXqQX4OtpVsxuHdke8lN3BiVY5Mq8Q4647t6jSFrhvg5fSEpBGCUYOCCFZ7V+3Lh3YmbJInGHd7fJbtlylCLJkpWoKjuMpaX0Qk7VBxRxj1DBq536lexWbpUtcqWlW7p/h7pi4ptCLmm52C4TXJRTbJcnmPvsNx1LS4kBocvKxjz8AhJxXXaS0Zp+5W2yuXmJdLRJuNzgxI6XZqCZrbqv5zqEcsKQgJwQokjKgOtN9p58cv+9eHcRus8vnziVnSrIf0BY12W3z418ko8Td5cHcqE64HENKbCdoQklKvPOdx69MeupHB4YaN8feYMuXeVci8TLcmS061y7c2wAtL0gkDAWMpzjHQkdRiksdSir59ORKwlRu3uUmr6p91egek/RFYfg8T5aK0h4lWO36evzEC2SPEsLtkSSXd+8KW6ylaik4B25JwCAcd63e0n6IrD8HifLRVLp6anSpSXeyx0XFwdWL7kYFKhPFG+3KzvWONGni0W+dLU1OupaDnhUhOUjzspSVHpuUMDFRCZrfUjGkr3Ih3ZM9iDeYsSDdxHQBKaWoBwYxtUU9tyR1zVXTwc6kVJNZ/7t87yJVVF2ZctdjYpzcF9anUqKVpxlPcVWnEvWCtN6o0tb25zTDUyafHpUkK2x+iQok/UG5QGenrrlfdSz7dxbtNjHiXrbLti3Vsx4/MPN5m1KyQMhIHc5wK1rCznFPmm+hsjXUJXXFE/uD4kzXX0pKQtWQDXwqj3eI+tUcMk3swEhflLkm6qUyGinnFOzlDzh0GN2P712ln1xq26WfXM22Ii3CVbnWRb2YqS622lQ88pO1KnMDKsEZyMVvejqsU3dWTtx/KXua3iIyd+eZblKqeBqe/iZMTar5Nv9vbs0iTJlybaGPBSEIJQAdqQcn+gg49tTrh5cJd20LZLnPd5suVCbdeXtCdyiOpwOgrTVw0qUdZsmNRSdkW5SlKqjpBSlKAUpSgIzxY9Fmrfgk35C68+7fNlW+Y3MhPKZkN52LABIyMHv07GvQziPClXHh5qS3wWVPypVplMsNJxla1MqSlIz7SQK0F1XpTUelJLUbUdnlW1x5JU0HkjCwO+CCQce+ur7Oyhs5wbzb4fo57TUZa8ZJZI7C663ud40uq0XvNykiazJZmPlJW022hSeSOmdp3A98eaOlfe76msD8q8XCz2e62aXdGXGnWY89oRUJXgqQEBkHl5A83I7d6h9K6Hd6a4L58RTbab4smh1XYjPi3hm0XW3XdiGiOXYE9tttaktcsuYLRUCsZKupySetZ2i+IECxWa1Q3bfPCrc84461EdbSxcwpWQmSFJJIA83pnzewB61XtKxlhaco6rXr85mSxE4u6ZN9Ka9Z07FuDUOxOpVcI7jEjl3V5pGFqBJQgdEqGAAepApYNa2u2Q7nERYXmUzZDT6X2ZDbr7e1KgpBU80vclRVuPQHIFQilHhqTvdcfywq9RWz4eR3eu76xqO/Luce3It7fh2mQ0kpJVsQElailKRuURk4AGTW8+k/RFYfg8T5aK0X0rpLUurHn2NOWaVclsJCneSkYQD2ySQBnB6f2re+xRJMDhhaYMxpTMmPbIzTzau6FpQgEH3EGqDT7hGFOnF8HwLXRam9pOS4orzi5PdtmiJExpia8EPNBwRHy0sJKsFRUEq80evpVXS7tNeYjtW3WMRhYfbUAvUa5I2hQJTyuQMkjpV/VxShtKtyW0JPtCQDVbQxUaUbON/wBmM6bk73K91DN03pzXa7fdrRbo9rvkJx6ZcZaFL5roX0ZUpWQE467egHTFNNR9Hv6/ts3TWoIjyYNrdiNwGCp3CVL3lXMJOAM4wf8AFWGoBQwoAj2EZohKUDCEpSPYBisN4+m2d7W45dLcidnmU9qa2WJHEtVnUmzaWitR0zWZj0ZCvFvFXXYHDyklJ79M5rM0aIl4ha1cm29i/oalJd8fE3tJuq22yUgBKsBSfq5R0Oe1WhLiRJjYamRWJLYOQl5sLGfcRX0abbZbS0y2httIwlKEhIHuArY8ZeCjbPLv5eufn7GKpZ3KDhW3QFz0e8perGLXc5ri3+VMdUpcMKSR4YpJ6pSf6sZq4OHkVuDoWyw2ZbcxtiGhtL7aSlLgAxuAVg499d4W2yrcW0FXtKRmuVY4jFOtHVz43zd/ZEwpajuT6lKVTnSilKUApSlAdVrG6rsWkbzfG2Uvrt0B+WlpSsBZbbUsJJ9WcYrSTjJxVuvEt23idbotvjQN5aaZWVkqXjKio49SR0xW5XFj0Wat+CTfkLrQKw2uRebo1boi2UPOpWpJdXtT5qCo5Pq6J/3rp+z9Gk4yqyWce/lkUOmatRONOLyfcYNKk38C6jDi0uRW2kNr5aluOhICspTtweucrAxjuD7K+LmjNRoaW6beChKQo4eRk5BVgDOSraCrbjIHXFdMq9N/2RRbKfIj9KkZ0Vfkzm4C2WUSlsre5SnR0SlSR37ddwI69q5/wHqbxgjmABnKuZzE7QgKA3d84657ZI64pt6fiQ2U+RGaV3130ld7ZbVz5HhVtNrCXA0+lSkApbUFEd8HnIH9ieuOldDWcZxmrxdzGUXF2aLD4OcWLtw08otwrbFuMacULcbeWUFK0ggEKGfUe2K3Oi3Jd50DCu7jSWVzoTElTaTkIK0pVgH14zXnar6p91egek/RFYfg8T5aK5jtBQpxcKiX1N5l3outOUJwbySyMClKVRmQpSlAKUpQClKUBPqUpXiOgFKUoBSlKAjPFj0Wat+CTfkLrQTTkJ243duEzIXHW426d6ElRwG1KIwCO4BH+a374seizVvwSb8hdeeqVKSdyVFJ9oOK63s6m6NRLn7HO6adqkLk8f07rohak3tySpsryG5rq1Z/mbsdO+W1j+5xjOa4jS2tFLcHlkZhhtKyZrmGgSUpGcY6BROB2CveKgwddHZ1wYOeij39tOY5gjmLwe/nHrV5sp810KnaR5PqTC4aY1WUSpku6odLEZx9bi5ayVNheOiiMHJT2z6hnGRnMj6b1fIgx5UHUDqmJDLB3OyltAl1RwgAkkhJ3ZJA9eM5GYHzXdu3mrxgjG4+vvX7zXf+q52A+sew7D3VLpTtxXQbSN+D6kvd0zqSVajIdu6ZEYsJdQPELWlbBSVBQTjdjLWANuco6421H9SWWZYLmbdOUwp8ICzyXN6RnPTPt6V1yVrSQUrUnHbCiP8A7uaKUpRBUpSiBgZOelZwhOLzeXkYSlFrhmcVfVPur0D0n6IrD8HifLRXn4r6p91egek/RFYfg8T5aKoe0X8KfmWuif8AJ5Ee1Hdk2a3iWpnnAubNu/b/AEqPs/7a6z+NLOHEs7JReUpaOUlAKgpJxjGemfUT/wAVJFJSr6yQrHXqM1+Btsdm0D/xFUMZQSzXqbGnfJkfmatgxvDrVFlqZejokBxLeQhKgs4V7COWemeua+Z1tZgpKVJlAqUlIBQn17uo87qBtV2zn1ZqS7U/6R/tX1gWhFxko2MsBTHnpWpP1Djb0/wSKnXpJZr1JUJydkRFWuLamMFmO+HlhWxrKfO2thee+QCDgEjvUqIwSK5SYojyFtONt70HBIArjWMpQdtVWCTTsxSlKwJJ9SlK8R0ApSlAKUpQGNdoES62qXa57XOhzGFx329xTvbWkpUMggjIJ6g5qvPoF4T/AHU/MJX7lWZSt1PEVaStTk15No1zo06mc4p+aKz+gXhP91PzCV+5T6BeE/3U/MJX7lWZStm/Yr7kurNe6UPAuiKz+gXhP91PzCV+5T6BeE/3U/MJX7lWZSm/Yr7kurG6UPAuiKz+gXhP91PzCV+5T6BeE/3U/MJX7lWZSm/Yr7kurG6UPAuiKz+gThP91PzCV+5VgRLZBiWhi0x2NkKOyhhpreo7UIACRknJwAOpOazKVrqYirVtryb822ZwoU4X1YpfowPI1t+zfjV+tPI1t+zfjV+tZ9K160uZOxp+FdDA8jW37N+NX6194kGLEUpUdrYVDB84n/2ayKVGs33kqnBO6SMN+1wX3lOusblq6k71DP8AzXDyNbfs341frWfSms+ZDpQf9UYHka2/Zvxq/Wnka2/Zvxq/Ws+lTrS5jY0/CugpSlYmwUpSgP/Z" alt="국민건강보험 일산병원" style="height:46px;width:auto">
       <div style="height:30px;width:1.5px;background:#E5E7EB;flex-shrink:0"></div>
       <span style="display:flex;flex-direction:column;line-height:1.15"><span style="font-size:10px;font-weight:600;color:#888;letter-spacing:.04em">NHIMC</span><span style="font-size:17px;font-weight:900;color:#1B3A6B;letter-spacing:-.03em">지역사회 통합 <span style="color:#2563EB">교육</span> 운영 시스템</span></span>
@@ -676,12 +819,55 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 <!-- NAV -->
 <div class="nav-bar">
   <nav class="nav">
-    <button class="nb on"  onclick="pg('guide',this)">신청안내</button>
-    <button class="nb"     onclick="pg('list',this)">교육목록</button>
-    <button class="nb"     onclick="pg('cal',this)">캘린더</button>
-    <button class="nb"     onclick="pg('prop',this)">기능제안</button>
-    <button class="nb"     onclick="pg('dept',this)">부서별 보기</button>
-    <button class="nb"     onclick="pg('my',this)">나의 신청</button>
+    <button class="nb on" data-nav="home" onclick="pg('home',this)">홈</button>
+
+    <div class="nav-grp">
+      <button class="nb" data-nav="dept" onclick="pg('dept',this)">소개</button>
+      <div class="nav-drop">
+        <button class="nd-item" onclick="pg('dept',document.querySelector('[data-nav=dept]'))">부서 소개</button>
+        <button class="nd-item" onclick="pg('contact',document.querySelector('[data-nav=dept]'))">담당자 연락처</button>
+        <button class="nd-item" onclick="pg('map',document.querySelector('[data-nav=dept]'))">오시는 길</button>
+      </div>
+    </div>
+
+    <div class="nav-grp">
+      <button class="nb" data-nav="guide" onclick="pg('guide',this)">교육안내</button>
+      <div class="nav-drop">
+        <button class="nd-item" onclick="pg('guide',document.querySelector('[data-nav=guide]'))">교육신청 안내</button>
+        <button class="nd-item" onclick="pg('list',document.querySelector('[data-nav=list]'))">교육과정 정보 안내</button>
+        <button class="nd-item" onclick="goCal('year')">연간 교육일정</button>
+        <button class="nd-item" onclick="goCal('month')">월간 교육일정</button>
+      </div>
+    </div>
+
+    <div class="nav-grp">
+      <button class="nb" data-nav="list" onclick="pg('list',this)">교육과정 신청</button>
+      <div class="nav-drop">
+        <div class="nd-sub">분류별 신청</div>
+        <button class="nd-item" onclick="goCat('건강증진')">🌱 건강증진교육</button>
+        <button class="nd-item" onclick="goCat('감염예방')">🛡️ 감염예방교육</button>
+        <button class="nd-item" onclick="goCat('응급대응')">🚑 응급대응교육</button>
+        <div class="nd-sub">전체</div>
+        <button class="nd-item" onclick="goCat('전체')">전체 교육과정 보기</button>
+      </div>
+    </div>
+
+    <div class="nav-grp">
+      <button class="nb" data-nav="prop" onclick="pg('prop',this)">커뮤니티</button>
+      <div class="nav-drop">
+        <button class="nd-item" onclick="pg('notice',document.querySelector('[data-nav=prop]'))">공지사항</button>
+        <button class="nd-item" onclick="pg('prop',document.querySelector('[data-nav=prop]'))">희망교육(콘텐츠) 요청</button>
+      </div>
+    </div>
+
+    <div class="nav-grp">
+      <button class="nb" data-nav="lib" onclick="pg('lib',this)">자료실</button>
+      <div class="nav-drop">
+        <button class="nd-item" onclick="pg('lib',document.querySelector('[data-nav=lib]'))">교육자료</button>
+      </div>
+    </div>
+
+    <button class="nb" data-nav="my" onclick="pg('my',this)">나의 신청</button>
     <button class="nb" id="nb-dash" style="display:none" onclick="pg('dash',this)">📊 대시보드</button>
     <button class="nb" id="nb-admin" style="display:none" onclick="pg('admin',this)">⚙ 관리자</button>
   </nav>
@@ -690,8 +876,105 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 <!-- MAIN -->
 <div class="main">
 
+<!-- ════ 홈 ════ -->
+<div class="pg on" id="pg-home">
+
+  <!-- HERO -->
+  <div class="home-hero">
+    <div class="home-hero-bg" id="hero-bg"></div>
+    <div class="home-hero-in">
+      <div class="hh-left">
+        <div class="hh-slogan">
+          <div class="hh-slg-row"><span class="hh-slg-word">지역</span><span class="hh-slg-on">ON!</span></div>
+          <div class="hh-slg-row"><span class="hh-slg-word">교육</span><span class="hh-slg-on">ON!</span></div>
+          <div class="hh-slg-row"><span class="hh-slg-word">가치</span><span class="hh-slg-on">ON!</span></div>
+        </div>
+        <div class="hh-desc">국민건강보험 일산병원 8개 부서의 통합 교육·프로그램</div>
+      </div>
+
+      <div class="hh-art" aria-hidden="true">
+        <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" role="img">
+          <title>8개 부서가 하나로 모이는 통합 교육 애니메이션</title>
+          <g stroke="#0B4DA2" stroke-width="1.4" fill="none" stroke-linecap="round">
+            <line class="ha-flow" x1="40" y1="55" x2="150" y2="150" style="animation-delay:0s"/>
+            <line class="ha-flow" x1="30" y1="150" x2="150" y2="150" style="animation-delay:.4s"/>
+            <line class="ha-flow" x1="45" y1="245" x2="150" y2="150" style="animation-delay:.8s"/>
+            <line class="ha-flow" x1="115" y1="30" x2="150" y2="150" style="animation-delay:.2s"/>
+            <line class="ha-flow" x1="205" y1="35" x2="150" y2="150" style="animation-delay:.6s"/>
+            <line class="ha-flow" x1="265" y1="105" x2="150" y2="150" style="animation-delay:1s"/>
+            <line class="ha-flow" x1="260" y1="205" x2="150" y2="150" style="animation-delay:.5s"/>
+            <line class="ha-flow" x1="205" y1="270" x2="150" y2="150" style="animation-delay:.9s"/>
+          </g>
+          <circle class="ha-ring" cx="150" cy="150" r="38" fill="none" stroke="#0B4DA2" stroke-width="1.5"/>
+          <g class="ha-d" style="--dx:110px;--dy:95px;animation-delay:0s"><circle cx="40" cy="55" r="21" fill="#EEF2F9" stroke="#1B3A6B" stroke-width="1.5"/><text class="ha-i" x="40" y="62" text-anchor="middle">🏥</text></g>
+          <g class="ha-d" style="--dx:120px;--dy:0px;animation-delay:.4s"><circle cx="30" cy="150" r="21" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/><text class="ha-i" x="30" y="157" text-anchor="middle">📊</text></g>
+          <g class="ha-d" style="--dx:105px;--dy:-95px;animation-delay:.8s"><circle cx="45" cy="245" r="21" fill="#FFF0E8" stroke="#854F0B" stroke-width="1.5"/><text class="ha-i" x="45" y="252" text-anchor="middle">😷</text></g>
+          <g class="ha-d" style="--dx:35px;--dy:120px;animation-delay:.2s"><circle cx="115" cy="30" r="21" fill="#FAECE7" stroke="#993C1D" stroke-width="1.5"/><text class="ha-i" x="115" y="37" text-anchor="middle">🏛️</text></g>
+          <g class="ha-d" style="--dx:-55px;--dy:115px;animation-delay:.6s"><circle cx="205" cy="35" r="21" fill="#FEF2F2" stroke="#CC2936" stroke-width="1.5"/><text class="ha-i" x="205" y="42" text-anchor="middle">🚑</text></g>
+          <g class="ha-d" style="--dx:-115px;--dy:45px;animation-delay:1s"><circle cx="265" cy="105" r="21" fill="#EEEDFE" stroke="#534AB7" stroke-width="1.5"/><text class="ha-i" x="265" y="112" text-anchor="middle">♿</text></g>
+          <g class="ha-d" style="--dx:-110px;--dy:-55px;animation-delay:.5s"><circle cx="260" cy="205" r="21" fill="#EAF3DE" stroke="#3B6D11" stroke-width="1.5"/><text class="ha-i" x="260" y="212" text-anchor="middle">👶</text></g>
+          <g class="ha-d" style="--dx:-55px;--dy:-120px;animation-delay:.9s"><circle cx="205" cy="270" r="21" fill="#FCE7F0" stroke="#B4185A" stroke-width="1.5"/><text class="ha-i" x="205" y="277" text-anchor="middle">❤️</text></g>
+          <g class="ha-hub">
+            <circle cx="150" cy="150" r="30" fill="#0B4DA2"/>
+            <circle cx="150" cy="150" r="30" fill="none" stroke="#FFD100" stroke-width="1.5" opacity="0.6"/>
+            <text x="150" y="147" text-anchor="middle" font-family="inherit" font-size="13" font-weight="700" fill="#FFFFFF">통합</text>
+            <text x="150" y="163" text-anchor="middle" font-family="inherit" font-size="10" font-weight="600" fill="#DCEBFF">교육포털</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="hh-right">
+        <div class="hh-right-p">
+          <span class="hhp-lead">배움이 연결되고,<br>성장이 이어지는 공간</span>
+          <span class="hhp-body">다양한 교육과정을 한 곳에서 확인하고 신청하세요.<br>누구나 쉽고 편리하게 이용할 수 있는 통합 교육신청 홈페이지입니다.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3대 카테고리 -->
+  <div class="home-cats">
+    <div class="hcat c-hlth" onclick="goCat('건강증진')">
+      <div class="hcat-count" id="hc-hlth">0개 과정</div>
+      <div class="hcat-ico">🌱</div>
+      <div class="hcat-t">건강증진교육</div>
+      <div class="hcat-d">통합돌봄·건강관리·질환관리·정신건강·재활지원 등 지역주민과 종사자 대상 건강증진 프로그램</div>
+      <span class="hcat-n">교육 살펴보기 →</span>
+    </div>
+    <div class="hcat c-infc" onclick="goCat('감염예방')">
+      <div class="hcat-count" id="hc-infc">0개 과정</div>
+      <div class="hcat-ico">🛡️</div>
+      <div class="hcat-t">감염예방교육</div>
+      <div class="hcat-d">노인장기요양시설·의료기관 종사자를 위한 기본과정과 감염관리 담당자 대상 전문과정</div>
+      <span class="hcat-n">교육 살펴보기 →</span>
+    </div>
+    <div class="hcat c-emrg" onclick="goCat('응급대응')">
+      <div class="hcat-count" id="hc-emrg">0개 과정</div>
+      <div class="hcat-ico">🚑</div>
+      <div class="hcat-t">응급대응교육</div>
+      <div class="hcat-d">심폐소생술·KTAS·현장응급의료종사자 전문화 교육 및 재난응급의료 합동교육</div>
+      <span class="hcat-n">교육 살펴보기 →</span>
+    </div>
+  </div>
+
+  <!-- 빠른 메뉴 -->
+  <div class="home-quick">
+    <div class="hq" onclick="pg('cal',document.querySelector('[data-nav=cal]'))"><div class="hq-ico">📅</div><div class="hq-t">교육일정</div><div class="hq-d">월간·연간 일정 확인</div></div>
+    <div class="hq" onclick="pg('list',document.querySelector('[data-nav=list]'))"><div class="hq-ico">📋</div><div class="hq-t">교육과정 신청</div><div class="hq-d">전체 교육 검색·신청</div></div>
+    <div class="hq" onclick="pg('dept',document.querySelector('[data-nav=dept]'))"><div class="hq-ico">🏥</div><div class="hq-t">부서 소개</div><div class="hq-d">8개 부서·담당자 연락처</div></div>
+    <div class="hq" onclick="pg('prop',document.querySelector('[data-nav=prop]'))"><div class="hq-ico">💬</div><div class="hq-t">희망교육 요청</div><div class="hq-d">원하는 교육 제안하기</div></div>
+  </div>
+
+  <!-- 공지 -->
+  <div class="home-notice">
+    <div class="hn-head"><div class="hn-head-t">📢 공지사항 · 모집중인 교육</div><div class="hn-more" onclick="pg('list',document.querySelector('[data-nav=list]'))">전체보기 →</div></div>
+    <div id="home-notice-list"></div>
+  </div>
+
+</div>
+
 <!-- ════ 신청안내 ════ -->
-<div class="pg on" id="pg-guide">
+<div class="pg" id="pg-guide">
   <div class="guide-pg">
     <div class="pg-title"><h2>신청안내</h2><p>교육 신청 방법과 유의사항을 확인하세요</p></div>
 
@@ -918,7 +1201,24 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 
 <!-- ════ 캘린더 ════ -->
 <div class="pg" id="pg-cal">
-  <div class="pg-title"><h2>캘린더</h2><p>월별 교육 일정을 확인하세요</p></div>
+  <div class="pg-title"><h2>교육일정</h2><p>2026년 연간 교육 일정과 월별 일정을 확인하세요</p></div>
+
+  <div class="cal-tabs">
+    <button class="cal-tab on" id="caltab-year" onclick="switchCal('year')">📅 연간 교육일정</button>
+    <button class="cal-tab" id="caltab-month" onclick="switchCal('month')">🗓️ 월간 교육일정</button>
+  </div>
+
+  <!-- 연간 일정표 -->
+  <div id="cal-year-view">
+    <div class="yr-legend" id="yr-legend"></div>
+    <div class="yr-table-wrap">
+      <table class="yr-table" id="yr-table"></table>
+    </div>
+    <div class="yr-note">● 표시는 해당 월에 교육이 예정되어 있음을 의미합니다 · 일정 미정 교육은 표에 월 표시가 없습니다.</div>
+  </div>
+
+  <!-- 월간 캘린더 -->
+  <div id="cal-month-view" style="display:none">
   <div style="display:flex;align-items:center;gap:14px;margin-bottom:16px">
     <button onclick="cm(-1)" style="background:none;border:1px solid var(--bd);border-radius:var(--r-sm);padding:6px 12px;cursor:pointer;font-size:16px;color:var(--tx2)">‹</button>
     <div id="cal-mo" style="font-size:17px;font-weight:800;color:var(--navy);letter-spacing:-.03em"></div>
@@ -941,11 +1241,12 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
     <div style="font-size:14px;font-weight:700;color:var(--navy);margin-bottom:10px" id="cal-lbl">이달의 교육</div>
     <div class="grid lv" id="cal-list"></div>
   </div>
+  </div><!-- /cal-month-view -->
 </div>
 
 <!-- ════ 부서별 보기 ════ -->
 <div class="pg" id="pg-dept">
-  <div class="pg-title"><h2>부서별 보기</h2><p>부서별 교육 현황과 기관 정보를 확인하세요</p></div>
+  <div class="pg-title"><h2>부서 소개</h2><p>각 부서를 선택하면 소개와 주요 사업, 교육 프로그램을 확인할 수 있습니다</p></div>
   <div class="dept-layout">
     <div class="dept-sidebar" id="dept-sidebar"></div>
     <div class="dept-main" id="dept-main"></div>
@@ -963,7 +1264,7 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
         <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #F3F4F6"><div style="width:28px;height:28px;border-radius:50%;background:#1B3A6B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">1</div><div><div style="font-size:13px;font-weight:700">관리자 로그인</div><div style="font-size:12px;color:#4B5563;line-height:1.6">오른쪽 상단 <b>⚙ 관리</b> 버튼 클릭 → 비밀번호 입력<br>💡 각 부서 담당자가 동일한 비밀번호로 로그인합니다</div></div></div>
         <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #F3F4F6"><div style="width:28px;height:28px;border-radius:50%;background:#1B3A6B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">2</div><div><div style="font-size:13px;font-weight:700">교육 추가 (각 부서 담당자)</div><div style="font-size:12px;color:#4B5563;line-height:1.6">관리자 패널 → <b>교육관리</b> → <b>+ 교육 추가</b> 클릭<br>① 본인 부서 선택 (주관부서)<br>② 교육명·대상·일시·장소·정원 입력<br>③ 회차가 여러 번이면 시리즈 설정<br>④ 저장 → 즉시 포털에 반영</div></div></div>
         <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #F3F4F6"><div style="width:28px;height:28px;border-radius:50%;background:#1B3A6B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">3</div><div><div style="font-size:13px;font-weight:700">신청 마감 / 수정 / 삭제</div><div style="font-size:12px;color:#4B5563;line-height:1.6">• <b>마감</b>: 교육 수정 → "신청 상태"를 <b>마감</b>으로 변경 → 사용자에게 "마감" 표시<br>• <b>수정</b>: 교육관리 목록에서 ✏ 아이콘 클릭 → 내용 변경 → 저장<br>• <b>삭제</b>: 🗑 아이콘 클릭 → 확인 후 삭제<br>• <b>비공개</b>: "게시" 체크 해제 → 일시적으로 숨김</div></div></div>
-        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #F3F4F6"><div style="width:28px;height:28px;border-radius:50%;background:#1B3A6B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">4</div><div><div style="font-size:13px;font-weight:700">대시보드 & 성과 확인</div><div style="font-size:12px;color:#4B5563;line-height:1.6">📊 <b>대시보드</b> 탭에서 확인 가능:<br>• QI 성과 지표 (원래 213건 → 통합 후 185건, 감소율 13.15%)<br>• 부서별 공동교육 참여 현황<br>• 신청 건수·방문자 수 통계<br>• 부서별·대상별 차트</div></div></div>
+        <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #F3F4F6"><div style="width:28px;height:28px;border-radius:50%;background:#1B3A6B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">4</div><div><div style="font-size:13px;font-weight:700">대시보드 & 성과 확인</div><div style="font-size:12px;color:#4B5563;line-height:1.6">📊 <b>대시보드</b> 탭에서 확인 가능:<br>• QI 성과 지표 (전체 210건 → 실제 185건, 통합교육 23건 / 적용률 10.95%)<br>• 부서별 공동교육 참여 현황<br>• 신청 건수·방문자 수 통계<br>• 부서별·대상별 차트</div></div></div>
         <div style="display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #F3F4F6"><div style="width:28px;height:28px;border-radius:50%;background:#1B3A6B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">5</div><div><div style="font-size:13px;font-weight:700">데이터 백업 & 공동교육 관리</div><div style="font-size:12px;color:#4B5563;line-height:1.6">• 대시보드 → <b>CSV 다운로드</b>: 신청자 데이터를 엑셀로 백업<br>• 관리자 패널 → <b>공동 개최</b>: 다른 부서와 합동 교육 등록<br>• 관리자 패널 → <b>게시물 생성</b>: 교육 홍보 카드뉴스 자동 생성</div></div></div>
         <div style="display:flex;gap:10px;padding:10px 0"><div style="width:28px;height:28px;border-radius:50%;background:#1B3A6B;color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0">6</div><div><div style="font-size:13px;font-weight:700">부서별 역할 분담</div><div style="font-size:12px;color:#4B5563;line-height:1.6"><b>각 부서 담당자의 역할:</b><br>• 본인 부서 교육 등록 및 내용 업데이트<br>• 교육 완료 후 마감 처리<br>• 신청자 확인 (대시보드에서 CSV 다운로드)<br><br><b>포털 총괄 관리자 역할 (일차의료개발센터):</b><br>• 포털 전체 유지보수 및 기능 관리<br>• QI 성과 모니터링<br>• 공동교육 조율 및 부서 간 협업 촉진</div></div></div>
       </div>
@@ -971,7 +1272,7 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
         <b>⚠️ 유지보수 안내:</b><br>
         • 교육 데이터 변경은 <b>관리자 모드</b>에서만 가능합니다<br>
         • 포털 디자인·기능 변경이 필요하면 <b>GitHub 저장소</b>에서 코드를 수정합니다<br>
-        • Notion DB 연동(3단계) 완료 시 → 신청 데이터가 서버에 자동 저장되어 모든 부서에서 확인 가능<br>
+        • 신청 데이터는 접수 즉시 담당자 이메일로 발송됩니다(개인정보는 서버에 저장하지 않음)<br>
         • 정확한 방문자 통계는 Google Analytics 연동 시 가능합니다<br>
         • 모바일(핸드폰)에서도 접속·신청이 가능하도록 반응형으로 구성되어 있습니다
       </div>
@@ -984,6 +1285,89 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
   </div>
   <div style="font-size:13px;font-weight:700;color:var(--tx2);margin-bottom:10px">등록된 제안</div>
   <div id="prop-list"></div>
+</div>
+
+<!-- ════ 공지사항 ════ -->
+<div class="pg" id="pg-notice">
+  <div class="pg-title"><h2>공지사항</h2><p>교육 운영 관련 공지 및 부서별 홍보 자료를 확인하세요</p></div>
+  <div id="notice-list"></div>
+</div>
+
+<!-- ════ 자료실 ════ -->
+<div class="pg" id="pg-lib">
+  <div class="pg-title"><h2>자료실</h2><p>교육자료를 다운로드하세요 · 교육 종료 후 삭제될 수 있으니 기간 내 받아 활용해 주세요</p></div>
+  <div id="lib-list"></div>
+</div>
+
+<!-- ════ 담당자 연락처 ════ -->
+<div class="pg" id="pg-contact">
+  <div class="pg-title"><h2>담당자 연락처</h2><p>부서별 교육 문의는 아래 연락처로 문의해 주세요 · 국민건강보험 일산병원 대표전화 1577-0013</p></div>
+  <div id="contact-list" class="contact-grid"></div>
+  <div class="contact-note">※ 각 부서 교육 담당자 직통 연락처입니다. 부재 시 병원 대표전화(1577-0013)를 통해 연결하실 수 있습니다.</div>
+</div>
+
+<!-- ════ 오시는 길 ════ -->
+<div class="pg" id="pg-map">
+  <div class="pg-title"><h2>오시는 길</h2><p>국민건강보험 일산병원 · 국민의 건강한 삶과 의료 표준을 선도하는 건강보험 모델병원</p></div>
+
+  <div class="map-wrap">
+    <iframe
+      title="국민건강보험 일산병원 위치"
+      src="https://www.openstreetmap.org/export/embed.html?bbox=126.7796%2C37.6409%2C126.7956%2C37.6509&amp;layer=mapnik&amp;marker=37.6459%2C126.7876"
+      style="width:100%;height:360px;border:0;border-radius:12px"
+      loading="lazy"></iframe>
+    <div class="map-links">
+      <a href="https://map.kakao.com/?q=국민건강보험 일산병원" target="_blank" rel="noopener" class="map-link">🗺️ 카카오맵에서 보기</a>
+      <a href="https://map.naver.com/p/search/국민건강보험 일산병원" target="_blank" rel="noopener" class="map-link">🗺️ 네이버지도에서 보기</a>
+      <a href="https://www.google.com/maps/search/국민건강보험 일산병원" target="_blank" rel="noopener" class="map-link">🗺️ 구글지도에서 보기</a>
+    </div>
+  </div>
+
+  <div class="way-addr">
+    <div class="way-addr-main">경기도 고양시 일산동구 일산로 100 <span class="way-addr-zip">(우편번호 10444, 백석1동)</span></div>
+    <div class="way-addr-tel">대표전화 1577-0013 · 팩스 031-900-0049</div>
+  </div>
+
+  <div class="way-block">
+    <div class="way-hd"><span class="way-ico">🚗</span> 승용차</div>
+    <div class="way-body">
+      <div class="way-row"><div class="way-row-t">서울 방면</div><div class="way-row-d">자유로 → 신평IC → 일산IC → 일산중앙로 → 백석역 → 국민건강보험 일산병원</div></div>
+      <div class="way-row"><div class="way-row-t">파주 방면</div><div class="way-row-d">자유로 → 장항IC → 뉴코아아울렛 우회전 → 일산중앙로 → 백석역 → 국민건강보험 일산병원</div></div>
+      <div class="way-row"><div class="way-row-t">김포·인천 방면</div><div class="way-row-d">수도권제1순환고속도로 → 김포대교 → 신평IC → 일산IC → 병원</div></div>
+      <div class="way-note">※ 네비게이션에 "국민건강보험 일산병원" 또는 "일산로 100" 검색</div>
+    </div>
+  </div>
+
+  <div class="way-block">
+    <div class="way-hd"><span class="way-ico">🚇</span> 지하철</div>
+    <div class="way-body">
+      <div class="way-table">
+        <div class="way-th"><div>노선</div><div>안내</div></div>
+        <div class="way-td"><div class="way-td-l"><span class="line-badge line-3">3호선</span></div><div>백석역 하차 (부기역명 "건강보험일산병원") · 병원과 인접, 도보 이용</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="way-block">
+    <div class="way-hd"><span class="way-ico">🚌</span> 버스</div>
+    <div class="way-body">
+      <div class="way-table">
+        <div class="way-th"><div>정류장</div><div>노선</div></div>
+        <div class="way-td"><div class="way-td-l">일산병원 / 일산병원 사거리</div><div>83, 84, 88A, 88B, 90, 97, 99, 068, 070B, 078, 760</div></div>
+        <div class="way-td"><div class="way-td-l">백석역 (6·3·2번 출구)</div><div>83, 88B, 90, 99, 068, 078, 070B, N001</div></div>
+        <div class="way-td"><div class="way-td-l">백석역·고양종합터미널</div><div>83, 84, 88A, 97, 99, 068, 070B, 1001, 1200, 8450, 9707</div></div>
+      </div>
+      <div class="way-note">※ 고양종합터미널에서 병원까지 도보 약 3분</div>
+    </div>
+  </div>
+
+  <div class="way-block way-park">
+    <div class="way-hd"><span class="way-ico">🅿️</span> 주차장 이용 안내</div>
+    <div class="way-body">
+      <div class="way-park-txt">내원객 편의를 위하여 원내 부설 주차장을 운영하고 있습니다. 주차 요금 및 감면 대상은 방문 목적(외래·입원·검진 등)에 따라 다르므로, 정확한 요금은 병원 공식 홈페이지 또는 주차 안내 데스크에서 확인해 주세요.</div>
+      <a href="https://www.nhimc.or.kr/conts/104002008001000.do" target="_blank" rel="noopener" class="map-link">🔗 병원 공식 오시는 길·주차 안내</a>
+    </div>
+  </div>
 </div>
 
 <!-- ════ 나의 신청 ════ -->
@@ -1224,22 +1608,32 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 
       <div class="qi-kpi-row">
         <div class="qi-kpi">
-          <div class="qi-kpi-n navy" id="qi-original">213</div>
-          <div class="qi-kpi-l">원래 계획 교육 수</div>
+          <div class="qi-kpi-n navy" id="qi-original">210</div>
+          <div class="qi-kpi-delta">(-6건)</div>
+          <div class="qi-kpi-l">전체 교육 건수</div>
         </div>
         <div class="qi-kpi">
           <div class="qi-kpi-n blue" id="qi-current">185</div>
-          <div class="qi-kpi-l">통합 후 교육 수</div>
+          <div class="qi-kpi-delta">(-2건)</div>
+          <div class="qi-kpi-l">실제 교육 건수</div>
         </div>
         <div class="qi-kpi">
-          <div class="qi-kpi-n green" id="qi-reduced">28</div>
-          <div class="qi-kpi-l">공동/통합 감소 건수 <span class="qi-kpi-arrow">▼</span></div>
+          <div class="qi-kpi-n green" id="qi-reduced">25</div>
+          <div class="qi-kpi-delta">(-4건)</div>
+          <div class="qi-kpi-l">교육 감소 건수 <span class="qi-kpi-arrow">▼</span></div>
         </div>
         <div class="qi-kpi">
-          <div class="qi-kpi-n red" id="qi-rate">13.15%</div>
-          <div class="qi-kpi-l">감소율</div>
+          <div class="qi-kpi-n orange" id="qi-integ">23</div>
+          <div class="qi-kpi-delta">&nbsp;</div>
+          <div class="qi-kpi-l">통합교육 건수</div>
+        </div>
+        <div class="qi-kpi">
+          <div class="qi-kpi-n red" id="qi-rate">10.95%</div>
+          <div class="qi-kpi-delta">&nbsp;</div>
+          <div class="qi-kpi-l">통합교육 적용률</div>
         </div>
       </div>
+      <div style="font-size:11px;color:var(--tx3);margin:-6px 0 16px;line-height:1.7">※ 산출식: 지역사회 통합교육 건수 × 100 / 지역사회 전체 교육 건수 &nbsp;|&nbsp; 괄호는 직전 집계 대비 변동</div>
 
       <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px">부서별 공동교육 참여 현황</div>
       <div id="qi-dept-bars"></div>
@@ -1521,78 +1915,82 @@ const DC = {
 };
 
 const EDUS = [
-  {id:1,type:'공동',dk:'책임',cat:'응급대응',sub:'심폐소생술',tgt:'종사자',title:'일반인 심폐소생술 표준 교육 프로그램 심화과정',desc:'보건소 요청,  응급의료에 관한 법률  의무교육 대상자,  보건소에서 대상자 모집',date:'2026-04-24',time:'13:00',place:'세미나실1',min:240,cap:25,totalSessions:2,pub:true,sessions:[{date:'2026-04-24',time:'13:00',place:'세미나실1',cap:25,min:240,title:'일반인 심폐소생술 표준 교육 프로그램 심화과정'},{date:'2026-10-23',time:'13:00',place:'컨퍼런스룸1',cap:25,min:240,title:'일반인 심폐소생술 표준 교육 프로그램 심화과정'}]},
-  {id:2,type:'부서',dk:'책임',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(의료인)',title:'외상 환자 평가 및 처치',desc:'소방서 구급대원 대상 경기도의료원 파주병원 공동교육',date:'2026-05-07',time:'10:00',place:'파주병원',min:60,cap:35,totalSessions:2,pub:true,sessions:[{date:'2026-05-07',time:'10:00',place:'파주병원',cap:35,min:60,title:'외상 환자 평가 및 처치'},{date:'2026-10-22',time:'10:00',place:'파주병원',cap:35,min:60,title:'외상 환자 평가 및 처치'}]},
-  {id:3,type:'공동',dk:'책임',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(의료인)',title:'뇌졸중',desc:'소방서 구급대원 대상 경기도의료원 파주병원 공동교육',date:'2026-06-18',time:'10:00',place:'파주병원',min:60,cap:35,totalSessions:1,pub:true,sessions:[{date:'2026-06-18',time:'10:00',place:'파주병원',cap:35,min:60,title:'뇌졸중'}]},
-  {id:4,type:'부서',dk:'책임',cat:'건강증진',sub:'통합돌봄',tgt:'종사자(의료인)',title:'낙상환자 관리와 환자안전 사고 보고 및 근본원인분석 사례',desc:'의료기관 환자안전 담당자 대상 교육',date:'2026-06-19',time:'14:30',place:'컨퍼런스룸1',min:60,cap:30,totalSessions:1,pub:true,sessions:[{date:'2026-06-19',time:'14:30',place:'컨퍼런스룸1',cap:30,min:60,title:'낙상환자 관리와 환자안전 사고 보고 및 근본원인분석 사례'}]},
-  {id:5,type:'부서',dk:'책임',cat:'감염예방',sub:'전문과정',tgt:'종사자(의료인)',title:'유행성 감염병 발생 시 대응전략(이론&실습)',desc:'의료기관 감염관리 담당자 대상 교육',date:'2026-06-19',time:'15:30',place:'컨퍼런스룸1',min:60,cap:30,totalSessions:1,pub:true,sessions:[{date:'2026-06-19',time:'15:30',place:'컨퍼런스룸1',cap:30,min:60,title:'유행성 감염병 발생 시 대응전략(이론&실습)'}]},
+  {id:1,type:'공동',dk:'책임',cat:'응급대응',sub:'심폐소생술',tgt:'종사자',title:'일반인 심폐소생술 표준 교육 프로그램 심화과정',desc:'보건소 요청, \'응급의료에 관한 법률\' 의무교육 대상자, 보건소에서 대상자 모집',date:'2026-04-24',time:'13:00',place:'세미나실1',min:240,cap:25,totalSessions:2,pub:true,sessions:[{date:'2026-04-24',time:'13:00',place:'세미나실1',cap:22,min:240,title:'일반인 심폐소생술 표준 교육 프로그램 심화과정(1차)'},{date:'2026-10-23',time:'13:00',place:'컨퍼런스룸1',cap:25,min:240,title:'일반인 심폐소생술 표준 교육 프로그램 심화과정(2차)'}]},
+  {id:2,type:'부서',dk:'책임',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(의료인)',title:'외상 환자 평가 및 처치',desc:'소방서 구급대원 대상 경기도의료원 파주병원 공동교육',date:'2026-05-07',time:'10:00',place:'파주병원',min:60,cap:48,totalSessions:2,pub:true,sessions:[{date:'2026-05-07',time:'10:00',place:'파주병원',cap:48,min:60,title:'외상 환자 평가 및 처치(1차)'},{date:'2026-10-22',time:'10:00',place:'파주병원',cap:35,min:60,title:'외상 환자 평가 및 처치(2차)'}]},
+  {id:3,type:'공동',dk:'책임',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(의료인)',title:'뇌졸중',desc:'소방서 구급대원 대상 경기도의료원 파주병원 공동교육',date:'2026-06-18',time:'10:00',place:'파주병원',min:60,cap:38,totalSessions:1,pub:true,sessions:[{date:'2026-06-18',time:'10:00',place:'파주병원',cap:38,min:60,title:'뇌졸중'}]},
+  {id:4,type:'부서',dk:'책임',cat:'건강증진',sub:'통합돌봄',tgt:'종사자(의료인)',title:'낙상환자 관리와 환자안전 사고 보고 및 근본원인분석 사례',desc:'의료기관 환자안전 담당자 대상 교육',date:'2026-06-19',time:'14:30',place:'컨퍼런스룸1',min:60,cap:26,totalSessions:1,pub:true,sessions:[{date:'2026-06-19',time:'14:30',place:'컨퍼런스룸1',cap:26,min:60,title:'낙상환자 관리와 환자안전 사고 보고 및 근본원인분석 사례'}]},
+  {id:5,type:'부서',dk:'책임',cat:'감염예방',sub:'전문과정',tgt:'종사자(의료인)',title:'유행성 감염병 발생 시 대응전략(이론&실습)',desc:'의료기관 감염관리 담당자 대상 교육',date:'2026-06-19',time:'15:30',place:'컨퍼런스룸1',min:60,cap:26,totalSessions:1,pub:true,sessions:[{date:'2026-06-19',time:'15:30',place:'컨퍼런스룸1',cap:26,min:60,title:'유행성 감염병 발생 시 대응전략(이론&실습)'}]},
   {id:6,type:'부서',dk:'책임',cat:'감염예방',sub:'기본과정',tgt:'종사자',title:'요양기관에서 감염병 유행 시 대처방법',desc:'장기요양시설 및 의료기관 종사자 대상',date:'2026-06-30',time:'14:00',place:'대강당',min:60,cap:100,totalSessions:1,pub:true,sessions:[{date:'2026-06-30',time:'14:00',place:'대강당',cap:100,min:60,title:'요양기관에서 감염병 유행 시 대처방법'}]},
-  {id:7,type:'공동',dk:'책임',cat:'건강증진',sub:'통합돌봄',tgt:'종사자',title:'다학제 질환을 통한 만성질환 관리',desc:'장기요양시설 및 의료기관 종사자 대상 만성질환 교육',date:'2026-06-30',time:'15:10',place:'대강당',min:60,cap:100,totalSessions:1,pub:true,sessions:[{date:'2026-06-30',time:'15:10',place:'대강당',cap:100,min:60,title:'다학제 질환을 통한 만성질환 관리'}]},
+  {id:7,type:'공동',dk:'책임',cat:'건강증진',sub:'통합돌봄',tgt:'종사자',title:'다학제 팀을 통한 노인 통합 관리',desc:'장기요양시설 및 의료기관 종사자 대상 만성질환 교육',date:'2026-06-30',time:'15:00',place:'대강당',min:60,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-06-30',time:'15:00',place:'대강당',cap:0,min:60,title:'다학제 팀을 통한 노인 통합 관리'}]},
   {id:8,type:'부서',dk:'책임',cat:'감염예방',sub:'기본과정',tgt:'종사자',title:'감염관리 기본원칙',desc:'국민건강보험공단, 경기도북부 의료원 공동 수행, 장기요양시설 및 의료기관 종사자 대상. 공단에서 대상자 모집',date:'2026-09-18',time:'14:00',place:'대강당',min:60,cap:250,totalSessions:1,pub:true,sessions:[{date:'2026-09-18',time:'14:00',place:'대강당',cap:250,min:60,title:'감염관리 기본원칙'}]},
-  {id:9,type:'부서',dk:'책임',cat:'건강증진',sub:'통합돌봄',tgt:'종사자',title:'노인 구강 관리',desc:'장기요양시설 및 의료기관 종사자 대상',date:'2026-09-18',time:'15:10',place:'대강당',min:60,cap:250,totalSessions:1,pub:true,sessions:[{date:'2026-09-18',time:'15:10',place:'대강당',cap:250,min:60,title:'노인 구강 관리'}]},
-  {id:10,type:'부서',dk:'책임',cat:'감염예방',sub:'전문과정',tgt:'종사자(의료인)',title:'미정(4월 요구도 조사 예정)',desc:'감염관리 네트워크 간담회 감염관리 담당자, 보건소 감염병관리팀 등 대상으로 교육 진행',date:'2026-10-01',time:'',place:'미정',min:60,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-10-01',time:'',place:'미정',cap:0,min:60,title:'미정(4월 요구도 조사 예정)'}]},
+  {id:9,type:'부서',dk:'책임',cat:'건강증진',sub:'통합돌봄',tgt:'종사자',title:'노인 구강 관리',desc:'장기요양시설 및 의료기관 종사자 대상',date:'2026-09-18',time:'15:10',place:'대강당',min:60,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-09-18',time:'15:10',place:'대강당',cap:0,min:60,title:'노인 구강 관리'}]},
+  {id:10,type:'부서',dk:'책임',cat:'감염예방',sub:'전문과정',tgt:'종사자(의료인)',title:'감염관리 사례교육',desc:'감염관리 네트워크 간담회 감염관리 담당자, 보건소 감염병관리팀 등 대상으로 교육 진행',date:'2026-09-11',time:'13:00',place:'컨퍼런스룸1',min:60,cap:40,totalSessions:1,pub:true,sessions:[{date:'2026-09-11',time:'13:00',place:'컨퍼런스룸1',cap:40,min:60,title:'감염관리 사례교육'}]},
   {id:11,type:'부서',dk:'책임',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(의료인)',title:'소아 CPR 및 응급처치',desc:'소방서 구급대원 대상 경기도의료원 파주병원 공동교육',date:'2026-10-27',time:'10:00',place:'파주병원',min:60,cap:35,totalSessions:1,pub:true,sessions:[{date:'2026-10-27',time:'10:00',place:'파주병원',cap:35,min:60,title:'소아 CPR 및 응급처치'}]},
-  {id:12,type:'공동',dk:'책임',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(의료인)',title:'천식과 아나필락시스의 응급대처 방안',desc:'소방서 구급대원 대상 경기도의료원 파주병원 공동교육',date:'2026-10-27',time:'10:00',place:'미정',min:30,cap:35,totalSessions:1,pub:true,sessions:[{date:'2026-10-27',time:'10:00',place:'미정',cap:35,min:30,title:'천식과 아나필락시스의 응급대처 방안'}]},
+  {id:12,type:'공동',dk:'책임',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(의료인)',title:'천식과 아나필락시스의 응급대처 방안',desc:'소방서 구급대원 대상 경기도의료원 파주병원 공동교육',date:'2026-10-27',time:'10:00',place:'미정',min:30,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-10-27',time:'10:00',place:'미정',cap:0,min:30,title:'천식과 아나필락시스의 응급대처 방안'}]},
   {id:13,type:'부서',dk:'아토피',cat:'건강증진',sub:'질환관리',tgt:'종사자(의료인)',title:'알레르기 질환 예방관리교육(보건의료인 대상)',desc:'보건의료인(의사직, 인턴) 대상 교육',date:'2026-01-21',time:'11:00',place:'교육정보센터상담실',min:30,cap:7,totalSessions:35,pub:true,sessions:[{date:'2026-01-21',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(1차)'},{date:'2026-02-03',time:'11:00',place:'교육정보센터상담실',cap:3,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(2차)'},{date:'2026-02-11',time:'12:00',place:'교육정보센터상담실',cap:1,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(3차)'},{date:'2026-02-23',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(4차)'},{date:'2026-03-03',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(5차)'},{date:'2026-03-03',time:'11:30',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(6차)'},{date:'2026-03-09',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(7차)'},{date:'2026-03-16',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(8차)'},{date:'2026-03-16',time:'11:30',place:'교육정보센터상담실',cap:4,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(9차)'},{date:'2026-03-17',time:'11:00',place:'7층 간호교육실',cap:7,min:60,title:'알레르기 질환 예방관리교육(보건의료인 대상)(10차)'},{date:'2026-03-19',time:'11:00',place:'7층 간호교육실',cap:6,min:60,title:'알레르기 질환 예방관리교육(보건의료인 대상)(11차)'},{date:'2026-03-23',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(12차)'},{date:'2026-03-30',time:'11:00',place:'교육정보센터상담실',cap:1,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(13차)'},{date:'2026-03-30',time:'11:30',place:'교육정보센터상담실',cap:4,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(14차)'},{date:'2026-04-06',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(15차)'},{date:'2026-04-13',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(16차)'},{date:'2026-04-27',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(17차)'},{date:'2026-05-11',time:'11:00',place:'교육정보센터상담실',cap:4,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(18차)'},{date:'2026-05-18',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(19차)'},{date:'2026-05-26',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(20차)'},{date:'2026-07-06',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(21차)'},{date:'2026-07-20',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(22차)'},{date:'2026-08-03',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(23차)'},{date:'2026-08-24',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(24차)'},{date:'2026-08-31',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(25차)'},{date:'2026-09-07',time:'11:00',place:'교육정보센터상담실',cap:4,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(26차)'},{date:'2026-09-14',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(27차)'},{date:'2026-09-21',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(28차)'},{date:'2026-09-28',time:'11:00',place:'교육정보센터상담실',cap:4,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(29차)'},{date:'2026-10-06',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(30차)'},{date:'2026-10-12',time:'11:00',place:'교육정보센터상담실',cap:4,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(31차)'},{date:'2026-11-02',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(32차)'},{date:'2026-11-09',time:'11:00',place:'교육정보센터상담실',cap:4,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(33차)'},{date:'2026-11-16',time:'11:00',place:'교육정보센터상담실',cap:2,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(34차)'},{date:'2026-11-23',time:'11:00',place:'교육정보센터상담실',cap:4,min:30,title:'알레르기 질환 예방관리교육(보건의료인 대상)(35차)'}]},
   {id:14,type:'부서',dk:'아토피',cat:'건강증진',sub:'질환관리',tgt:'종사자',title:'식품알레르기(고양시육아종합지원센터 교육대상자)',desc:'알레르기질환 예방관리교육(교사대상)',date:'2026-04-03',time:'14:00',place:'실시간 온라인 교육',min:60,cap:80,totalSessions:1,pub:true,sessions:[{date:'2026-04-03',time:'14:00',place:'실시간 온라인 교육',cap:80,min:60,title:'식품알레르기(고양시육아종합지원센터 교육대상자)'}]},
-  {id:15,type:'부서',dk:'아토피',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'알레르기 질환 예방관리교육',desc:'알레르기질환 예방관리교육, (지역주민 대상)',date:'2026-02-13',time:'13:00',place:'파주시운정보건소',min:40,cap:100,totalSessions:20,pub:true,sessions:[{date:'2026-02-13',time:'13:00',place:'파주시운정보건소',cap:20,min:40,title:'알레르기 질환 예방관리교육(1차)'},{date:'2026-05-01',time:'',place:'미정',cap:0,min:60,title:'알레르기 질환 예방관리교육(2차)'},{date:'2026-05-01',time:'',place:'미정',cap:0,min:60,title:'알레르기 질환 예방관리교육(3차)'},{date:'2026-05-06',time:'10:30',place:'대강당',cap:100,min:40,title:'알레르기 질환 예방관리교육(4차)'},{date:'2026-06-01',time:'',place:'미정',cap:0,min:60,title:'알레르기 질환 예방관리교육(5차)'},{date:'2026-06-01',time:'10:30',place:'대강당',cap:0,min:40,title:'알레르기 질환 예방관리교육(6차)'},{date:'2026-06-26',time:'10:00',place:'경기도청',cap:100,min:60,title:'알레르기 질환 예방관리교육(7차)'},{date:'2026-06-26',time:'11:00',place:'경기도청',cap:100,min:60,title:'알레르기 질환 예방관리교육(8차)'},{date:'2026-07-01',time:'10:00',place:'경기도청',cap:0,min:40,title:'알레르기 질환 예방관리교육(9차)'},{date:'2026-07-01',time:'11:00',place:'경기도청',cap:0,min:40,title:'알레르기 질환 예방관리교육(10차)'},{date:'2026-07-01',time:'',place:'미정',cap:0,min:60,title:'알레르기 질환 예방관리교육(11차)'},{date:'2026-07-01',time:'',place:'미정',cap:0,min:60,title:'알레르기 질환 예방관리교육(12차)'},{date:'2026-08-01',time:'',place:'미정',cap:0,min:60,title:'알레르기 질환 예방관리교육(13차)'},{date:'2026-08-01',time:'',place:'미정',cap:0,min:60,title:'알레르기 질환 예방관리교육(14차)'},{date:'2026-09-01',time:'',place:'대강당',cap:100,min:60,title:'알레르기 질환 예방관리교육(15차)'},{date:'2026-09-01',time:'',place:'미정',cap:0,min:60,title:'알레르기 질환 예방관리교육(16차)'},{date:'2026-09-01',time:'',place:'미정',cap:0,min:60,title:'알레르기 질환 예방관리교육(17차)'},{date:'2026-10-01',time:'',place:'미정',cap:0,min:60,title:'알레르기 질환 예방관리교육(18차)'},{date:'2026-10-01',time:'',place:'미정',cap:0,min:60,title:'알레르기 질환 예방관리교육(19차)'},{date:'2026-11-01',time:'',place:'미정',cap:0,min:60,title:'알레르기 질환 예방관리교육(20차)'}]},
+  {id:15,type:'부서',dk:'아토피',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'알레르기 질환 예방관리교육',desc:'알레르기질환 예방관리교육, (지역주민 대상)',date:'2026-02-13',time:'13:00',place:'파주시운정보건소',min:40,cap:130,totalSessions:20,pub:true,sessions:[{date:'2026-02-13',time:'13:00',place:'파주시운정보건소',cap:20,min:40,title:'알레르기 질환 예방관리교육(1차)'},{date:'2026-05-06',time:'10:30',place:'대강당',cap:100,min:40,title:'알레르기 질환 예방관리교육(4차)'},{date:'2026-06-18',time:'10:00',place:'대한노인회양주시지회',cap:60,min:60,title:'알레르기 질환 예방관리교육(2차)'},{date:'2026-06-18',time:'15:00',place:'대한노인회양주시지회',cap:130,min:60,title:'알레르기 질환 예방관리교육(3차)'},{date:'2026-06-22',time:'10:00',place:'대한노인회양주시지회',cap:130,min:60,title:'알레르기 질환 예방관리교육(5차)'},{date:'2026-06-22',time:'15:00',place:'대강당',cap:130,min:40,title:'알레르기 질환 예방관리교육(6차)'},{date:'2026-06-25',time:'10:00',place:'대한노인회양주시지회',cap:130,min:40,title:'알레르기 질환 예방관리교육(9차)'},{date:'2026-06-25',time:'15:00',place:'대한노인회양주시지회',cap:130,min:40,title:'알레르기 질환 예방관리교육(10차)'},{date:'2026-06-26',time:'10:00',place:'경기도청',cap:100,min:60,title:'알레르기 질환 예방관리교육(7차)'},{date:'2026-06-26',time:'11:00',place:'경기도청',cap:100,min:60,title:'알레르기 질환 예방관리교육(8차)'},{date:'2026-07-03',time:'14:00',place:'파주시운정보건소',cap:60,min:0,title:'알레르기 질환 예방관리교육(11차)'},{date:'2026-08-01',time:'',place:'미정',cap:0,min:0,title:'알레르기 질환 예방관리교육(13차)'},{date:'2026-08-01',time:'',place:'미정',cap:0,min:0,title:'알레르기 질환 예방관리교육(14차)'},{date:'2026-08-21',time:'10:30',place:'김포시보건소',cap:60,min:0,title:'알레르기 질환 예방관리교육(12차)'},{date:'2026-09-01',time:'',place:'대강당',cap:100,min:60,title:'알레르기 질환 예방관리교육(15차)'},{date:'2026-09-01',time:'',place:'미정',cap:0,min:0,title:'알레르기 질환 예방관리교육(16차)'},{date:'2026-09-01',time:'',place:'미정',cap:0,min:0,title:'알레르기 질환 예방관리교육(17차)'},{date:'2026-10-01',time:'',place:'미정',cap:0,min:0,title:'알레르기 질환 예방관리교육(18차)'},{date:'2026-10-01',time:'',place:'미정',cap:0,min:0,title:'알레르기 질환 예방관리교육(19차)'},{date:'2026-11-01',time:'',place:'미정',cap:0,min:0,title:'알레르기 질환 예방관리교육(20차)'}]},
   {id:16,type:'공동',dk:'아토피',cat:'건강증진',sub:'질환관리',tgt:'종사자(의료인)',title:'알레르기질환예방관리교육(연수강좌)',desc:'알레르기질환 예방관리교육(의사, 간호사, 사업담당자)',date:'2026-06-27',time:'15:30',place:'대강당',min:120,cap:100,totalSessions:1,pub:true,sessions:[{date:'2026-06-27',time:'15:30',place:'대강당',cap:100,min:120,title:'알레르기질환예방관리교육(연수강좌)'}]},
   {id:17,type:'부서',dk:'아토피',cat:'건강증진',sub:'질환관리',tgt:'종사자(의료인)',title:'천식 및 아나필락시스 예방관리교육(보건교사 대상)',desc:'보건의료인(보건교사, 간호사) 대상 교육/경기도교육청협력',date:'2026-07-10',time:'11:00',place:'학생건강증진센터(의정부)',min:100,cap:130,totalSessions:6,pub:true,sessions:[{date:'2026-07-10',time:'11:00',place:'학생건강증진센터(의정부)',cap:130,min:100,title:'천식 및 아나필락시스 예방관리교육(보건교사 대상)(1차)'},{date:'2026-07-11',time:'11:00',place:'학생건강증진센터(의정부)',cap:130,min:100,title:'천식 및 아나필락시스 예방관리교육(보건교사 대상)(2차)'},{date:'2026-07-24',time:'11:00',place:'고양시(장소미정)',cap:130,min:100,title:'천식 및 아나필락시스 예방관리교육(보건교사 대상)(3차)'},{date:'2026-07-25',time:'11:00',place:'고양시(장소미정)',cap:130,min:100,title:'천식 및 아나필락시스 예방관리교육(보건교사 대상)(4차)'},{date:'2026-07-27',time:'11:00',place:'학생건강증진센터(의정부)',cap:130,min:100,title:'천식 및 아나필락시스 예방관리교육(보건교사 대상)(5차)'},{date:'2026-07-28',time:'11:00',place:'학생건강증진센터(의정부)',cap:130,min:100,title:'천식 및 아나필락시스 예방관리교육(보건교사 대상)(6차)'}]},
-  {id:18,type:'부서',dk:'일차',cat:'건강증진',sub:'통합돌봄',tgt:'종사자(비의료인)',title:'건강증진 노쇠예방',desc:'돌봄 제공자를 위한 노쇠예방교육',date:'2026-02-24',time:'14:00',place:'사과나무의료재단(서구보건소)',min:60,cap:50,totalSessions:2,pub:true,sessions:[{date:'2026-02-24',time:'14:00',place:'사과나무의료재단(서구보건소)',cap:50,min:60,title:'건강증진 노쇠예방'},{date:'2026-05-01',time:'',place:'문촌9종합사회복지관',cap:50,min:60,title:'건강증진 노쇠예방'}]},
+  {id:18,type:'부서',dk:'일차',cat:'건강증진',sub:'통합돌봄',tgt:'종사자(비의료인)',title:'건강증진 노쇠예방',desc:'돌봄 제공자를 위한 노쇠예방교육',date:'2026-02-24',time:'14:00',place:'사과나무의료재단(서구보건소)',min:60,cap:50,totalSessions:2,pub:true,sessions:[{date:'2026-02-24',time:'14:00',place:'사과나무의료재단(서구보건소)',cap:50,min:60,title:'건강증진 노쇠예방'},{date:'2026-10-01',time:'14:00',place:'사과나무의료재단(서구보건소)',cap:50,min:60,title:'건강증진 노쇠예방(대상2)'}]},
   {id:19,type:'부서',dk:'일차',cat:'건강증진',sub:'통합돌봄',tgt:'일반인',title:'노인 만성질환 관리 교육(부스설치)',desc:'혈압,혈당 체크 및 만성질환 관리 교육',date:'2026-05-07',time:'10:00',place:'일산노인종합복지관',min:120,cap:50,totalSessions:1,pub:true,sessions:[{date:'2026-05-07',time:'10:00',place:'일산노인종합복지관',cap:50,min:120,title:'노인 만성질환 관리 교육(부스설치)'}]},
   {id:20,type:'부서',dk:'일차',cat:'건강증진',sub:'통합돌봄',tgt:'종사자',title:'일차의료개발센터 심포지엄 2026',desc:'일차의료 통합관리의 미래',date:'2026-05-09',time:'10:00',place:'일산병원 대강강',min:390,cap:100,totalSessions:1,pub:true,sessions:[{date:'2026-05-09',time:'10:00',place:'일산병원 대강강',cap:100,min:390,title:'일차의료개발센터 심포지엄 2026'}]},
-  {id:21,type:'부서',dk:'일차',cat:'건강증진',sub:'통합돌봄',tgt:'종사자(의료인)',title:'방문 노쇠 예방 재가돌봄 교육(간호)',desc:'동구 보건소 통합돌봄 방문 노쇠 예방및 관리사업 담당자 교육',date:'2026-05-01',time:'14:00',place:'일산서구 보건소',min:60,cap:6,totalSessions:1,pub:true,sessions:[{date:'2026-05-01',time:'14:00',place:'일산서구 보건소',cap:6,min:60,title:'방문 노쇠 예방 재가돌봄 교육(간호)'}]},
-  {id:22,type:'부서',dk:'일차',cat:'건강증진',sub:'통합돌봄',tgt:'종사자(의료인)',title:'방문 노쇠 예방 재가돌봄 교육(임상영양)',desc:'동구 보건소 통합돌봄 방문 노쇠 예방및 관리사업 담당자 교육',date:'2026-06-01',time:'14:00',place:'일산서구 보건소',min:60,cap:6,totalSessions:1,pub:true,sessions:[{date:'2026-06-01',time:'14:00',place:'일산서구 보건소',cap:6,min:60,title:'방문 노쇠 예방 재가돌봄 교육(임상영양)'}]},
-  {id:23,type:'부서',dk:'일차',cat:'건강증진',sub:'통합돌봄',tgt:'종사자(의료인)',title:'방문 노쇠 예방 재가돌봄교육(운동)',desc:'동구 보건소 통합돌봄 방문 노쇠 예방및 관리사업 담당자 교육',date:'2026-07-01',time:'14:00',place:'일산서구 보건소',min:60,cap:6,totalSessions:1,pub:true,sessions:[{date:'2026-07-01',time:'14:00',place:'일산서구 보건소',cap:6,min:60,title:'방문 노쇠 예방 재가돌봄교육(운동)'}]},
-  {id:24,type:'부서',dk:'일차',cat:'건강증진',sub:'통합돌봄',tgt:'종사자(비의료인)',title:'건강증진 노쇠예방(대상2)',desc:'돌봄 제공자를 위한 노쇠예방교육',date:'2026-10-01',time:'14:00',place:'사과나무의료재단(서구보건소)',min:60,cap:50,totalSessions:1,pub:true,sessions:[{date:'2026-10-01',time:'14:00',place:'사과나무의료재단(서구보건소)',cap:50,min:60,title:'건강증진 노쇠예방(대상2)'}]},
-  {id:25,type:'부서',dk:'일차',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'만성질환자를 위한 맞춤운동교실',desc:'사전 인바디 검사 및 악력 측정',date:'2026-03-05',time:'14:00',place:'컨퍼런스룸',min:60,cap:15,totalSessions:16,pub:true,sessions:[{date:'2026-03-05',time:'14:00',place:'컨퍼런스룸',cap:14,min:60,title:'만성질환자를 위한 맞춤운동교실(1차)'},{date:'2026-03-12',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(2차)'},{date:'2026-03-19',time:'14:00',place:'컨퍼런스룸',cap:13,min:60,title:'만성질환자를 위한 맞춤운동교실(3차)'},{date:'2026-03-26',time:'14:00',place:'컨퍼런스룸',cap:15,min:60,title:'만성질환자를 위한 맞춤운동교실(4차)'},{date:'2026-04-02',time:'14:00',place:'컨퍼런스룸',cap:15,min:60,title:'만성질환자를 위한 맞춤운동교실(5차)'},{date:'2026-04-09',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(6차)'},{date:'2026-04-16',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(7차)'},{date:'2026-04-23',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(8차)'},{date:'2026-04-30',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(9차)'},{date:'2026-05-07',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(10차)'},{date:'2026-05-14',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(11차)'},{date:'2026-05-21',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(12차)'},{date:'2026-05-28',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(13차)'},{date:'2026-06-04',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(14차)'},{date:'2026-06-11',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(15차)'},{date:'2026-06-18',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(16차)'}]},
-  {id:26,type:'부서',dk:'일차',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'만성질환자를 위한 맞춤운동교실-시상식',desc:'사후 인바디 검사 및 악력 측정 후 시상식',date:'2026-06-19',time:'14:00',place:'컨퍼런스룸',min:60,cap:10,totalSessions:1,pub:true,sessions:[{date:'2026-06-19',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실-시상식'}]},
-  {id:27,type:'부서',dk:'일차',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'성인의 영양관리',desc:'60세이상 건강군 대상/ 다영역 중재를 통한 인지기능 저하 예방교육',date:'2026-04-23',time:'14:00',place:'일산동구 보건소',min:60,cap:10,totalSessions:20,pub:true,sessions:[{date:'2026-04-23',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(1차)'},{date:'2026-04-30',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(2차)'},{date:'2026-05-07',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(3차)'},{date:'2026-05-14',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(4차)'},{date:'2026-05-21',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(5차)'},{date:'2026-05-28',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(6차)'},{date:'2026-06-04',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(7차)'},{date:'2026-06-11',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(8차)'},{date:'2026-06-18',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(9차)'},{date:'2026-06-25',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(10차)'},{date:'2026-08-27',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(1차)'},{date:'2026-09-03',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(2차)'},{date:'2026-09-10',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(3차)'},{date:'2026-09-17',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(4차)'},{date:'2026-10-01',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(5차)'},{date:'2026-10-08',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(6차)'},{date:'2026-10-15',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(7차)'},{date:'2026-10-22',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(8차)'},{date:'2026-10-22',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(9차)'},{date:'2026-10-29',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(10차)'}]},
-  {id:28,type:'부서',dk:'일차',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영',desc:'25년 심리 사회정서 지지  프로그램 수료자 자조모임-대화체험공원',date:'2026-04-13',time:'10:00',place:'대화농업체험공원',min:90,cap:10,totalSessions:4,pub:true,sessions:[{date:'2026-04-13',time:'10:00',place:'대화농업체험공원',cap:10,min:90,title:'텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영(1차)'},{date:'2026-05-18',time:'10:00',place:'대화농업체험공원',cap:10,min:90,title:'텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영(2차)'},{date:'2026-06-15',time:'10:00',place:'대화농업체험공원',cap:10,min:90,title:'텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영(3차)'},{date:'2026-08-03',time:'10:00',place:'대화농업체험공원',cap:10,min:90,title:'텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영(4차)'}]},
-  {id:29,type:'부서',dk:'일차',cat:'건강증진',sub:'건강관리',tgt:'종사자(비의료인)',title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램',desc:'텃밭 및 원예치료와 건강교육을 통한 돌봄제공자의 심리정서 지지 및 역량강화',date:'2026-06-09',time:'14:00',place:'대화농업체험공원',min:90,cap:15,totalSessions:6,pub:true,sessions:[{date:'2026-06-09',time:'14:00',place:'대화농업체험공원',cap:15,min:90,title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(1차)'},{date:'2026-06-16',time:'14:00',place:'대화농업체험공원',cap:15,min:90,title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(2차)'},{date:'2026-06-23',time:'14:00',place:'대화농업체험공원',cap:15,min:90,title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(3차)'},{date:'2026-06-30',time:'14:00',place:'대화농업체험공원',cap:15,min:90,title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(4차)'},{date:'2026-07-07',time:'14:00',place:'대화농업체험공원',cap:15,min:90,title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(5차)'},{date:'2026-07-14',time:'14:00',place:'대화농업체험공원',cap:15,min:90,title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(6차)'}]},
-  {id:30,type:'부서',dk:'지장보',cat:'건강증진',sub:'통합돌봄',tgt:'일반인',title:'건강관리 및 낙상예방교육(시각장애인 대상)',desc:'시각장애인만을 대상으로 하는 교육으로 개별진행',date:'2026-05-18',time:'14:00',place:'경기도시각장애인복지관',min:60,cap:28,totalSessions:2,pub:true,sessions:[{date:'2026-05-18',time:'14:00',place:'경기도시각장애인복지관',cap:28,min:60,title:'건강관리 및 낙상예방교육(시각장애인 대상)'},{date:'2026-05-18',time:'14:00',place:'경기도시각장애인복지관',cap:0,min:60,title:'건강관리 및 낙상예방교육(시각장애인 대상)'}]},
-  {id:31,type:'부서',dk:'지장보',cat:'건강증진',sub:'통합돌봄',tgt:'일반인',title:'건강관리 교육(장애인 부모 대상)',desc:'발달장애부모교육 찾아가는 현장교육으로 개별진행',date:'2026-05-22',time:'10:00',place:'양주시장애인종합복지관',min:60,cap:10,totalSessions:2,pub:true,sessions:[{date:'2026-05-22',time:'10:00',place:'양주시장애인종합복지관',cap:10,min:60,title:'건강관리 교육(장애인 부모 대상)(1차)'},{date:'2026-05-29',time:'10:00',place:'포천시장애인가족지원센터',cap:10,min:60,title:'건강관리 교육(장애인 부모 대상)(2차)'}]},
-  {id:32,type:'부서',dk:'지장보',cat:'건강증진',sub:'통합돌봄',tgt:'일반인',title:'건강관리 및 자가운동 교육(성인발달장애인 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'',time:'',place:'일산장애인자립생활센터',min:120,cap:29,totalSessions:2,pub:true,sessions:[{date:'',time:'',place:'일산장애인자립생활센터',cap:29,min:120,title:'건강관리 및 자가운동 교육(성인발달장애인 대상)(1차)'},{date:'',time:'',place:'운정다누림장애인복지관',cap:10,min:60,title:'건강관리 및 자가운동 교육(성인발달장애인 대상)(2차)'}]},
-  {id:33,type:'부서',dk:'지장보',cat:'건강증진',sub:'통합돌봄',tgt:'일반인',title:'구강관리 및 예방 교육(성인발달장애인 부모 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'',time:'',place:'고양시장애인종합복지관',min:120,cap:7,totalSessions:1,pub:true,sessions:[{date:'',time:'',place:'고양시장애인종합복지관',cap:7,min:120,title:'구강관리 및 예방 교육(성인발달장애인 부모 대상)'}]},
-  {id:34,type:'부서',dk:'지장보',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'건강관리 교육(발달장애인 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'2026-04-14',time:'15:00',place:'고양시장애인종합복지관',min:60,cap:40,totalSessions:3,pub:true,sessions:[{date:'2026-04-14',time:'15:00',place:'고양시장애인종합복지관',cap:10,min:60,title:'건강관리 교육(발달장애인 대상)(1차)'},{date:'2026-05-12',time:'14:00',place:'애덕의 집',cap:40,min:60,title:'건강관리 교육(발달장애인 대상)(2차)'},{date:'',time:'',place:'애덕의 집',cap:40,min:60,title:'건강관리 교육(발달장애인 대상)(3차)'}]},
-  {id:35,type:'부서',dk:'지장보',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'자가운동교육(장애인 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'2026-05-13',time:'15:00',place:'의정부장애인종합복지관',min:60,cap:5,totalSessions:1,pub:true,sessions:[{date:'2026-05-13',time:'15:00',place:'의정부장애인종합복지관',cap:5,min:60,title:'자가운동교육(장애인 대상)'}]},
-  {id:36,type:'부서',dk:'지장보',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'성 상담 및 성교육(장애아동 양육자 대상)',desc:'찾아가는 현장교육으로 개별진행(외부 전문강사 운영)',date:'',time:'',place:'남양주시장애인가족지원센터',min:120,cap:11,totalSessions:1,pub:true,sessions:[{date:'',time:'',place:'남양주시장애인가족지원센터',cap:11,min:120,title:'성 상담 및 성교육(장애아동 양육자 대상)'}]},
-  {id:37,type:'부서',dk:'지장보',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'1부-다빈도 질환 및 건강관리교육(여성발달장애인 대상) 2부-올바른 성교육법(여성발달장애인 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'2026-06-11',time:'10:00',place:'연천군장애인가족지원센터',min:120,cap:10,totalSessions:2,pub:true,sessions:[{date:'2026-06-11',time:'10:00',place:'연천군장애인가족지원센터',cap:10,min:120,title:'1부-다빈도 질환 및 건강관리교육(여성발달장애인 대상) 2부-올바른 성교육법(여성발달장애인 대상)'},{date:'2026-06-11',time:'10:00',place:'연천군장애인가족지원센터',cap:0,min:60,title:'1부-다빈도 질환 및 건강관리교육(여성발달장애인 대상) 2부-올바른 성교육법(여성발달장애인 대상)'}]},
-  {id:38,type:'부서',dk:'지장보',cat:'건강증진',sub:'재활지원',tgt:'종사자(비의료인)',title:'장애인식개선 교육(예비의료인 대상)',desc:'원내 임상실습학생 대상교육, 현재는 재활치료센터만 진행',date:'2026-01-27',time:'16:00',place:'컨퍼런스룸2',min:60,cap:18,totalSessions:1,pub:true,sessions:[{date:'2026-01-27',time:'16:00',place:'컨퍼런스룸2',cap:18,min:60,title:'장애인식개선 교육(예비의료인 대상)'}]},
-  {id:39,type:'부서',dk:'지장보',cat:'건강증진',sub:'재활지원',tgt:'종사자(비의료인)',title:'시설종사자 역량강화교육(장애인식교육 등)',desc:'찾아가는 현장교육으로 개별진행',date:'2026-05-12',time:'15:00',place:'애덕의 집',min:60,cap:20,totalSessions:2,pub:true,sessions:[{date:'2026-05-12',time:'15:00',place:'애덕의 집',cap:20,min:60,title:'시설종사자 역량강화교육(장애인식교육 등)(1차)'},{date:'',time:'',place:'애덕의 집',cap:20,min:60,title:'시설종사자 역량강화교육(장애인식교육 등)(2차)'}]},
-  {id:40,type:'부서',dk:'지장보',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'건강관리 교육(발달장애인 가족 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'2026-06-12',time:'10:30',place:'경기북부장애인가족지원센터',min:60,cap:10,totalSessions:1,pub:true,sessions:[{date:'2026-06-12',time:'10:30',place:'경기북부장애인가족지원센터',cap:10,min:60,title:'건강관리 교육(발달장애인 가족 대상)'}]},
-  {id:41,type:'부서',dk:'지장보',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'질병예방 및 건강관리 교육(발달장애인 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'',time:'',place:'의정부 장애인주단기보호시설 곰두리네 집',min:60,cap:30,totalSessions:1,pub:true,sessions:[{date:'',time:'',place:'의정부 장애인주단기보호시설 곰두리네 집',cap:30,min:60,title:'질병예방 및 건강관리 교육(발달장애인 대상)'}]},
-  {id:42,type:'부서',dk:'지장보',cat:'건강증진',sub:'재활지원',tgt:'종사자(의료인)',title:'장애인건강권 및 인식개선 교육(의료종사자 대상)',desc:'재활치료센터 직원대상이나 타부서 참여 확대 진행 가능',date:'',time:'',place:'컨퍼런스룸1',min:60,cap:41,totalSessions:1,pub:true,sessions:[{date:'',time:'',place:'컨퍼런스룸1',cap:41,min:60,title:'장애인건강권 및 인식개선 교육(의료종사자 대상)'}]},
-  {id:43,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'부모교육',desc:'어린이병원 환자보호자대상교육으로 응급협조 희망',date:'2026-04-17',time:'14:00',place:'대강당',min:150,cap:130,totalSessions:8,pub:true,sessions:[{date:'2026-04-17',time:'14:00',place:'대강당',cap:130,min:150,title:'부모교육(1차)'},{date:'2026-04-17',time:'14:00',place:'대강당',cap:0,min:60,title:'부모교육(1차)'},{date:'',time:'',place:'미정',cap:0,min:60,title:'부모교육(2차)'},{date:'',time:'',place:'미정',cap:0,min:60,title:'부모교육(2차)'},{date:'',time:'',place:'미정',cap:0,min:120,title:'부모교육(3차)'},{date:'',time:'',place:'미정',cap:0,min:60,title:'부모교육(3차)'},{date:'',time:'',place:'미정',cap:0,min:60,title:'부모교육(4차)'},{date:'',time:'',place:'미정',cap:0,min:60,title:'부모교육(4차)'}]},
-  {id:44,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'사경 부모교육',desc:'어린이병원 보호자 대상 질환별 특성화 교육으로 개별 진행',date:'',time:'',place:'미정',min:120,cap:0,totalSessions:2,pub:true,sessions:[{date:'',time:'',place:'미정',cap:0,min:120,title:'사경 부모교육'},{date:'',time:'',place:'미정',cap:0,min:60,title:'사경 부모교육'}]},
-  {id:45,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'발달장애인 재활체육 교육',desc:'찾아가는 현장교육으로 개별진행(외부 전문강사 운영)',date:'',time:'',place:'미정',min:120,cap:15,totalSessions:8,pub:true,sessions:[{date:'',time:'',place:'미정',cap:15,min:120,title:'발달장애인 재활체육 교육(1차)'},{date:'',time:'',place:'미정',cap:0,min:60,title:'발달장애인 재활체육 교육(1차)'},{date:'',time:'',place:'미정',cap:15,min:120,title:'발달장애인 재활체육 교육(2차)'},{date:'',time:'',place:'미정',cap:0,min:60,title:'발달장애인 재활체육 교육(2차)'},{date:'',time:'',place:'미정',cap:15,min:120,title:'발달장애인 재활체육 교육(3차)'},{date:'',time:'',place:'미정',cap:0,min:60,title:'발달장애인 재활체육 교육(3차)'},{date:'',time:'',place:'미정',cap:15,min:120,title:'발달장애인 재활체육 교육(4차)'},{date:'',time:'',place:'미정',cap:0,min:60,title:'발달장애인 재활체육 교육(4차)'}]},
-  {id:46,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'보조기기 사용방법 교육',desc:'찾아가는 현장교육으로 개별진행(외부 전문강사 운영)',date:'',time:'',place:'미정',min:60,cap:45,totalSessions:2,pub:true,sessions:[{date:'',time:'',place:'미정',cap:45,min:60,title:'보조기기 사용방법 교육(1차)'},{date:'',time:'',place:'미정',cap:45,min:60,title:'보조기기 사용방법 교육(2차)'}]},
-  {id:47,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'종사자(비의료인)',title:'특수교사 연수교육',desc:'경기도내 특수교사 역걍강화 교육, 지장보와 공동 주관',date:'',time:'',place:'미정',min:120,cap:70,totalSessions:4,pub:true,sessions:[{date:'',time:'15:00',place:'미정',cap:70,min:120,title:'특수교사 연수교육(1차)'},{date:'',time:'15:00',place:'미정',cap:0,min:60,title:'특수교사 연수교육(1차)'},{date:'',time:'15:00',place:'미정',cap:70,min:120,title:'특수교사 연수교육(2차)'},{date:'',time:'15:00',place:'미정',cap:0,min:60,title:'특수교사 연수교육(2차)'}]},
-  {id:48,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'종사자(비의료인)',title:'특수교사 지원인력 연수교육',desc:'경기도내 특수학교 지원인력 교육으로 응급/감염 협조 희망',date:'',time:'',place:'미정',min:120,cap:70,totalSessions:2,pub:true,sessions:[{date:'',time:'15:00',place:'미정',cap:70,min:120,title:'특수교사 지원인력 연수교육'},{date:'',time:'15:00',place:'미정',cap:0,min:60,title:'특수교사 지원인력 연수교육'}]},
-  {id:49,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'종사자(의료인)',title:'전문역량강화교육',desc:'재활 치료사 전문교욱으로 개별진행',date:'',time:'',place:'미정',min:60,cap:0,totalSessions:4,pub:true,sessions:[{date:'',time:'',place:'미정',cap:0,min:60,title:'전문역량강화교육(1차)'},{date:'',time:'',place:'미정',cap:0,min:60,title:'전문역량강화교육(1차)'},{date:'',time:'',place:'미정',cap:0,min:60,title:'전문역량강화교육(2차)'},{date:'',time:'',place:'미정',cap:0,min:60,title:'전문역량강화교육(2차)'}]},
-  {id:50,type:'공동',dk:'공공',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'아토피 질환 예방(대안학교 학생 대상)',desc:'고양시 다문화 대안학교 학생 대상 교육',date:'2026-05-01',time:'10:00',place:'대안학교',min:60,cap:30,totalSessions:1,pub:true,sessions:[{date:'2026-05-01',time:'10:00',place:'대안학교',cap:30,min:60,title:'아토피 질환 예방(대안학교 학생 대상)'}]},
-  {id:51,type:'공동',dk:'공공',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'교실 속 트레이닝(대안학교 학생 대상)',desc:'고양시 다문화 대안학교 학생 대상 교육',date:'2026-05-01',time:'11:00',place:'대안학교',min:60,cap:30,totalSessions:1,pub:true,sessions:[{date:'2026-05-01',time:'11:00',place:'대안학교',cap:30,min:60,title:'교실 속 트레이닝(대안학교 학생 대상)'}]},
-  {id:52,type:'부서',dk:'공공',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'미정(고양축협 조합원 대상)',desc:'고양축협 조합원 대상 원하는 강의 요청 후 진료과 교수 연계',date:'2026-05-29',time:'10:00',place:'고양축협',min:45,cap:100,totalSessions:1,pub:true,sessions:[{date:'2026-05-29',time:'10:00',place:'고양축협',cap:100,min:45,title:'미정(고양축협 조합원 대상)'}]},
-  {id:53,type:'부서',dk:'공공',cat:'건강증진',sub:'정신건강',tgt:'일반인',title:'아이를 돌보다 지친 나를 돌보는 법(1차_방과후교사 대상)',desc:'고양시 교육지원청 연계 유치원 방과후 교사 대상',date:'2026-06-09',time:'09:00',place:'대강당',min:60,cap:80,totalSessions:3,pub:true,sessions:[{date:'2026-06-09',time:'09:00',place:'대강당',cap:80,min:60,title:'아이를 돌보다 지친 나를 돌보는 법(1차_방과후교사 대상)'},{date:'2026-06-17',time:'14:00',place:'대강당',cap:60,min:60,title:'아이를 돌보다 지친 나를 돌보는 법(2차_유치원교사 대상)'},{date:'2026-06-30',time:'09:00',place:'대강당',cap:30,min:60,title:'아이를 돌보다 지친 나를 돌보는 법(3차_학부모 대상)'}]},
-  {id:54,type:'공동',dk:'공공',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'근골격계 스트레칭(방과후교사 대상)',desc:'고양시 교육지원청 연계 유치원 방과후 교사 대상',date:'2026-06-09',time:'10:00',place:'대강당',min:60,cap:80,totalSessions:1,pub:true,sessions:[{date:'2026-06-09',time:'10:00',place:'대강당',cap:80,min:60,title:'근골격계 스트레칭(방과후교사 대상)'}]},
-  {id:55,type:'부서',dk:'공공',cat:'건강증진',sub:'정신건강',tgt:'일반인',title:'스트레스 검사 측정(방과후교사 대상)',desc:'고양시 교육지원청 연계 유치원 방과후 교사 대상',date:'2026-06-09',time:'11:00',place:'대강당',min:60,cap:80,totalSessions:1,pub:true,sessions:[{date:'2026-06-09',time:'11:00',place:'대강당',cap:80,min:60,title:'스트레스 검사 측정(방과후교사 대상)'}]},
-  {id:56,type:'공동',dk:'공공',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'근골격계 스트레칭(유치원교사 대상)',desc:'고양시 교육지원청 연계 유치원 사립, 공립 교사 대상',date:'2026-06-17',time:'15:00',place:'대강당',min:60,cap:60,totalSessions:1,pub:true,sessions:[{date:'2026-06-17',time:'15:00',place:'대강당',cap:60,min:60,title:'근골격계 스트레칭(유치원교사 대상)'}]},
-  {id:57,type:'부서',dk:'공공',cat:'건강증진',sub:'정신건강',tgt:'일반인',title:'스트레스 검사 측정(유치원교사 대상)',desc:'고양시 교육지원청 연계 유치원 사립, 공립 교사 대상',date:'2026-06-17',time:'16:00',place:'대강당',min:60,cap:60,totalSessions:1,pub:true,sessions:[{date:'2026-06-17',time:'16:00',place:'대강당',cap:60,min:60,title:'스트레스 검사 측정(유치원교사 대상)'}]},
-  {id:58,type:'공동',dk:'공공',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'언어발달(학부모 대상)',desc:'고양시 유치원 학부모 대상',date:'2026-06-30',time:'10:00',place:'대강당',min:60,cap:30,totalSessions:1,pub:true,sessions:[{date:'2026-06-30',time:'10:00',place:'대강당',cap:30,min:60,title:'언어발달(학부모 대상)'}]},
-  {id:59,type:'부서',dk:'공공',cat:'건강증진',sub:'정신건강',tgt:'일반인',title:'스트레스 검사 측정(학부모 대상)',desc:'고양시 유치원 학부모 대상',date:'2026-06-30',time:'11:00',place:'대강당',min:60,cap:30,totalSessions:1,pub:true,sessions:[{date:'2026-06-30',time:'11:00',place:'대강당',cap:30,min:60,title:'스트레스 검사 측정(학부모 대상)'}]},
-  {id:60,type:'공동',dk:'공공',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'아토피 질환 예방(다문화 학부모 대상)',desc:'다문화가족지원센터 이용 학부모 대상',date:'2026-06-01',time:'10:00',place:'컨퍼런스룸',min:60,cap:30,totalSessions:1,pub:true,sessions:[{date:'2026-06-01',time:'10:00',place:'컨퍼런스룸',cap:30,min:60,title:'아토피 질환 예방(다문화 학부모 대상)'}]},
-  {id:61,type:'공동',dk:'공공',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'언어발달(다문화 학부모 대상)',desc:'다문화가족지원센터 이용 학부모 대상',date:'2026-06-01',time:'11:00',place:'컨퍼런스룸',min:60,cap:30,totalSessions:1,pub:true,sessions:[{date:'2026-06-01',time:'11:00',place:'컨퍼런스룸',cap:30,min:60,title:'언어발달(다문화 학부모 대상)'}]},
-  {id:62,type:'공동',dk:'공공',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'아토피 질환 예방(지역아동센터 학생 대상)',desc:'지역아동센터 학생(초1~고등학생) 대상',date:'2026-08-01',time:'14:00',place:'지역아동센터',min:60,cap:40,totalSessions:2,pub:true,sessions:[{date:'2026-08-01',time:'14:00',place:'지역아동센터',cap:40,min:60,title:'아토피 질환 예방(지역아동센터 학생 대상)(1차)'},{date:'2026-08-01',time:'14:00',place:'지역아동센터',cap:40,min:60,title:'아토피 질환 예방(지역아동센터 학생 대상)(2차)'}]},
-  {id:63,type:'공동',dk:'공공',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'교실 속 트레이닝(지역아동센터 학생 대상)',desc:'지역아동센터 학생(초1~고등학생) 대상',date:'2026-08-01',time:'15:00',place:'지역아동센터',min:60,cap:40,totalSessions:2,pub:true,sessions:[{date:'2026-08-01',time:'15:00',place:'지역아동센터',cap:40,min:60,title:'교실 속 트레이닝(지역아동센터 학생 대상)(1차)'},{date:'2026-08-01',time:'15:00',place:'지역아동센터',cap:40,min:60,title:'교실 속 트레이닝(지역아동센터 학생 대상)(2차)'}]},
-  {id:64,type:'부서',dk:'공공',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'미정(지역주민 노인 대상)',desc:'지역심뇌혈관질환센터와 함께 성당 노인대상 건강강좌 실시',date:'2026-09-01',time:'10:00',place:'중산성당',min:45,cap:200,totalSessions:1,pub:true,sessions:[{date:'2026-09-01',time:'10:00',place:'중산성당',cap:200,min:45,title:'미정(지역주민 노인 대상)'}]},
-  {id:65,type:'공동',dk:'공공',cat:'건강증진',sub:'통합돌봄',tgt:'일반인',title:'사전연명의료의향서 안내 및 작성',desc:'연명의료에 대한 이해와 사전연명의료의향서 작성 안내 등',date:'2026-06-12',time:'10:00',place:'중산성당',min:60,cap:80,totalSessions:1,pub:true,sessions:[{date:'2026-06-12',time:'10:00',place:'중산성당',cap:80,min:60,title:'사전연명의료의향서 안내 및 작성'}]},
-  {id:66,type:'부서',dk:'공공',cat:'건강증진',sub:'통합돌봄',tgt:'일반인',title:'사회적고립가구 건강관리교육',desc:'복지관에서 발굴한 고립가구 대상 건강관리 및 정서관리 교육 진행',date:'2026-10-01',time:'',place:'흰돌종합사회복지관',min:60,cap:10,totalSessions:3,pub:true,sessions:[{date:'2026-10-01',time:'',place:'흰돌종합사회복지관',cap:10,min:60,title:'사회적고립가구 건강관리교육(1차)'},{date:'2026-10-01',time:'',place:'흰돌종합사회복지관',cap:10,min:60,title:'사회적고립가구 건강관리교육(2차)'},{date:'2026-10-01',time:'',place:'흰돌종합사회복지관',cap:10,min:60,title:'사회적고립가구 건강관리교육(3차)'}]},
-  {id:67,type:'공동',dk:'응급',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(비의료인)',title:'외상환자평가 및 병원전외상처치술',desc:'국립중앙의료원 대상자 모집. 소방서 구급대원 대상 교육',date:'2026-07-21',time:'13:30',place:'컨퍼런스룸1',min:240,cap:18,totalSessions:4,pub:true,sessions:[{date:'2026-07-21',time:'13:30',place:'컨퍼런스룸1',cap:18,min:240,title:'외상환자평가 및 병원전외상처치술'},{date:'2026-07-21',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'외상환자평가 및 병원전외상처치술'},{date:'2026-07-21',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'외상환자평가 및 병원전외상처치술'},{date:'2026-07-21',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'외상환자평가 및 병원전외상처치술'}]},
-  {id:68,type:'공동',dk:'응급',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(비의료인)',title:'응급분만시 탯줄결찰 및 절단',desc:'국립중앙의료원 대상자 모집. 소방서 구급대원 대상 교육',date:'2026-07-27',time:'13:30',place:'컨퍼런스룸1',min:240,cap:18,totalSessions:8,pub:true,sessions:[{date:'2026-07-27',time:'13:30',place:'컨퍼런스룸1',cap:18,min:240,title:'응급분만시 탯줄결찰 및 절단(1차)'},{date:'2026-07-27',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'응급분만시 탯줄결찰 및 절단(1차)'},{date:'2026-07-27',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'응급분만시 탯줄결찰 및 절단(1차)'},{date:'2026-07-27',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'응급분만시 탯줄결찰 및 절단(1차)'},{date:'2026-10-19',time:'13:30',place:'컨퍼런스룸1',cap:18,min:240,title:'응급분만시 탯줄결찰 및 절단(2차)'},{date:'2026-10-19',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'응급분만시 탯줄결찰 및 절단(2차)'},{date:'2026-10-19',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'응급분만시 탯줄결찰 및 절단(2차)'},{date:'2026-10-19',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'응급분만시 탯줄결찰 및 절단(2차)'}]},
-  {id:69,type:'공동',dk:'응급',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(비의료인)',title:'소아 응급처치',desc:'국립중앙의료원 대상자 모집. 소방서 구급대원 대상 교육',date:'2026-08-25',time:'13:30',place:'컨퍼런스룸1',min:240,cap:18,totalSessions:4,pub:true,sessions:[{date:'2026-08-25',time:'13:30',place:'컨퍼런스룸1',cap:18,min:240,title:'소아 응급처치(1차)'},{date:'2026-08-25',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'소아 응급처치(1차)'},{date:'2026-08-25',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'소아 응급처치(1차)'},{date:'2026-08-25',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'소아 응급처치(1차)'}]},
-  {id:70,type:'공동',dk:'응급',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(비의료인)',title:'소아응급처치',desc:'국립중앙의료원 대상자 모집. 소방서 구급대원 대상 교육',date:'2026-10-13',time:'13:30',place:'컨퍼런스룸1',min:240,cap:18,totalSessions:4,pub:true,sessions:[{date:'2026-10-13',time:'13:30',place:'컨퍼런스룸1',cap:18,min:240,title:'소아응급처치(2차)'},{date:'2026-10-13',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'소아응급처치(2차)'},{date:'2026-10-13',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'소아응급처치(2차)'},{date:'2026-10-13',time:'13:30',place:'컨퍼런스룸1',cap:0,min:60,title:'소아응급처치(2차)'}]},
-  {id:71,type:'부서',dk:'응급',cat:'응급대응',sub:'KTAS',tgt:'종사자(의료인)',title:'KTAS',desc:'한국형 응급환자 분류도구 (Korean Triage and Acuity Scale) 교육과정',date:'2026-04-14',time:'09:00',place:'세미나실1,2',min:270,cap:16,totalSessions:4,pub:true,sessions:[{date:'2026-04-14',time:'09:00',place:'세미나실1,2',cap:16,min:270,title:'KTAS(1차)'},{date:'2026-04-14',time:'09:00',place:'세미나실1,2',cap:0,min:60,title:'KTAS(1차)'},{date:'',time:'',place:'미정',cap:16,min:270,title:'KTAS(2차)'},{date:'',time:'',place:'미정',cap:0,min:60,title:'KTAS(2차)'}]},
-  {id:72,type:'공동',dk:'응급',cat:'응급대응',sub:'재난응급의료 합동교육',tgt:'종사자(비의료인)',title:'재난응급의료 합동교육',desc:'재난의료대응 체계 및 출동, 중증도분류, 도상훈련',date:'2026-07-10',time:'',place:'미정',min:180,cap:15,totalSessions:8,pub:true,sessions:[{date:'2026-07-10',time:'',place:'미정',cap:15,min:180,title:'재난응급의료 합동교육(1차)'},{date:'2026-07-10',time:'',place:'미정',cap:0,min:60,title:'재난응급의료 합동교육(1차)'},{date:'2026-07-10',time:'',place:'미정',cap:0,min:60,title:'재난응급의료 합동교육(1차)'},{date:'2026-07-10',time:'',place:'미정',cap:0,min:60,title:'재난응급의료 합동교육(1차)'},{date:'2026-08-21',time:'',place:'미정',cap:15,min:180,title:'재난응급의료 합동교육(2차)'},{date:'2026-08-21',time:'',place:'미정',cap:0,min:60,title:'재난응급의료 합동교육(2차)'},{date:'2026-08-21',time:'',place:'미정',cap:0,min:60,title:'재난응급의료 합동교육(2차)'},{date:'2026-08-21',time:'',place:'미정',cap:0,min:60,title:'재난응급의료 합동교육(2차)'}]},
+  {id:21,type:'부서',dk:'일차',cat:'건강증진',sub:'통합돌봄',tgt:'종사자(의료인)',title:'방문 노쇠 예방 재가돌봄 교육(가정의학과 전문의)',desc:'동구 보건소 통합돌봄 방문 노쇠 예방및 관리사업 담당자 교육',date:'2026-06-10',time:'14:00',place:'일산동구 보건소',min:60,cap:76,totalSessions:1,pub:true,sessions:[{date:'2026-06-10',time:'14:00',place:'일산동구 보건소',cap:76,min:60,title:'방문 노쇠 예방 재가돌봄 교육(가정의학과 전문의)'}]},
+  {id:22,type:'부서',dk:'일차',cat:'건강증진',sub:'통합돌봄',tgt:'종사자(의료인)',title:'방문 노쇠 예방 재가돌봄 교육(간호)',desc:'동구 보건소 통합돌봄 방문 노쇠 예방및 관리사업 담당자 교육',date:'2026-06-10',time:'',place:'일산동구 보건소',min:30,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-06-10',time:'',place:'일산동구 보건소',cap:0,min:30,title:'방문 노쇠 예방 재가돌봄 교육(간호)'}]},
+  {id:23,type:'부서',dk:'일차',cat:'건강증진',sub:'통합돌봄',tgt:'종사자(의료인)',title:'방문 노쇠 예방 재가돌봄 교육(임상영양)',desc:'동구 보건소 통합돌봄 방문 노쇠 예방및 관리사업 담당자 교육',date:'2026-06-10',time:'',place:'일산동구 보건소',min:30,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-06-10',time:'',place:'일산동구 보건소',cap:0,min:30,title:'방문 노쇠 예방 재가돌봄 교육(임상영양)'}]},
+  {id:24,type:'부서',dk:'일차',cat:'건강증진',sub:'통합돌봄',tgt:'종사자(의료인)',title:'방문 노쇠 예방 재가돌봄교육(운동)',desc:'동구 보건소 통합돌봄 방문 노쇠 예방및 관리사업 담당자 교육',date:'2026-06-10',time:'',place:'일산동구 보건소',min:30,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-06-10',time:'',place:'일산동구 보건소',cap:0,min:30,title:'방문 노쇠 예방 재가돌봄교육(운동)'}]},
+  {id:25,type:'부서',dk:'일차',cat:'감염예방',sub:'기본과정',tgt:'종사자(의료인)',title:'재가 방문 시 감염관리 실무 가이드',desc:'동구 보건소 통합돌봄 방문 노쇠 예방및 관리사업 담당자 교육',date:'2026-06-10',time:'',place:'일산동구보건소',min:20,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-06-10',time:'',place:'일산동구보건소',cap:0,min:20,title:'재가 방문 시 감염관리 실무 가이드'}]},
+  {id:26,type:'부서',dk:'일차',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'만성질환자를 위한 맞춤운동교실',desc:'사전 인바디 검사 및 악력 측정',date:'2026-03-05',time:'14:00',place:'컨퍼런스룸',min:60,cap:15,totalSessions:16,pub:true,sessions:[{date:'2026-03-05',time:'14:00',place:'컨퍼런스룸',cap:14,min:60,title:'만성질환자를 위한 맞춤운동교실(1차)'},{date:'2026-03-12',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(2차)'},{date:'2026-03-19',time:'14:00',place:'컨퍼런스룸',cap:13,min:60,title:'만성질환자를 위한 맞춤운동교실(3차)'},{date:'2026-03-26',time:'14:00',place:'컨퍼런스룸',cap:15,min:60,title:'만성질환자를 위한 맞춤운동교실(4차)'},{date:'2026-04-02',time:'14:00',place:'컨퍼런스룸',cap:15,min:60,title:'만성질환자를 위한 맞춤운동교실(5차)'},{date:'2026-04-09',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(6차)'},{date:'2026-04-16',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(7차)'},{date:'2026-04-23',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(8차)'},{date:'2026-04-30',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(9차)'},{date:'2026-05-07',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(10차)'},{date:'2026-05-14',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(11차)'},{date:'2026-05-21',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(12차)'},{date:'2026-05-28',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(13차)'},{date:'2026-06-04',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(14차)'},{date:'2026-06-11',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(15차)'},{date:'2026-06-18',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실(16차)'}]},
+  {id:27,type:'부서',dk:'일차',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'만성질환자를 위한 맞춤운동교실-시상식',desc:'사후 인바디 검사 및 악력 측정 후 시상식',date:'2026-06-19',time:'14:00',place:'컨퍼런스룸',min:60,cap:10,totalSessions:1,pub:true,sessions:[{date:'2026-06-19',time:'14:00',place:'컨퍼런스룸',cap:10,min:60,title:'만성질환자를 위한 맞춤운동교실-시상식'}]},
+  {id:28,type:'부서',dk:'일차',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'성인의 영양관리',desc:'60세이상 건강군 대상/ 다영역 중재를 통한 인지기능 저하 예방교육',date:'2026-04-23',time:'14:00',place:'일산동구 보건소',min:60,cap:10,totalSessions:20,pub:true,sessions:[{date:'2026-04-23',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(1차)'},{date:'2026-04-30',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(2차)'},{date:'2026-05-07',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(3차)'},{date:'2026-05-14',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(4차)'},{date:'2026-05-21',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(5차)'},{date:'2026-05-28',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(6차)'},{date:'2026-06-04',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(7차)'},{date:'2026-06-11',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(8차)'},{date:'2026-06-18',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(9차)'},{date:'2026-06-25',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -상반기(10차)'},{date:'2026-08-27',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(1차)'},{date:'2026-09-03',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(2차)'},{date:'2026-09-10',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(3차)'},{date:'2026-09-17',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(4차)'},{date:'2026-10-01',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(5차)'},{date:'2026-10-08',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(6차)'},{date:'2026-10-15',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(7차)'},{date:'2026-10-22',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(8차)'},{date:'2026-10-22',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(9차)'},{date:'2026-10-29',time:'14:00',place:'일산동구 보건소',cap:10,min:60,title:'성인의 영양관리 -하반기(10차)'}]},
+  {id:29,type:'부서',dk:'일차',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'식품알레르기',desc:'',date:'2026-06-25',time:'',place:'일산동구 보건소',min:0,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-06-25',time:'',place:'일산동구 보건소',cap:0,min:0,title:'식품알레르기'}]},
+  {id:30,type:'부서',dk:'일차',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영',desc:'25년 심리 사회정서 지지 프로그램 수료자 자조모임-대화체험공원',date:'2026-04-13',time:'10:00',place:'대화농업체험공원',min:90,cap:10,totalSessions:4,pub:true,sessions:[{date:'2026-04-13',time:'10:00',place:'대화농업체험공원',cap:10,min:90,title:'텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영(1차)'},{date:'2026-05-18',time:'10:00',place:'대화농업체험공원',cap:10,min:90,title:'텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영(2차)'},{date:'2026-06-15',time:'10:00',place:'대화농업체험공원',cap:10,min:90,title:'텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영(3차)'},{date:'2026-08-03',time:'10:00',place:'대화농업체험공원',cap:10,min:90,title:'텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영(4차)'}]},
+  {id:31,type:'부서',dk:'일차',cat:'건강증진',sub:'건강관리',tgt:'종사자(비의료인)',title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램',desc:'텃밭 및 원예치료와 건강교육을 통한 돌봄제공자의 심리정서 지지 및 역량강화',date:'2026-07-14',time:'14:00',place:'일차 회의실',min:90,cap:15,totalSessions:7,pub:true,sessions:[{date:'2026-07-14',time:'14:00',place:'일차 회의실',cap:15,min:90,title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(1차)'},{date:'2026-07-20',time:'10:00',place:'대화농업체험공원',cap:15,min:90,title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(2차)'},{date:'2026-07-28',time:'14:00',place:'일차 회의실',cap:15,min:90,title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(3차)'},{date:'2026-08-03',time:'10:00',place:'대화농업체험공원',cap:15,min:90,title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(4차)'},{date:'2026-08-11',time:'14:00',place:'일차 회의실',cap:15,min:90,title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(5차)'},{date:'2026-08-18',time:'14:00',place:'일차 회의실',cap:15,min:90,title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(6차)'},{date:'2026-08-25',time:'14:00',place:'일차 회의실',cap:15,min:90,title:'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(7차)'}]},
+  {id:32,type:'부서',dk:'일차',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'만성질환 질병 완화 근력 운동 교육',desc:'국민건강보험공단 김포지사 요청 교육',date:'2026-05-28',time:'13:30',place:'김포 김포 한강신도시 아파트 경로당',min:120,cap:15,totalSessions:1,pub:true,sessions:[{date:'2026-05-28',time:'13:30',place:'김포 김포 한강신도시 아파트 경로당',cap:15,min:120,title:'만성질환 질병 완화 근력 운동 교육'}]},
+  {id:33,type:'부서',dk:'지장보',cat:'건강증진',sub:'통합돌봄',tgt:'일반인',title:'건강관리 및 낙상예방교육(시각장애인 대상)',desc:'시각장애인만을 대상으로 하는 교육으로 개별진행',date:'2026-05-18',time:'14:00',place:'경기도시각장애인복지관',min:60,cap:28,totalSessions:2,pub:true,sessions:[{date:'2026-05-18',time:'14:00',place:'경기도시각장애인복지관',cap:28,min:60,title:'건강관리 및 낙상예방교육(시각장애인 대상)'},{date:'2026-05-18',time:'14:00',place:'경기도시각장애인복지관',cap:0,min:0,title:'건강관리 및 낙상예방교육(시각장애인 대상)'}]},
+  {id:34,type:'부서',dk:'지장보',cat:'건강증진',sub:'통합돌봄',tgt:'일반인',title:'건강관리 교육(장애인 부모 대상)',desc:'발달장애부모교육 찾아가는 현장교육으로 개별진행',date:'2026-05-22',time:'10:00',place:'양주시장애인종합복지관',min:60,cap:10,totalSessions:2,pub:true,sessions:[{date:'2026-05-22',time:'10:00',place:'양주시장애인종합복지관',cap:10,min:60,title:'건강관리 교육(장애인 부모 대상)(1차)'},{date:'2026-05-29',time:'10:00',place:'포천시장애인가족지원센터',cap:10,min:60,title:'건강관리 교육(장애인 부모 대상)(2차)'}]},
+  {id:35,type:'부서',dk:'지장보',cat:'건강증진',sub:'통합돌봄',tgt:'일반인',title:'건강관리 및 자가운동 교육(성인발달장애인 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'',time:'',place:'일산장애인자립생활센터',min:120,cap:29,totalSessions:2,pub:true,sessions:[{date:'',time:'',place:'일산장애인자립생활센터',cap:29,min:120,title:'건강관리 및 자가운동 교육(성인발달장애인 대상)(1차)'},{date:'',time:'',place:'운정다누림장애인복지관',cap:10,min:60,title:'건강관리 및 자가운동 교육(성인발달장애인 대상)(2차)'}]},
+  {id:36,type:'부서',dk:'지장보',cat:'건강증진',sub:'통합돌봄',tgt:'일반인',title:'구강관리 및 예방 교육(성인발달장애인 부모 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'',time:'',place:'고양시장애인종합복지관',min:120,cap:7,totalSessions:1,pub:true,sessions:[{date:'',time:'',place:'고양시장애인종합복지관',cap:7,min:120,title:'구강관리 및 예방 교육(성인발달장애인 부모 대상)'}]},
+  {id:37,type:'부서',dk:'지장보',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'건강관리 교육(발달장애인 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'2026-04-14',time:'15:00',place:'고양시장애인종합복지관',min:60,cap:40,totalSessions:3,pub:true,sessions:[{date:'2026-04-14',time:'15:00',place:'고양시장애인종합복지관',cap:10,min:60,title:'건강관리 교육(발달장애인 대상)(1차)'},{date:'2026-05-12',time:'14:00',place:'애덕의 집',cap:40,min:60,title:'건강관리 교육(발달장애인 대상)(2차)'},{date:'',time:'',place:'애덕의 집',cap:40,min:60,title:'건강관리 교육(발달장애인 대상)(3차)'}]},
+  {id:38,type:'부서',dk:'지장보',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'자가운동교육(장애인 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'2026-05-13',time:'15:00',place:'의정부장애인종합복지관',min:60,cap:5,totalSessions:1,pub:true,sessions:[{date:'2026-05-13',time:'15:00',place:'의정부장애인종합복지관',cap:5,min:60,title:'자가운동교육(장애인 대상)'}]},
+  {id:39,type:'부서',dk:'지장보',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'성 상담 및 성교육(장애아동 양육자 대상)',desc:'찾아가는 현장교육으로 개별진행(외부 전문강사 운영)',date:'',time:'',place:'남양주시장애인가족지원센터',min:120,cap:11,totalSessions:1,pub:true,sessions:[{date:'',time:'',place:'남양주시장애인가족지원센터',cap:11,min:120,title:'성 상담 및 성교육(장애아동 양육자 대상)'}]},
+  {id:40,type:'부서',dk:'지장보',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'1부-다빈도 질환 및 건강관리교육(여성발달장애인 대상) 2부-올바른 성교육법(여성발달장애인 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'2026-06-11',time:'10:00',place:'연천군장애인가족지원센터',min:120,cap:10,totalSessions:2,pub:true,sessions:[{date:'2026-06-11',time:'10:00',place:'연천군장애인가족지원센터',cap:10,min:120,title:'1부-다빈도 질환 및 건강관리교육(여성발달장애인 대상) 2부-올바른 성교육법(여성발달장애인 대상)'},{date:'2026-06-11',time:'10:00',place:'연천군장애인가족지원센터',cap:0,min:0,title:'1부-다빈도 질환 및 건강관리교육(여성발달장애인 대상) 2부-올바른 성교육법(여성발달장애인 대상)'}]},
+  {id:41,type:'부서',dk:'지장보',cat:'건강증진',sub:'재활지원',tgt:'종사자(비의료인)',title:'장애인식개선 교육(예비의료인 대상)',desc:'원내 임상실습학생 대상교육, 현재는 재활치료센터만 진행',date:'2026-01-27',time:'16:00',place:'컨퍼런스룸2',min:60,cap:18,totalSessions:1,pub:true,sessions:[{date:'2026-01-27',time:'16:00',place:'컨퍼런스룸2',cap:18,min:60,title:'장애인식개선 교육(예비의료인 대상)'}]},
+  {id:42,type:'부서',dk:'지장보',cat:'건강증진',sub:'재활지원',tgt:'종사자(비의료인)',title:'시설종사자 역량강화교육(장애인식교육 등)',desc:'찾아가는 현장교육으로 개별진행',date:'2026-05-12',time:'15:00',place:'애덕의 집',min:60,cap:20,totalSessions:2,pub:true,sessions:[{date:'2026-05-12',time:'15:00',place:'애덕의 집',cap:20,min:60,title:'시설종사자 역량강화교육(장애인식교육 등)(1차)'},{date:'',time:'',place:'애덕의 집',cap:20,min:60,title:'시설종사자 역량강화교육(장애인식교육 등)(2차)'}]},
+  {id:43,type:'부서',dk:'지장보',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'건강관리 교육(발달장애인 가족 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'2026-06-12',time:'10:30',place:'경기북부장애인가족지원센터',min:60,cap:10,totalSessions:1,pub:true,sessions:[{date:'2026-06-12',time:'10:30',place:'경기북부장애인가족지원센터',cap:10,min:60,title:'건강관리 교육(발달장애인 가족 대상)'}]},
+  {id:44,type:'부서',dk:'지장보',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'질병예방 및 건강관리 교육(발달장애인 대상)',desc:'찾아가는 현장교육으로 개별진행',date:'',time:'',place:'의정부 장애인주단기보호시설 곰두리네 집',min:60,cap:30,totalSessions:1,pub:true,sessions:[{date:'',time:'',place:'의정부 장애인주단기보호시설 곰두리네 집',cap:30,min:60,title:'질병예방 및 건강관리 교육(발달장애인 대상)'}]},
+  {id:45,type:'부서',dk:'지장보',cat:'건강증진',sub:'재활지원',tgt:'종사자(의료인)',title:'장애인건강권 및 인식개선 교육(의료종사자 대상)',desc:'재활치료센터 직원대상이나 타부서 참여 확대 진행 가능',date:'',time:'',place:'컨퍼런스룸1',min:60,cap:41,totalSessions:1,pub:true,sessions:[{date:'',time:'',place:'컨퍼런스룸1',cap:41,min:60,title:'장애인건강권 및 인식개선 교육(의료종사자 대상)'}]},
+  {id:46,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'부모교육',desc:'어린이병원 환자보호자대상교육으로 응급협조 희망',date:'2026-04-17',time:'14:00',place:'대강당',min:150,cap:130,totalSessions:8,pub:true,sessions:[{date:'2026-04-17',time:'14:00',place:'대강당',cap:130,min:150,title:'부모교육(1차)'},{date:'2026-04-17',time:'14:00',place:'대강당',cap:0,min:0,title:'부모교육(1차)'},{date:'',time:'',place:'미정',cap:0,min:0,title:'부모교육(2차)'},{date:'',time:'',place:'미정',cap:0,min:0,title:'부모교육(2차)'},{date:'',time:'',place:'미정',cap:0,min:120,title:'부모교육(3차)'},{date:'',time:'',place:'미정',cap:0,min:0,title:'부모교육(3차)'},{date:'',time:'',place:'미정',cap:0,min:0,title:'부모교육(4차)'},{date:'',time:'',place:'미정',cap:0,min:0,title:'부모교육(4차)'}]},
+  {id:47,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'사경 부모교육',desc:'어린이병원 보호자 대상 질환별 특성화 교육으로 개별 진행',date:'',time:'',place:'미정',min:120,cap:0,totalSessions:2,pub:true,sessions:[{date:'',time:'',place:'미정',cap:0,min:120,title:'사경 부모교육'},{date:'',time:'',place:'미정',cap:0,min:0,title:'사경 부모교육'}]},
+  {id:48,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'발달장애인 재활체육 교육',desc:'찾아가는 현장교육으로 개별진행(외부 전문강사 운영)',date:'',time:'',place:'미정',min:120,cap:15,totalSessions:8,pub:true,sessions:[{date:'',time:'',place:'미정',cap:15,min:120,title:'발달장애인 재활체육 교육(1차)'},{date:'',time:'',place:'미정',cap:0,min:0,title:'발달장애인 재활체육 교육(1차)'},{date:'',time:'',place:'미정',cap:15,min:120,title:'발달장애인 재활체육 교육(2차)'},{date:'',time:'',place:'미정',cap:0,min:0,title:'발달장애인 재활체육 교육(2차)'},{date:'',time:'',place:'미정',cap:15,min:120,title:'발달장애인 재활체육 교육(3차)'},{date:'',time:'',place:'미정',cap:0,min:0,title:'발달장애인 재활체육 교육(3차)'},{date:'',time:'',place:'미정',cap:15,min:120,title:'발달장애인 재활체육 교육(4차)'},{date:'',time:'',place:'미정',cap:0,min:0,title:'발달장애인 재활체육 교육(4차)'}]},
+  {id:49,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'보조기기 사용방법 교육',desc:'찾아가는 현장교육으로 개별진행(외부 전문강사 운영)',date:'',time:'',place:'미정',min:60,cap:45,totalSessions:2,pub:true,sessions:[{date:'',time:'',place:'미정',cap:45,min:60,title:'보조기기 사용방법 교육(1차)'},{date:'',time:'',place:'미정',cap:45,min:60,title:'보조기기 사용방법 교육(2차)'}]},
+  {id:50,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'종사자(비의료인)',title:'특수교사 연수교육',desc:'경기도내 특수교사 역걍강화 교육, 지장보와 공동 주관',date:'',time:'15:00',place:'미정',min:120,cap:70,totalSessions:4,pub:true,sessions:[{date:'',time:'15:00',place:'미정',cap:70,min:120,title:'특수교사 연수교육(1차)'},{date:'',time:'15:00',place:'미정',cap:0,min:0,title:'특수교사 연수교육(1차)'},{date:'',time:'15:00',place:'미정',cap:70,min:120,title:'특수교사 연수교육(2차)'},{date:'',time:'15:00',place:'미정',cap:0,min:0,title:'특수교사 연수교육(2차)'}]},
+  {id:51,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'종사자(비의료인)',title:'특수교사 지원인력 연수교육',desc:'경기도내 특수학교 지원인력 교육으로 응급/감염 협조 희망',date:'',time:'15:00',place:'미정',min:120,cap:70,totalSessions:2,pub:true,sessions:[{date:'',time:'15:00',place:'미정',cap:70,min:120,title:'특수교사 지원인력 연수교육'},{date:'',time:'15:00',place:'미정',cap:0,min:0,title:'특수교사 지원인력 연수교육'}]},
+  {id:52,type:'부서',dk:'어린이',cat:'건강증진',sub:'재활지원',tgt:'종사자(의료인)',title:'전문역량강화교육',desc:'재활 치료사 전문교욱으로 개별진행',date:'',time:'',place:'미정',min:0,cap:0,totalSessions:4,pub:true,sessions:[{date:'',time:'',place:'미정',cap:0,min:0,title:'전문역량강화교육(1차)'},{date:'',time:'',place:'미정',cap:0,min:0,title:'전문역량강화교육(1차)'},{date:'',time:'',place:'미정',cap:0,min:0,title:'전문역량강화교육(2차)'},{date:'',time:'',place:'미정',cap:0,min:0,title:'전문역량강화교육(2차)'}]},
+  {id:53,type:'공동',dk:'공공',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'아토피 피부염(인형극) 교육(대안학교 학생 대상)',desc:'고양시 다문화 대안학교 학생 대상 교육',date:'2026-05-20',time:'14:00',place:'고양시다문화대안학교',min:60,cap:34,totalSessions:1,pub:true,sessions:[{date:'2026-05-20',time:'14:00',place:'고양시다문화대안학교',cap:34,min:60,title:'아토피 피부염(인형극) 교육(대안학교 학생 대상)'}]},
+  {id:54,type:'부서',dk:'공공',cat:'응급대응',sub:'',tgt:'일반인',title:'소방안전(체험)교육(대안학교 학생 대상)',desc:'고양시 다문화 대안학교 학생 대상 교육',date:'2026-05-20',time:'15:00',place:'고양시다문화대안학교',min:60,cap:0,totalSessions:3,pub:true,sessions:[{date:'2026-05-20',time:'15:00',place:'고양시다문화대안학교',cap:0,min:60,title:'소방안전(체험)교육(대안학교 학생 대상)'},{date:'2026-07-29',time:'15:00',place:'푸른학교 반디교실 지역아동센터',cap:0,min:60,title:'소방안전(체험)교육(대안학교 학생 대상)'},{date:'2026-08-12',time:'15:00',place:'동녘지역아동센터',cap:0,min:60,title:'소방안전(체험)교육(대안학교 학생 대상)'}]},
+  {id:55,type:'부서',dk:'공공',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'폐렴으로부터 내몸 지키기(고양축협 조합원 대상)',desc:'고양축협 조합원 대상 원하는 강의 요청 후 진료과 교수 연계',date:'2026-05-29',time:'10:00',place:'고양축협',min:90,cap:90,totalSessions:1,pub:true,sessions:[{date:'2026-05-29',time:'10:00',place:'고양축협',cap:90,min:90,title:'폐렴으로부터 내몸 지키기(고양축협 조합원 대상)'}]},
+  {id:56,type:'부서',dk:'공공',cat:'건강증진',sub:'정신건강',tgt:'일반인',title:'아이를 돌보다 지친 나를 돌보는 법(1차_방과후교사 대상)',desc:'고양시 교육지원청 연계 유치원 방과후 교사 대상',date:'2026-06-09',time:'09:00',place:'대강당',min:60,cap:67,totalSessions:1,pub:true,sessions:[{date:'2026-06-09',time:'09:00',place:'대강당',cap:67,min:60,title:'아이를 돌보다 지친 나를 돌보는 법(1차_방과후교사 대상)'}]},
+  {id:57,type:'공동',dk:'공공',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'근골격계 질환 예방 운동(방과후교사 대상)',desc:'고양시 교육지원청 연계 유치원 방과후 교사 대상',date:'2026-06-09',time:'10:00',place:'대강당',min:60,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-06-09',time:'10:00',place:'대강당',cap:0,min:60,title:'근골격계 질환 예방 운동(방과후교사 대상)'}]},
+  {id:58,type:'부서',dk:'공공',cat:'건강증진',sub:'정신건강',tgt:'일반인',title:'스트레스 검사 측정(방과후교사 대상)',desc:'고양시 교육지원청 연계 유치원 방과후 교사 대상',date:'2026-06-09',time:'11:00',place:'대강당',min:60,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-06-09',time:'11:00',place:'대강당',cap:0,min:60,title:'스트레스 검사 측정(방과후교사 대상)'}]},
+  {id:59,type:'공동',dk:'공공',cat:'건강증진',sub:'통합돌봄',tgt:'일반인',title:'사전연명의료의향서 안내 및 작성',desc:'연명의료에 대한 이해와 사전연명의료의향서 작성 안내 등',date:'2026-06-12',time:'10:00',place:'중산성당',min:0,cap:87,totalSessions:1,pub:true,sessions:[{date:'2026-06-12',time:'10:00',place:'중산성당',cap:87,min:0,title:'사전연명의료의향서 안내 및 작성'}]},
+  {id:60,type:'부서',dk:'공공',cat:'건강증진',sub:'정신건강',tgt:'일반인',title:'아이를 돌보다 지친 나를 돌보는 법(2차_유치원교사 대상)',desc:'고양시 교육지원청 연계 유치원 사립, 공립 교사 대상',date:'2026-06-17',time:'14:00',place:'대강당',min:60,cap:25,totalSessions:1,pub:true,sessions:[{date:'2026-06-17',time:'14:00',place:'대강당',cap:25,min:60,title:'아이를 돌보다 지친 나를 돌보는 법(2차_유치원교사 대상)'}]},
+  {id:61,type:'공동',dk:'공공',cat:'건강증진',sub:'건강관리',tgt:'일반인',title:'근골격계 질환 예방 운동(유치원교사 대상)',desc:'고양시 교육지원청 연계 유치원 사립, 공립 교사 대상',date:'2026-06-17',time:'15:00',place:'대강당',min:60,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-06-17',time:'15:00',place:'대강당',cap:0,min:60,title:'근골격계 질환 예방 운동(유치원교사 대상)'}]},
+  {id:62,type:'부서',dk:'공공',cat:'건강증진',sub:'정신건강',tgt:'일반인',title:'스트레스 검사 측정(유치원교사 대상)',desc:'고양시 교육지원청 연계 유치원 사립, 공립 교사 대상',date:'2026-06-17',time:'16:00',place:'대강당',min:60,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-06-17',time:'16:00',place:'대강당',cap:0,min:60,title:'스트레스 검사 측정(유치원교사 대상)'}]},
+  {id:63,type:'부서',dk:'공공',cat:'건강증진',sub:'정신건강',tgt:'일반인',title:'아이를 돌보다 지친 나를 돌보는 법(3차_학부모 대상)',desc:'고양시 유치원 학부모 대상',date:'2026-06-30',time:'09:00',place:'대강당',min:60,cap:30,totalSessions:1,pub:true,sessions:[{date:'2026-06-30',time:'09:00',place:'대강당',cap:30,min:60,title:'아이를 돌보다 지친 나를 돌보는 법(3차_학부모 대상)'}]},
+  {id:64,type:'공동',dk:'공공',cat:'건강증진',sub:'재활지원',tgt:'일반인',title:'인지 발달을 위한 신체 놀이(학부모 대상)',desc:'고양시 유치원 학부모 대상',date:'2026-06-30',time:'10:00',place:'대강당',min:60,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-06-30',time:'10:00',place:'대강당',cap:0,min:60,title:'인지 발달을 위한 신체 놀이(학부모 대상)'}]},
+  {id:65,type:'부서',dk:'공공',cat:'건강증진',sub:'정신건강',tgt:'일반인',title:'스트레스 검사 측정(학부모 대상)',desc:'고양시 유치원 학부모 대상',date:'2026-06-30',time:'11:00',place:'대강당',min:60,cap:0,totalSessions:1,pub:true,sessions:[{date:'2026-06-30',time:'11:00',place:'대강당',cap:0,min:60,title:'스트레스 검사 측정(학부모 대상)'}]},
+  {id:66,type:'공동',dk:'공공',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'내 뇌를 살리는 뇌혈관질환 바로알기(고양축협 조합원 대상)',desc:'고양축협 조합원 대상 원하는 강의 요청 후 진료과 교수 연계',date:'2026-07-23',time:'10:00',place:'고양축협',min:100,cap:100,totalSessions:1,pub:true,sessions:[{date:'2026-07-23',time:'10:00',place:'고양축협',cap:100,min:100,title:'내 뇌를 살리는 뇌혈관질환 바로알기(고양축협 조합원 대상)'}]},
+  {id:67,type:'공동',dk:'공공',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'아토피 피부염(인형극) 교육(지역아동센터 학생 대상)',desc:'지역아동센터 학생(초1~고등학생) 대상',date:'2026-07-29',time:'14:00',place:'푸른학교 반디교실 지역아동센터',min:60,cap:40,totalSessions:2,pub:true,sessions:[{date:'2026-07-29',time:'14:00',place:'푸른학교 반디교실 지역아동센터',cap:40,min:60,title:'아토피 피부염(인형극) 교육(지역아동센터 학생 대상)(1차)'},{date:'2026-08-12',time:'14:00',place:'동녘지역아동센터',cap:40,min:60,title:'아토피 피부염(인형극) 교육(지역아동센터 학생 대상)(1차)'}]},
+  {id:68,type:'부서',dk:'공공',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'어르신을 위한 콩팥 건강교실(고양축협 조합원 대상)',desc:'고양축협 조합원 대상 원하는 강의 요청 후 진료과 교수 연계',date:'2026-08-19',time:'10:00',place:'고양축협',min:100,cap:100,totalSessions:1,pub:true,sessions:[{date:'2026-08-19',time:'10:00',place:'고양축협',cap:100,min:100,title:'어르신을 위한 콩팥 건강교실(고양축협 조합원 대상)'}]},
+  {id:69,type:'부서',dk:'공공',cat:'건강증진',sub:'질환관리',tgt:'일반인',title:'미정(지역주민 노인 대상)',desc:'지역심뇌혈관질환센터와 함께 성당 노인대상 건강강좌 실시',date:'2026-09-01',time:'10:00',place:'중산성당',min:45,cap:200,totalSessions:1,pub:true,sessions:[{date:'2026-09-01',time:'10:00',place:'중산성당',cap:200,min:45,title:'미정(지역주민 노인 대상)'}]},
+  {id:70,type:'부서',dk:'공공',cat:'건강증진',sub:'통합돌봄',tgt:'일반인',title:'사회적고립가구 건강관리교육',desc:'복지관에서 발굴한 고립가구 대상 건강관리 및 정서관리 교육 진행',date:'2026-10-01',time:'',place:'흰돌종합사회복지관',min:0,cap:10,totalSessions:3,pub:true,sessions:[{date:'2026-10-01',time:'',place:'흰돌종합사회복지관',cap:10,min:0,title:'사회적고립가구 건강관리교육(1차)'},{date:'2026-10-01',time:'',place:'흰돌종합사회복지관',cap:10,min:0,title:'사회적고립가구 건강관리교육(2차)'},{date:'2026-10-01',time:'',place:'흰돌종합사회복지관',cap:10,min:0,title:'사회적고립가구 건강관리교육(3차)'}]},
+  {id:71,type:'공동',dk:'응급',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(비의료인)',title:'외상환자평가 및 병원전외상처치술',desc:'국립중앙의료원 대상자 모집. 소방서 구급대원 대상 교육',date:'2026-07-21',time:'13:30',place:'컨퍼런스룸1',min:240,cap:18,totalSessions:4,pub:true,sessions:[{date:'2026-07-21',time:'13:30',place:'컨퍼런스룸1',cap:18,min:240,title:'외상환자평가 및 병원전외상처치술'},{date:'2026-07-21',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'외상환자평가 및 병원전외상처치술'},{date:'2026-07-21',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'외상환자평가 및 병원전외상처치술'},{date:'2026-07-21',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'외상환자평가 및 병원전외상처치술'}]},
+  {id:72,type:'공동',dk:'응급',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(비의료인)',title:'응급분만시 탯줄결찰 및 절단',desc:'국립중앙의료원 대상자 모집. 소방서 구급대원 대상 교육',date:'2026-07-27',time:'13:30',place:'컨퍼런스룸1',min:240,cap:18,totalSessions:8,pub:true,sessions:[{date:'2026-07-27',time:'13:30',place:'컨퍼런스룸1',cap:18,min:240,title:'응급분만시 탯줄결찰 및 절단(1차)'},{date:'2026-07-27',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'응급분만시 탯줄결찰 및 절단(1차)'},{date:'2026-07-27',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'응급분만시 탯줄결찰 및 절단(1차)'},{date:'2026-07-27',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'응급분만시 탯줄결찰 및 절단(1차)'},{date:'2026-10-19',time:'13:30',place:'컨퍼런스룸1',cap:18,min:240,title:'응급분만시 탯줄결찰 및 절단(2차)'},{date:'2026-10-19',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'응급분만시 탯줄결찰 및 절단(2차)'},{date:'2026-10-19',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'응급분만시 탯줄결찰 및 절단(2차)'},{date:'2026-10-19',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'응급분만시 탯줄결찰 및 절단(2차)'}]},
+  {id:73,type:'공동',dk:'응급',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(비의료인)',title:'소아 응급처치',desc:'국립중앙의료원 대상자 모집. 소방서 구급대원 대상 교육',date:'2026-08-25',time:'13:30',place:'컨퍼런스룸1',min:240,cap:18,totalSessions:4,pub:true,sessions:[{date:'2026-08-25',time:'13:30',place:'컨퍼런스룸1',cap:18,min:240,title:'소아 응급처치(1차)'},{date:'2026-08-25',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'소아 응급처치(1차)'},{date:'2026-08-25',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'소아 응급처치(1차)'},{date:'2026-08-25',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'소아 응급처치(1차)'}]},
+  {id:74,type:'공동',dk:'응급',cat:'응급대응',sub:'현장응급의료종사자 전문화 교육',tgt:'종사자(비의료인)',title:'소아응급처치',desc:'국립중앙의료원 대상자 모집. 소방서 구급대원 대상 교육',date:'2026-10-13',time:'13:30',place:'컨퍼런스룸1',min:240,cap:18,totalSessions:4,pub:true,sessions:[{date:'2026-10-13',time:'13:30',place:'컨퍼런스룸1',cap:18,min:240,title:'소아응급처치(2차)'},{date:'2026-10-13',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'소아응급처치(2차)'},{date:'2026-10-13',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'소아응급처치(2차)'},{date:'2026-10-13',time:'13:30',place:'컨퍼런스룸1',cap:0,min:0,title:'소아응급처치(2차)'}]},
+  {id:75,type:'부서',dk:'응급',cat:'응급대응',sub:'KTAS',tgt:'종사자(의료인)',title:'KTAS',desc:'한국형 응급환자 분류도구 (Korean Triage and Acuity Scale) 교육과정',date:'2026-04-14',time:'09:00',place:'세미나실1,2',min:270,cap:16,totalSessions:4,pub:true,sessions:[{date:'2026-04-14',time:'09:00',place:'세미나실1,2',cap:16,min:270,title:'KTAS(1차)'},{date:'2026-04-14',time:'09:00',place:'세미나실1,2',cap:0,min:0,title:'KTAS(1차)'},{date:'',time:'',place:'미정',cap:16,min:270,title:'KTAS(2차)'},{date:'',time:'',place:'미정',cap:0,min:0,title:'KTAS(2차)'}]},
+  {id:76,type:'공동',dk:'응급',cat:'응급대응',sub:'재난응급의료 합동교육',tgt:'종사자(비의료인)',title:'재난응급의료 합동교육',desc:'재난의료대응 체계 및 출동, 중증도분류, 도상훈련',date:'2026-07-10',time:'09:30',place:'컨퍼런스룸1',min:180,cap:15,totalSessions:8,pub:true,sessions:[{date:'2026-07-10',time:'09:30',place:'컨퍼런스룸1',cap:15,min:180,title:'재난응급의료 합동교육(1차)'},{date:'2026-07-10',time:'09:30',place:'컨퍼런스룸1',cap:0,min:0,title:'재난응급의료 합동교육(1차)'},{date:'2026-07-10',time:'09:30',place:'컨퍼런스룸1',cap:0,min:0,title:'재난응급의료 합동교육(1차)'},{date:'2026-07-10',time:'09:30',place:'컨퍼런스룸1',cap:0,min:0,title:'재난응급의료 합동교육(1차)'},{date:'2026-08-21',time:'09:30',place:'컨퍼런스룸1',cap:15,min:180,title:'재난응급의료 합동교육(2차)'},{date:'2026-08-21',time:'09:30',place:'컨퍼런스룸1',cap:0,min:0,title:'재난응급의료 합동교육(2차)'},{date:'2026-08-21',time:'09:30',place:'컨퍼런스룸1',cap:0,min:0,title:'재난응급의료 합동교육(2차)'},{date:'2026-08-21',time:'09:30',place:'컨퍼런스룸1',cap:0,min:0,title:'재난응급의료 합동교육(2차)'}]}
 ];
 
 // ═══════════════════════════════
@@ -1636,19 +2034,257 @@ function fmtDur(min) {
 // ═══════════════════════════════
 // PAGE NAV
 // ═══════════════════════════════
+// ═══════════════════════════════
+// HOME
+// ═══════════════════════════════
+function goCat(cat) {
+  currentCat = cat;
+  currentType = '전체';
+  pg('list', document.querySelector('[data-nav=list]'));
+  // 카테고리 탭 UI 동기화
+  document.querySelectorAll('.ct').forEach(c => {
+    c.classList.toggle('on', c.dataset.c === cat);
+  });
+  rl();
+}
+
+function renderHome() {
+  const pub = EDUS.filter(e => e.pub !== false);
+  const cnt = c => pub.filter(e => e.cat === c).length;
+  g('hc-hlth').textContent = cnt('건강증진') + '개 과정';
+  g('hc-infc').textContent = cnt('감염예방') + '개 과정';
+  g('hc-emrg').textContent = cnt('응급대응') + '개 과정';
+
+  // 히어로 배경 노드 그래픽 (1회만)
+  const bg = g('hero-bg');
+  if (bg && !bg.dataset.done) {
+    bg.dataset.done = '1';
+    let html = '';
+    const nodes = [[82,18,60],[92,55,90],[70,80,44],[58,40,30],[88,88,54]];
+    nodes.forEach(([x,y,s]) => { html += `<div class="hero-node" style="left:${x}%;top:${y}%;width:${s}px;height:${s}px"></div>`; });
+    const lines = [[80,24,18,-20],[90,60,22,15],[68,78,16,-30]];
+    lines.forEach(([x,y,w,r]) => { html += `<div class="hero-line" style="left:${x}%;top:${y}%;width:${w}%;transform:rotate(${r}deg)"></div>`; });
+    bg.innerHTML = html;
+  }
+
+  // 공지/모집중 교육 (임박한 교육 상위 5개)
+  const CATBADGE = {
+    '건강증진': ['건강증진', '#E7F6EE', '#0B7C4A'],
+    '감염예방': ['감염예방', '#E7F0FB', '#0B4DA2'],
+    '응급대응': ['응급대응', '#FBEDE4', '#C2410C']
+  };
+  const today = new Date(); today.setHours(0,0,0,0);
+  const upcoming = pub
+    .filter(e => e.date && new Date(e.date) >= today)
+    .sort((a,b) => new Date(a.date) - new Date(b.date))
+    .slice(0, 5);
+  const box = g('home-notice-list');
+  if (!upcoming.length) {
+    box.innerHTML = '<div style="padding:16px 0;color:var(--tx3);font-size:13px">현재 모집 예정인 교육이 없습니다.</div>';
+    return;
+  }
+  box.innerHTML = upcoming.map(e => {
+    const b = CATBADGE[e.cat] || ['기타', '#F1F5F9', '#64748B'];
+    const d = new Date(e.date);
+    const ds = `${d.getMonth()+1}.${d.getDate()}`;
+    return `<div class="hn-item" onclick="openApply(${e.id})" style="cursor:pointer">
+      <span class="hn-tag" style="background:${b[1]};color:${b[2]}">${b[0]}</span>
+      <span class="hn-txt">${e.title}</span>
+      <span class="hn-date">${ds}</span>
+    </div>`;
+  }).join('');
+}
+
+// 페이지 → 활성화할 상위 네비(data-nav) 매핑
+const NAV_MAP = {  home:'home', guide:'guide', list:'list', cal:'guide',
+  dept:'dept', prop:'prop', notice:'prop', lib:'lib', map:'dept', contact:'dept',
+  my:'my', dash:'dash', admin:'admin'
+};
+
+// ── 공지사항 ──
+function renderNotice() {
+  const CATBADGE = {
+    '건강증진': ['건강증진', '#E7F6EE', '#0B7C4A'],
+    '감염예방': ['감염예방', '#E7F0FB', '#0B4DA2'],
+    '응급대응': ['응급대응', '#FBEDE4', '#C2410C']
+  };
+  const pub = EDUS.filter(e => e.pub !== false);
+  const today = new Date(); today.setHours(0,0,0,0);
+  const upcoming = pub
+    .filter(e => e.date && new Date(e.date) >= today)
+    .sort((a,b) => new Date(a.date) - new Date(b.date));
+  const box = g('notice-list');
+  if (!box) return;
+  if (!upcoming.length) {
+    box.innerHTML = '<div class="home-notice"><div style="padding:20px 0;color:var(--tx3);font-size:13px;text-align:center">현재 등록된 공지 또는 모집중인 교육이 없습니다.</div></div>';
+    return;
+  }
+  box.innerHTML = '<div class="home-notice"><div class="hn-head"><div class="hn-head-t">📢 모집중 · 예정 교육</div></div>' +
+    upcoming.map(e => {
+      const b = CATBADGE[e.cat] || ['기타', '#F1F5F9', '#64748B'];
+      const d = new Date(e.date);
+      const ds = `${d.getFullYear()}.${d.getMonth()+1}.${d.getDate()}`;
+      return `<div class="hn-item" onclick="openApply(${e.id})" style="cursor:pointer">
+        <span class="hn-tag" style="background:${b[1]};color:${b[2]}">${b[0]}</span>
+        <span class="hn-txt">${e.title}</span>
+        <span class="hn-date">${ds}</span>
+      </div>`;
+    }).join('') + '</div>';
+}
+
+// ── 자료실 ──
+// ── 담당자 연락처 ──
+// 예시안(회의자료) 기준 부서별 교육 담당자 직통 번호
+const CONTACTS = [
+  { name: '공공의료사업부', tel: '031-900-3133', ico: '🏛', c: '#993C1D', bg: '#FAECE7' },
+  { name: '책임의료사업부', tel: '031-900-3903', ico: '🏥', c: '#1B3A6B', bg: '#EEF2F9' },
+  { name: '경기도북부 아토피·천식 교육정보센터', tel: '031-900-3919', ico: '🌬', c: '#854F0B', bg: '#FFF0E8' },
+  { name: '경기도북부 지역장애인보건의료센터', tel: '031-900-0690', ico: '♿', c: '#534AB7', bg: '#EEEDFE' },
+  { name: '권역응급의료센터', tel: '031-900-3133', ico: '🚑', c: '#CC2936', bg: '#FEF2F2' },
+  { name: '일차의료개발센터', tel: '031-900-4108', ico: '🌿', c: '#0F6E56', bg: '#E1F5EE' },
+  { name: '지역심뇌혈관질환센터', tel: '031-900-3660', ico: '❤️', c: '#B4185A', bg: '#FCE7F0' },
+  { name: '공공어린이재활병원', tel: '031-900-0690', ico: '👶', c: '#3B6D11', bg: '#EAF3DE' },
+];
+
+function renderContact() {
+  const box = g('contact-list');
+  if (!box) return;
+  box.innerHTML = CONTACTS.map(c => `
+    <div class="contact-card">
+      <div class="contact-ico" style="background:${c.bg}">${c.ico}</div>
+      <div class="contact-info">
+        <div class="contact-name">${c.name}</div>
+        <div class="contact-tel"><a href="tel:${c.tel.replace(/-/g,'')}" style="color:${c.c}">${c.tel}</a></div>
+      </div>
+    </div>`).join('');
+}
+
+function renderLib() {
+  const box = g('lib-list');
+  if (!box) return;
+  box.innerHTML = '<div class="home-notice"><div style="padding:24px 0;text-align:center">' +
+    '<div style="font-size:34px;margin-bottom:10px">📁</div>' +
+    '<div style="font-size:14px;font-weight:700;color:var(--tx);margin-bottom:6px">교육자료 준비중</div>' +
+    '<div style="font-size:12.5px;color:var(--tx3);line-height:1.8">교육자료는 각 교육 종료 후 순차적으로 게시됩니다.<br>※ 교육자료 게시는 일부 교육에 한하며, 신청 기간 내 다운로드하여 활용하시기 바랍니다.</div>' +
+    '</div></div>';
+}
+
+// ── 교육일정 연간/월간 탭 ──
+function setCalMode(mode) { switchCal(mode); }
+
+function switchCal(mode) {
+  const yv = g('cal-year-view'), mv = g('cal-month-view');
+  const yt = g('caltab-year'), mt = g('caltab-month');
+  if (!yv || !mv) return;
+  if (mode === 'month') {
+    yv.style.display = 'none'; mv.style.display = 'block';
+    yt.classList.remove('on'); mt.classList.add('on');
+    renderCal();
+  } else {
+    yv.style.display = 'block'; mv.style.display = 'none';
+    yt.classList.add('on'); mt.classList.remove('on');
+    renderYearTable();
+  }
+}
+
+// 대분류 색상
+const CAT_COLORS = {
+  '건강증진': '#0B7C4A',
+  '감염예방': '#0B4DA2',
+  '응급대응': '#C2410C'
+};
+
+function renderYearTable() {
+  const table = g('yr-table');
+  if (!table) return;
+  const pub = EDUS.filter(e => e.pub !== false);
+
+  // 대분류 표시 순서
+  const catOrder = ['건강증진', '감염예방', '응급대응'];
+
+  // 범례
+  g('yr-legend').innerHTML = catOrder.map(c =>
+    `<span class="yr-leg-item"><span class="yr-leg-dot" style="background:${CAT_COLORS[c]}"></span>${c}교육</span>`
+  ).join('');
+
+  // 각 교육의 실시 월 집합 계산 (sessions 우선, 없으면 대표 date)
+  function monthsOf(e) {
+    const ms = new Set();
+    const src = (e.sessions && e.sessions.length) ? e.sessions : [{date: e.date}];
+    src.forEach(s => {
+      if (s.date) { const m = new Date(s.date).getMonth() + 1; if (m >= 1 && m <= 12) ms.add(m); }
+    });
+    return ms;
+  }
+
+  // 헤더
+  let html = '<thead><tr>';
+  html += '<th class="yr-th-name">교육과정</th>';
+  html += '<th style="width:70px">중분류</th>';
+  for (let m = 1; m <= 12; m++) html += `<th class="yr-th-mon">${m}월</th>`;
+  html += '</tr></thead><tbody>';
+
+  catOrder.forEach(cat => {
+    const items = pub.filter(e => e.cat === cat);
+    if (!items.length) return;
+    // 대분류 구분행
+    html += `<tr class="yr-cat-row"><td colspan="14">${cat}교육 <span style="font-weight:600;color:var(--tx3);font-size:11px">(${items.length}개 과정)</span></td></tr>`;
+    // 중분류별 정렬
+    items.sort((a, b) => (a.sub || '').localeCompare(b.sub || '', 'ko'));
+    items.forEach(e => {
+      const ms = monthsOf(e);
+      const color = CAT_COLORS[cat];
+      html += '<tr>';
+      html += `<td class="yr-title">${e.title}${e.totalSessions > 1 ? ` <small>(${e.totalSessions}회)</small>` : ''}</td>`;
+      html += `<td class="yr-mid" style="font-size:11.5px">${e.sub || '-'}</td>`;
+      for (let m = 1; m <= 12; m++) {
+        html += `<td>${ms.has(m) ? `<span class="yr-dot" style="background:${color}"></span>` : ''}</td>`;
+      }
+      html += '</tr>';
+    });
+  });
+  html += '</tbody>';
+  table.innerHTML = html;
+}
+
 function pg(name, el) {
   document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
   document.querySelectorAll('.nb').forEach(b => b.classList.remove('on'));
-  g('pg-' + name).classList.add('on');
-  if (el) el.classList.add('on');
+  const target = g('pg-' + name);
+  if (target) target.classList.add('on');
+  // 상위 메뉴 활성화 (하위 드롭다운에서 진입해도 상위 탭 표시)
+  const navKey = NAV_MAP[name];
+  const navBtn = navKey ? document.querySelector('.nb[data-nav="' + navKey + '"]') : null;
+  if (navBtn) navBtn.classList.add('on');
+  else if (el && el.classList.contains('nb')) el.classList.add('on');
+  // 모바일 드롭다운 닫기
+  document.querySelectorAll('.nav-grp.open').forEach(g => g.classList.remove('open'));
+
+  if (name === 'home') renderHome();
   if (name === 'list') rl();
   if (name === 'dept') rdept();
   if (name === 'admin') renderAdmin();
   if (name === 'my') renderMy();
-  if (name === 'cal') renderCal();
+  if (name === 'cal') switchCal('year');
   if (name === 'dash') renderDash();
   if (name === 'prop') renderProps();
+  if (name === 'notice') renderNotice();
+  if (name === 'lib') renderLib();
+  if (name === 'contact') renderContact();
   window.scrollTo(0, 0);
+}
+
+// 네비 드롭다운 헬퍼
+function goDept(section) {
+  pg('dept', document.querySelector('[data-nav=dept]'));
+  setTimeout(() => {
+    const el = g('dept-sec-' + section);
+    if (el) el.scrollIntoView({behavior:'smooth', block:'start'});
+  }, 120);
+}
+function goCal(mode) {
+  pg('cal', document.querySelector('[data-nav=guide]'));
+  setTimeout(() => { if (typeof setCalMode === 'function') setCalMode(mode); }, 120);
 }
 
 // ═══════════════════════════════
@@ -1888,32 +2524,33 @@ function submitApply() {
   toast('✅ 신청이 접수되었습니다!');
   rl();
 
-  // Notion으로 전송 (Vercel 서버리스 함수 경유, 비동기)
-  fetch(API_BASE + '/api/apply', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name, tel, org, job, email, note,
+  // EmailJS로 신청 내용 메일 발송 (비동기)
+  if (window.emailjs) {
+    emailjs.send('service_uoskupg', 'template_bpnc3if', {
+      name: name,
+      tel: tel,
+      org: org,
+      job: job,
+      email: email,
+      note: note,
       eduTitle: appData.eduTitle,
       sessTitle: appData.sessTitle,
       sessDate: appData.sessDate,
       sessPlace: appData.sessPlace,
-      sessInfo
+      sessInfo: sessInfo,
+      dk: appData.dk,
+      dt: appData.dt
     })
-  })
-  .then(r => r.json())
-  .then(res => {
-    if (res.ok) {
-      toast('✅ 신청이 완료되었습니다! Notion에 저장되었어요 📋');
-    } else {
-      toast('✅ 신청 완료! (Notion 동기화는 관리자가 확인합니다)');
-      console.error('Notion 오류:', res.error, res.details);
-    }
-  })
-  .catch(err => {
-    toast('✅ 신청이 완료되었습니다 (서버 동기화는 관리자가 확인합니다)');
-    console.error('네트워크 오류:', err);
-  });
+    .then(function(){
+      toast('✅ 신청이 완료되었습니다! 접수 메일이 발송되었어요 📧');
+    })
+    .catch(function(err){
+      toast('✅ 신청 완료! (메일 발송은 관리자가 확인합니다)');
+      console.error('EmailJS 오류:', err);
+    });
+  } else {
+    console.error('EmailJS SDK 미로드');
+  }
 }
 
 // ═══════════════════════════════
@@ -2382,17 +3019,19 @@ var QI_INTEG = [
 ];
 
 function updateQiMetrics() {
-  // 회의자료 기준 고정값 (5차 회의 확정)
-  // 전체 교육: 213건, 실제 교육: 185건, 감소: 28건, 감소율: 13.15%
-  var reducedCount = 28; // 엑셀: 부서1(25) + 부서2(2) + 통합(1) = 28건
-  var currentCount = 185; // 고유 교육 코드 수
-  var originalCount = 213; // 185 + 28
-  var rate = '13.15';
+  // 회의자료 기준 고정값 (지표1: 지역사회 '통합교육' 적용률)
+  // 산출식: 통합교육 건수 × 100 / 전체 교육 건수 = 23 × 100 / 210 ≈ 10.95%
+  var originalCount = 210; // 전체 교육 건수
+  var currentCount = 185;  // 실제 교육 건수
+  var reducedCount = 25;   // 교육 감소 건수
+  var integCount = 23;     // 통합교육 건수
+  var rate = '10.95';      // 통합교육 적용률(%)
 
   var el;
   el = g('qi-original'); if(el) el.textContent = originalCount;
   el = g('qi-current'); if(el) el.textContent = currentCount;
   el = g('qi-reduced'); if(el) el.textContent = reducedCount;
+  el = g('qi-integ'); if(el) el.textContent = integCount;
   el = g('qi-rate'); if(el) el.textContent = rate + '%';
 
   var deptCounts = {};
@@ -2515,54 +3154,73 @@ function exportCSV() {
 // ═══════════════════════════════
 let curDk = '책임';
 
+// 대표 문의 이메일 (교육 포털 운영 계정) — 부서별 개별 이메일 확정 시 교체
+const DEPT_EMAIL = 'nhimc.edu@gmail.com';
+
 const DEPT_INFO = {
   책임: {
-    summary: '2022년 6월 보건복지부로부터 고양권 지역 책임의료기관으로 지정된 부서입니다. 지역사회 필수보건의료를 제공하고, 분당서울대병원·경기도립의료원 파주병원·고양시 보건소·소방서 등 15개 이상 지역 기관과 원외 협의체를 구성해 공공보건의료 거버넌스를 구축하고 있습니다.',
+    summary: '2022년 6월 보건복지부로부터 고양시·김포시 지역책임의료기관으로 지정된 부서입니다. 경기북부 지역 책임의료기관으로서 보건복지부와 협력하며, 퇴원환자의 지역사회 연계, 중증·응급환자의 이송·전원 시스템 구축, 감염병 및 환자안전 관리 사업 등을 수행합니다.',
+    target: '지역 의료기관 종사자, 보건소·소방 등 유관기관 실무자, 지역주민',
+    business: ['퇴원환자 지역사회 연계 및 진료협력', '중증·응급환자 이송·전원 시스템 구축', '감염병 대응 및 환자안전 관리', '지역 필수의료 협의체 운영'],
     roles: ['지역 필수보건의료 제공','원외 협의체 운영','감염관리 교육','응급·만성질환 교육','지역사회 연계'],
-    recent: '고양시·김포시 보건소, 의사회, 소방서 등과 협의체를 통해 응급의료·감염·만성질환 공동교육 추진 중',
-    contact: '031-900-0114', site: 'https://www.nhimc.or.kr'
+    recent: '경기도의료원(의정부·파주·포천병원)과 책임의료기관 공동 심포지엄을 통해 중증응급 이송·전원 및 진료협력 성과 공유',
+    contact: '031-900-3903', site: 'https://www.nhimc.or.kr'
   },
   일차: {
-    summary: '일차의료 지원센터의 역할을 수행하는 부서로, 지역 의원·보건소·복지관 등과 협력하여 주민 건강증진 교육을 기획·운영합니다. 본 통합 교육 포털의 운영 주관 부서이며, 노쇠예방·만성질환 관리·영양·운동 분야의 다양한 프로그램을 운영합니다.',
+    summary: '2023년 4월 국민건강보험공단이 한국형 주치의 모델 실증을 위해 설치한 부서입니다. 의사·간호사·사회복지사 등 다학제팀을 통한 환자 중심 일차의료를 실증하며, 등록 환자에게 건강관리부터 방문진료, 비대면 관리·교육 상담, 지역사회 자원 연계까지 제공합니다. 본 통합 교육 포털의 운영 주관 부서입니다.',
+    target: '고혈압·당뇨 등 만성질환자, 지역 의원·보건소 종사자, 지역주민',
+    business: ['지역기반 환자중심 일차의료 모형 실증', '만성질환자 맞춤 건강관리·방문진료', '일차의료 통합관리 플랫폼·매뉴얼 개발', '통합돌봄 연계 및 지역 네트워크 구축'],
     roles: ['통합 교육 포털 운영','만성질환자 맞춤운동교실','노쇠예방 교육','영양관리 교육','일차의료 종사자 역량강화'],
-    recent: '2026년 텃밭 기반 사회정서 지지 프로그램, 노인 인지기능 저하 예방 다영역 교육 신규 운영 예정',
-    contact: '031-931-4103', site: 'https://www.nhimc.or.kr'
+    recent: '통합돌봄과 일차의료 시범사업 연계 전략을 추진하고, 인터랙티브 일차의료지원 매뉴얼·혈당지킴이 앱 등 플랫폼 개발',
+    contact: '031-900-4108', site: 'https://www.nhimc.or.kr'
   },
   아토피: {
-    summary: '2024년 10월 경기도북부 아토피·천식 교육정보센터로 지정되었습니다. 아토피피부염·천식·알레르기 비염 등 알레르기 질환의 예방·관리 교육을 전문으로 담당하며, 보건의료인 대상 정기 교육(연간 35회 이상)과 지역주민·학생·보건교사 대상 교육을 운영합니다.',
-    roles: ['알레르기 질환 예방관리 교육','보건의료인 정기교육(연간 35회+)','안심학교 학생·교사 교육','보건교사 연수','1:1 상담 및 환자 교육'],
-    recent: '2026년 경기도 보건교사 대상 천식·아나필락시스 집중 교육 6회 운영 예정 (7월, 회당 130명)',
-    contact: '031-900-0114', site: 'https://www.nhimc.or.kr'
+    summary: '2024년 10월(질병관리청·경기도 지정) 개소한 경기도북부 아토피·천식 교육정보센터입니다. 소아청소년과 내 상담실을 운영하며 교육간호사가 상주해 전화·온오프라인 상담을 제공하고, 아토피·천식 예방관리 교육을 실시합니다. 전국 11개 센터 중 경기 북부를 담당합니다.',
+    target: '안심학교 학생·학부모·보건교사, 보건의료인, 영양사·조리사, 구급대원, 지역주민',
+    business: ['아토피·천식 안심학교 운영 지원', '알레르기 질환 예방관리 교육', '교육·홍보 콘텐츠 제작 및 배포', '지역사회 상담서비스 및 지역 네트워크 구축'],
+    roles: ['알레르기 질환 예방관리 교육','보건의료인 정기교육','안심학교 학생·교사 교육','보건교사 연수','1:1 상담 및 환자 교육'],
+    recent: '구급대원 대상 아나필락시스 응급대응 교육으로 인지도를 30점대에서 90점대로 향상시키는 성과 달성',
+    contact: '031-900-3919', site: 'https://www.nhimc.or.kr'
   },
   공공: {
-    summary: '고양시 교육지원청·다문화가족지원센터·지역아동센터·복지관 등 지역사회 기관과 연계하여 공공보건의료 교육 사업을 수행합니다. 취약계층을 포함한 지역 주민 대상 맞춤형 건강교육 프로그램을 운영합니다.',
+    summary: '보험자 직영 공공병원으로서 정부 정책사업을 선도적으로 수행하는 부서입니다. 고양시 교육지원청·다문화가족지원센터·지역아동센터·복지관 등 지역사회 기관과 연계하여 취약계층을 포함한 지역주민 대상 맞춤형 공공보건의료 교육 사업을 운영합니다.',
+    target: '다문화 가족·학생, 교사·학부모, 사회적 고립가구, 지역주민',
+    business: ['다문화 가족·학생 건강교육', '교사·학부모 정신건강 교육', '사회적 고립가구 건강관리', '사전연명의료의향서 등 지역사회 연계 교육'],
     roles: ['다문화 가족·학생 건강교육','교사·학부모 정신건강 교육','사회적 고립가구 건강관리','사전연명의료의향서 교육','지역사회 기관 연계 교육'],
-    recent: '2026년 고양시 교육지원청 연계 유치원 교사·학부모 대상 정신건강 교육 3회 시리즈 운영 예정',
-    contact: '031-900-0101', site: 'https://www.nhimc.or.kr'
+    recent: '2026년 고양시 교육지원청 연계 유치원 교사·학부모 대상 정신건강 교육 시리즈 운영 예정',
+    contact: '031-900-3133', site: 'https://www.nhimc.or.kr'
   },
   응급: {
-    summary: '2023년 10월 경기 서북부 권역응급의료센터로 지정되었습니다. 응급실 33병상, 응급전용 중환자실 20병상을 운영하며, 전문의가 24시간 상주합니다. 소방서 구급대원 전문 교육도 수행합니다.',
+    summary: '2023년 10월 경기 서북부 권역응급의료센터로 지정되었습니다. 중증응급 및 외상환자를 24시간 수용하고, 스마트 응급진료시스템(AI HOTLINE)을 운영합니다. 소아응급 전문의를 확보해 365일 24시간 소아응급 진료체계를 구축했으며, 권역 내 응급의료 종사자 교육·훈련도 담당합니다.',
+    target: '소방 구급대원, 응급의료 종사자, 지역 의료기관 인력, 지역주민',
+    business: ['중증응급·외상환자 24시간 수용', '스마트 응급진료시스템(AI HOTLINE) 운영', '권역 내 응급의료종사자 교육·훈련', '재난 대비·대응 거점 운영'],
     roles: ['중증응급환자 24시간 진료','경기 서북부 권역 거점','소방서 구급대원 전문교육','KTAS 응급환자 분류교육','재난응급의료 합동훈련'],
-    recent: '2026년 소방서 구급대원 대상 외상처치·소아응급·응급분만·KTAS 등 9회 전문 교육 운영 예정',
-    contact: '031-900-0760 (응급진료센터)', site: 'https://www.nhimc.or.kr'
+    recent: '2026년 소방서 구급대원 대상 외상처치·소아응급·응급분만·KTAS 등 전문 교육 운영 예정',
+    contact: '031-900-3133', site: 'https://www.nhimc.or.kr'
   },
   지장보: {
-    summary: '2022년 10월 경기도북부 지역장애인보건의료센터로 지정되었습니다. 장애인의 건강권 보장을 위해 지역 내 장애인 거주시설·복지관·가족지원센터에 직접 찾아가는 현장 교육을 운영합니다.',
+    summary: '2022년 10월(보건복지부·경기도 지정) 개소한 경기도북부 지역장애인보건의료센터입니다. 경기 북부지역 장애인의 건강권 향상을 위해 종합적·체계적인 건강보건관리 서비스를 제공하고, 보건소·지역사회와 연계한 방문재활, 여성장애인 모성보건 사업 등을 운영합니다.',
+    target: '지역 장애인 및 가족, 보건소·복지관 종사자, 예비의료인',
+    business: ['장애인 건강보건관리 서비스 제공', '보건소 연계 고령 장애인 방문재활', '여성장애인 모성보건 사업', '장애인 건강권 인식개선 교육'],
     roles: ['찾아가는 현장 장애인 건강교육','장애인식개선 교육','예비의료인 교육','시설종사자 역량강화','발달장애인 가족 지원'],
-    recent: '2026년 경기북부 18개 시·군 장애인 복지관·거주시설 대상 12개 교육 프로그램 운영 예정',
-    contact: '031-900-0114', site: 'https://www.nhimc.or.kr'
+    recent: '보건소 및 지역사회와 연계한 방문재활 서비스, 여성장애인 모성보건사업 등 장애인 건강권 향상 사업 추진 중',
+    contact: '031-900-3601 (센터 대표)', site: 'http://www.gnrhmc.or.kr'
   },
   어린이: {
-    summary: '보건복지부 지정 수도권 공공어린이재활병원으로, 장애아동의 재활 치료와 가족 지원을 위한 교육 사업을 운영합니다. 발달장애 아동 보호자 교육, 특수교사 연수, 재활체육 프로그램 등을 제공합니다.',
+    summary: '2021년 10월 개원한 수도권 공공어린이재활병원(보건복지부 지정)입니다. 집중재활치료 및 의료서비스가 필요한 장애아동(고위험아동 포함)에게 발달단계별 다학제적 치료를 제공하고, 퇴원 후 지역사회 복지서비스 연계, 학교 복귀 지원, 부모·형제 교육 등 가족 중심의 포괄적 서비스를 제공합니다.',
+    target: '집중재활이 필요한 장애아동·고위험아동, 보호자·형제자매, 특수교사',
+    business: ['장애아동 집중재활치료 및 의료서비스', '생애주기별 부모교육·가족지원', '보조기기 상담·체험·지원 연계', '지역사회 복지·학교 복귀 지원'],
     roles: ['장애아동 보호자 교육','발달장애인 재활체육 교육','특수교사·지원인력 연수','보조기기 사용방법 교육','전문 의료인 역량강화 교육'],
-    recent: '2026년 어린이병원 보호자 대상 다학제 부모교육(의사·치료사 공동) 4회 및 재활체육 교육 4회 운영 예정',
-    contact: '031-900-0114', site: 'https://www.nhimc.or.kr'
+    recent: '로봇보행·상지재활로봇·감각통합 치료 등 전문 재활 인프라를 기반으로 다학제 부모교육 및 재활체육 프로그램 운영',
+    contact: '031-900-0690', site: 'https://www.nhimc.or.kr'
   },
   심뇌: {
-    summary: '2025년 1월 지역심뇌혈관질환센터로 지정되었습니다. 뇌졸중·심근경색 등 심뇌혈관질환의 예방·관리를 위한 지역사회 교육 및 홍보 사업을 담당합니다.',
+    summary: '2025년 1월 지역심뇌혈관질환센터로 지정되었습니다. 뇌졸중·심근경색 등 심뇌혈관질환자에게 24시간 응급·전문 치료를 제공하고, 예방관리 홍보·교육, 권역심뇌혈관질환센터와의 협력체계 구축 등 다각적 활동을 추진합니다.',
+    target: '지역주민(특히 고령자), 심뇌혈관질환 고위험군, 구급대원',
+    business: ['심뇌혈관질환 24시간 응급·전문 치료', '예방관리 홍보 및 지역주민 교육', '권역심뇌혈관질환센터 협력체계 구축', '경기북부 심뇌혈관 전문의 네트워크 운영'],
     roles: ['심뇌혈관질환 예방 교육','뇌졸중 응급처치 교육 지원','지역주민 건강강좌','구급대원 뇌졸중 대응 교육','환자·가족 관리 교육'],
-    recent: '2026년 책임의료사업부·공공의료사업부와 협력하여 지역 노인 대상 뇌졸중·심혈관 건강강좌 공동 운영 예정',
-    contact: '031-900-0114', site: 'https://www.nhimc.or.kr'
+    recent: '경기북부 의료기관 간 심뇌혈관질환 전문의 인적 네트워크를 구성해 골든타임 내 치료체계 강화',
+    contact: '031-900-3660', site: 'https://www.nhimc.or.kr'
   }
 };
 
@@ -2594,14 +3252,14 @@ function showDeptMain(dk) {
           <div class="dept-hs">국민건강보험 일산병원 · 정부지정센터</div>
         </div>
       </div>
-      <div class="dept-kpis">
-        <div class="dept-kpi"><div class="dept-kpi-n" style="color:${d.c}">${items.length}</div><div class="dept-kpi-l">2026 교육 프로그램</div></div>
-        <div class="dept-kpi"><div class="dept-kpi-n" style="color:${d.c}">${totalCap.toLocaleString()}</div><div class="dept-kpi-l">총 정원 합계</div></div>
-        <div class="dept-kpi"><div class="dept-kpi-n" style="color:${d.c}">${apps.filter(a => a.dk === dk).length}</div><div class="dept-kpi-l">신청 완료</div></div>
-      </div>
     </div>
     <div class="dept-info-box" id="dept-info-box"></div>
-    <div class="rc-n" style="margin-bottom:12px;font-size:14px;font-weight:700">${d.name} 교육 목록 <span style="font-weight:400;color:var(--tx3);font-size:12px">${items.length}개</span></div>
+    <div class="rc-n" style="margin:4px 0 12px;font-size:14px;font-weight:700">${d.name} 교육 <span style="font-weight:400;color:var(--tx3);font-size:12px">${items.length}개 프로그램</span></div>
+    <div class="dept-kpis dept-kpis-edu">
+      <div class="dept-kpi"><div class="dept-kpi-n" style="color:${d.c}">${items.length}</div><div class="dept-kpi-l">2026 교육 프로그램</div></div>
+      <div class="dept-kpi"><div class="dept-kpi-n" style="color:${d.c}">${totalCap.toLocaleString()}</div><div class="dept-kpi-l">총 정원 합계</div></div>
+      <div class="dept-kpi"><div class="dept-kpi-n" style="color:${d.c}">${apps.filter(a => a.dk === dk).length}</div><div class="dept-kpi-l">신청 완료</div></div>
+    </div>
     <div id="dept-cards" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px"></div>`;
 
   renderDeptInfo(dk);
@@ -2618,6 +3276,20 @@ function renderDeptInfo(dk) {
     `<span class="dept-role-tag" style="background:${d.bg};color:${d.c}">${r}</span>`
   ).join('');
 
+  const targetHtml = info.target ? `
+    <div class="dept-biz">
+      <div class="dept-biz-hd"><span class="db-bar" style="background:${d.c}"></span>주요 사업 대상</div>
+      <div class="dept-biz-target">${info.target}</div>
+    </div>` : '';
+
+  const bizHtml = info.business ? `
+    <div class="dept-biz">
+      <div class="dept-biz-hd"><span class="db-bar" style="background:${d.c}"></span>주요 사업</div>
+      <div class="dept-biz-list">
+        ${info.business.map(b => `<div class="dept-biz-item"><span class="db-dot" style="background:${d.c}"></span><span>${b}</span></div>`).join('')}
+      </div>
+    </div>` : '';
+
   box.innerHTML = `
     <div class="dept-info-hd">
       <div class="dept-info-ttl">
@@ -2629,9 +3301,11 @@ function renderDeptInfo(dk) {
     </div>
     <div class="dept-info-body">
       <p>${info.summary}</p>
+      ${targetHtml}
+      ${bizHtml}
       <div class="dept-role-wrap">${rolesHtml}</div>
       <div class="dept-recent" style="border-left:3px solid ${d.c}">💡 ${info.recent}</div>
-      <div class="dept-contact">📞 ${info.contact}</div>
+      <div class="dept-contact">📞 대표번호 ${info.contact} &nbsp;·&nbsp; ✉️ <a href="mailto:${DEPT_EMAIL}" style="color:var(--tx2)">${DEPT_EMAIL}</a></div>
     </div>`;
 }
 
@@ -3039,9 +3713,37 @@ function closeSessions() { g('sess-modal').classList.remove('on'); }
 document.querySelector('[data-c="재활지원"]').setAttribute('onclick', 'sc(this)');
 rl();
 updateStats();
+renderHome();
 // Check URL param
 const urlEdu = new URLSearchParams(location.search).get('edu');
-if (urlEdu) { pg('list', document.querySelectorAll('.nb')[1]); setTimeout(() => openPan(parseInt(urlEdu)), 200); }
+if (urlEdu) { pg('list', document.querySelector('[data-nav=list]')); setTimeout(() => openPan(parseInt(urlEdu)), 200); }
+
+// 모바일: 상위 메뉴 탭 시 드롭다운 토글
+document.querySelectorAll('.nav-grp>.nb').forEach(btn => {
+  btn.addEventListener('click', function(e) {
+    if (window.innerWidth <= 820) {
+      const grp = this.closest('.nav-grp');
+      const nav = document.querySelector('.nav');
+      const wasOpen = grp.classList.contains('open');
+      document.querySelectorAll('.nav-grp.open').forEach(g => g.classList.remove('open'));
+      if (!wasOpen) {
+        grp.classList.add('open');
+        if (nav) nav.style.overflow = 'visible';
+        e.stopPropagation();
+      } else {
+        if (nav) nav.style.overflow = '';
+      }
+    }
+  });
+});
+// 바깥 탭 시 닫기 + overflow 복원
+document.addEventListener('click', function(e) {
+  if (window.innerWidth <= 820 && !e.target.closest('.nav-grp')) {
+    document.querySelectorAll('.nav-grp.open').forEach(g => g.classList.remove('open'));
+    const nav = document.querySelector('.nav');
+    if (nav) nav.style.overflow = '';
+  }
+});
 </script>
 </body>
 </html>
