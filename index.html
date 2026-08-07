@@ -3474,6 +3474,10 @@ function updateQiMetrics() {
       deptCounts[p.name] = (deptCounts[p.name] || 0) + 1;
     });
   });
+  // 프로그램 내 진행 교육(QI_INTEG)의 지원 부서도 참여 현황에 포함 (막대 수치 = 클릭 상세의 '협력 지원' 수치)
+  QI_INTEG.forEach(function(c) {
+    if (c.partner) deptCounts[c.partner] = (deptCounts[c.partner] || 0) + 1;
+  });
 
   var barsEl = g('qi-dept-bars');
   if(barsEl) {
@@ -3536,7 +3540,7 @@ function renderQiGrid() {
   });
   QI_INTEG.forEach(function(c) {
     if (!qiMatch(c, qiSelDept)) return;
-    cardsHtml += '<div class="qi-collab-card" style="border-left-color:#059669"><div class="qi-collab-title">' + c.title + ' <span style="font-size:10px;background:#D1FAE5;color:#065F46;padding:2px 6px;border-radius:10px">프로그램 내 진행</span>' + roleBadge(c) + '</div><div class="qi-collab-meta">주관: ' + c.dept + '<br>통합: ' + c.partner + ' (' + c.topic + ')</div></div>';
+    cardsHtml += '<div class="qi-collab-card"><div class="qi-collab-title">' + c.title + roleBadge(c) + '</div><div class="qi-collab-meta">주관: ' + c.dept + '<br>협력: <span class="qi-collab-dept">' + c.partner + '</span>' + c.topic + '</div></div>';
   });
   gridEl.innerHTML = cardsHtml;
 }
