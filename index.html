@@ -1729,9 +1729,11 @@ body.bigfont .card-title,body.bigfont .hn-txt,body.bigfont .g-sec p{line-height:
         <div class="qi-collab-grid" id="qi-collab-grid"></div>
       </div>
 
-      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bd);display:flex;gap:10px;flex-wrap:wrap">
-        <button class="hd-btn" style="background:var(--navy);color:#fff;border-color:var(--navy);padding:9px 16px;font-size:13px;font-weight:600" onclick="openPerfSummary()">📊 성과 요약 카드 (회의·보고용)</button>
-        <button class="hd-btn" style="padding:9px 16px;font-size:13px" onclick="exportQiCsv()">⬇ 통합교육 목록 CSV</button>
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bd);display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+        <span style="font-size:13px;font-weight:600;color:var(--navy)">📋 부서별 실적 보고서</span>
+        <select class="fsel" id="dept-report-sel" style="padding:8px 10px;font-size:13px" onchange="openDeptReport(this.value)">
+          <option value="">부서를 선택하세요…</option>
+        </select>
       </div>
     </div>
 
@@ -1831,6 +1833,21 @@ body.bigfont .card-title,body.bigfont .hn-txt,body.bigfont .g-sec p{line-height:
 </div>
 
 <!-- ════ 신청 완료 알림 ════ -->
+<!-- ════ 부서별 실적 보고서 (관리자·보고용) ════ -->
+<div class="modal-bg" id="deptrep-modal" onclick="if(event.target===this)g('deptrep-modal').classList.remove('on')">
+  <div class="modal" style="max-width:760px;padding:0;overflow:hidden;max-height:90vh;display:flex;flex-direction:column">
+    <div id="deptrep-print-area" style="overflow-y:auto">
+      <div id="deptrep-head" style="padding:26px 30px;color:#fff"></div>
+      <div style="padding:24px 30px" id="deptrep-body"></div>
+    </div>
+    <div style="padding:14px 30px;background:#F8FAFC;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid #E5E7EB" class="perf-noprint">
+      <button class="hd-btn" onclick="exportDeptCsv()" style="padding:9px 18px;font-size:13px">⬇ CSV 다운로드</button>
+      <button class="hd-btn" onclick="printDeptReport()" style="background:var(--navy);color:#fff;border-color:var(--navy);padding:9px 18px;font-size:13px;font-weight:600">🖨 인쇄 / PDF 저장</button>
+      <button class="hd-btn" onclick="g('deptrep-modal').classList.remove('on')" style="padding:9px 18px;font-size:13px">닫기</button>
+    </div>
+  </div>
+</div>
+
 <!-- ════ 성과 요약 카드 (관리자·회의용) ════ -->
 <div class="modal-bg" id="perf-modal" onclick="if(event.target===this)g('perf-modal').classList.remove('on')">
   <div class="modal" style="max-width:720px;padding:0;overflow:hidden">
@@ -3763,6 +3780,162 @@ function exportQiCsv(){
   URL.revokeObjectURL(url);
   toast('⬇ 통합교육 목록 CSV를 내려받았습니다');
 }
+// ── 부서별 실적 보고서 ──
+function _deptStats(dk){
+  var pub = EDUS.filter(function(e){ return e.pub !== false; });
+  function sessN(e){ return (e.sessions&&e.sessions.length)?e.sessions.length:1; }
+  var host = pub.filter(function(e){ return e.dk===dk; });
+  var hostInteg = host.filter(function(e){ return e.type==='공동'; });
+  var hostDept = host.filter(function(e){ return e.type!=='공동'; });
+  var sessTotal = host.reduce(function(a,e){ return a+sessN(e); }, 0);
+  // 대상별
+  var tgt = {}; host.forEach(function(e){ var t=e.tgt||'기타'; tgt[t]=(tgt[t]||0)+1; });
+  // 카테고리별
+  var cat = {}; host.forEach(function(e){ var c=e.cat||'기타'; cat[c]=(cat[c]||0)+1; });
+  // 지원 횟수 + 협력부서
+  var supportGiven=0, partners={}, supportList=[];
+  pub.forEach(function(e){ (e.coop||[]).forEach(function(c){ if(c.dept===dk){ supportGiven++; partners[e.dk]=1; supportList.push({host:e.dk, title:e.title, role:c.role, date:(e.sessions&&e.sessions[0]&&e.sessions[0].date)||e.date}); } }); });
+  hostInteg.forEach(function(e){ (e.coop||[]).forEach(function(c){ partners[c.dept]=1; }); });
+  delete partners[dk];
+  return { host:host, hostInteg:hostInteg, hostDept:hostDept, sessTotal:sessTotal, tgt:tgt, cat:cat, supportGiven:supportGiven, supportList:supportList, partners:Object.keys(partners) };
+}
+function openDeptReport(dk){
+  if(!dk){ return; }
+  var d = DC[dk]; if(!d) return;
+  window._deptRepDk = dk; // CSV 다운로드용
+  var s = _deptStats(dk);
+  g('deptrep-head').style.background = 'linear-gradient(135deg,'+d.c+', '+d.c+'cc)';
+  g('deptrep-head').innerHTML = '<div style="font-size:12px;font-weight:600;opacity:.9;letter-spacing:.05em">국민건강보험 일산병원 · 지역사회 통합 교육 운영 시스템</div>'
+    + '<div style="font-size:22px;font-weight:900;margin-top:6px">'+d.icon+' '+d.name+' 교육 실적 보고</div>'
+    + '<div style="font-size:12px;opacity:.9;margin-top:4px">2026년 · 출력일: '+new Date().toLocaleDateString('ko-KR')+'</div>';
+
+  // KPI 블록
+  function kpi(n, l, col){ return '<div style="text-align:center;padding:14px 6px;background:#F8FAFC;border-radius:10px;border-top:3px solid '+col+'"><div style="font-size:26px;font-weight:900;color:'+col+'">'+n+'</div><div style="font-size:11.5px;color:#64748B;margin-top:2px">'+l+'</div></div>'; }
+  var html = '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:22px">'
+    + kpi(s.host.length, '주관 교육', d.c)
+    + kpi(s.sessTotal, '총 회차', '#0B7C4A')
+    + kpi(s.hostInteg.length, '주관 통합교육', '#C2410C')
+    + kpi(s.supportGiven, '타 부서 지원', '#0B4DA2')
+    + '</div>';
+
+  // 대상별·카테고리별 (있을 때만)
+  function distRow(title, obj){
+    var keys = Object.keys(obj); if(!keys.length) return '';
+    var total = keys.reduce(function(a,k){return a+obj[k];},0);
+    var rows = keys.sort(function(a,b){return obj[b]-obj[a];}).map(function(k){
+      var pct = Math.round(obj[k]/total*100);
+      return '<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px"><div style="width:130px;font-size:12px;color:#334155;text-align:right;flex-shrink:0">'+k+'</div><div style="flex:1;background:#F1F5F9;border-radius:4px;height:16px;position:relative"><div style="width:'+pct+'%;background:'+d.c+';height:100%;border-radius:4px;min-width:20px"></div><span style="position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:11px;font-weight:700;color:#334155">'+obj[k]+'</span></div></div>';
+    }).join('');
+    return '<div style="font-size:13px;font-weight:700;color:#1B3A6B;margin:18px 0 8px">'+title+'</div>'+rows;
+  }
+  html += distRow('교육 대상별 분포', s.tgt);
+  html += distRow('교육 유형별 분포', s.cat);
+
+  // 협력 현황
+  html += '<div style="font-size:13px;font-weight:700;color:#1B3A6B;margin:18px 0 8px">부서 협력 현황</div>';
+  if(s.partners.length){
+    html += '<div style="font-size:13px;color:#334155;line-height:1.8;margin-bottom:6px">함께한 부서: '
+      + s.partners.map(function(p){ var pd=DC[p]; return '<span style="display:inline-block;padding:2px 9px;margin:2px;border-radius:12px;background:'+((pd&&pd.bg)||'#eee')+';color:'+((pd&&pd.c)||'#555')+';font-size:12px;font-weight:600">'+((pd&&pd.short)||p)+'</span>'; }).join('')
+      + '</div>';
+  } else {
+    html += '<div style="font-size:13px;color:#94A3B8;margin-bottom:6px">협력 실적이 없습니다.</div>';
+  }
+
+  // 주관 통합교육 목록
+  if(s.hostInteg.length){
+    html += '<div style="font-size:13px;font-weight:700;color:#1B3A6B;margin:18px 0 8px">주관 통합교육 ('+s.hostInteg.length+'건)</div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="background:#F1F5F9"><th style="padding:6px 8px;text-align:left;border-bottom:1px solid #E5E7EB">교육명</th><th style="padding:6px 8px;text-align:left;border-bottom:1px solid #E5E7EB">일자</th><th style="padding:6px 8px;text-align:left;border-bottom:1px solid #E5E7EB">지원 부서</th></tr></thead><tbody>';
+    s.hostInteg.forEach(function(e){
+      var dt=(e.sessions&&e.sessions[0]&&e.sessions[0].date)||e.date||'';
+      var sup=(e.coop||[]).map(function(c){ var pd=DC[c.dept]; return ((pd&&pd.short)||c.dept)+(c.role?'('+c.role+')':''); }).join(', ');
+      html += '<tr><td style="padding:6px 8px;border-bottom:1px solid #F1F5F9">'+e.title+'</td><td style="padding:6px 8px;border-bottom:1px solid #F1F5F9;white-space:nowrap">'+dt+'</td><td style="padding:6px 8px;border-bottom:1px solid #F1F5F9">'+sup+'</td></tr>';
+    });
+    html += '</tbody></table>';
+  }
+
+  // 타 부서 지원 내역
+  if(s.supportList.length){
+    html += '<div style="font-size:13px;font-weight:700;color:#1B3A6B;margin:18px 0 8px">타 부서 교육 지원 내역 ('+s.supportList.length+'건)</div>';
+    html += '<table style="width:100%;border-collapse:collapse;font-size:12px"><thead><tr style="background:#F1F5F9"><th style="padding:6px 8px;text-align:left;border-bottom:1px solid #E5E7EB">주관 부서</th><th style="padding:6px 8px;text-align:left;border-bottom:1px solid #E5E7EB">교육명</th><th style="padding:6px 8px;text-align:left;border-bottom:1px solid #E5E7EB">지원 역할</th></tr></thead><tbody>';
+    s.supportList.forEach(function(x){
+      var pd=DC[x.host];
+      html += '<tr><td style="padding:6px 8px;border-bottom:1px solid #F1F5F9;white-space:nowrap">'+((pd&&pd.short)||x.host)+'</td><td style="padding:6px 8px;border-bottom:1px solid #F1F5F9">'+x.title+'</td><td style="padding:6px 8px;border-bottom:1px solid #F1F5F9">'+(x.role||'')+'</td></tr>';
+    });
+    html += '</tbody></table>';
+  }
+
+  html += '<div style="font-size:11px;color:#94A3B8;line-height:1.7;border-top:1px solid #E5E7EB;padding-top:12px;margin-top:18px">※ 포털 등록 교육 데이터 기준 자동 집계 · 통합교육 = 두 개 이상 부서가 함께 진행한 교육</div>';
+
+  g('deptrep-body').innerHTML = html;
+  g('deptrep-modal').classList.add('on');
+  var sel=g('dept-report-sel'); if(sel) sel.value=''; // 선택 초기화
+}
+function printDeptReport(){
+  var area = g('deptrep-print-area');
+  if(!area) return;
+  var w = window.open('', '_blank');
+  if(!w){ toast('팝업이 차단되었습니다. 팝업 허용 후 다시 시도해 주세요.'); return; }
+  w.document.write('<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>부서 교육 실적 보고</title>'
+    + '<style>body{margin:0;font-family:"맑은 고딕","Malgun Gothic",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}@page{size:A4;margin:12mm}table{page-break-inside:auto}tr{page-break-inside:avoid}</style>'
+    + '</head><body>' + area.innerHTML + '</body></html>');
+  w.document.close();
+  setTimeout(function(){ w.focus(); w.print(); }, 350);
+}
+// ── 부서별 실적 CSV 다운로드 ──
+function exportDeptCsv(){
+  var dk = window._deptRepDk;
+  if(!dk || !DC[dk]){ toast('먼저 부서를 선택하세요'); return; }
+  var d = DC[dk], s = _deptStats(dk);
+  var rows = [];
+  rows.push(['['+d.name+' 교육 실적 보고]']);
+  rows.push(['출력일', new Date().toLocaleDateString('ko-KR')]);
+  rows.push([]);
+  rows.push(['■ 요약 지표']);
+  rows.push(['주관 교육 수', s.host.length]);
+  rows.push(['총 회차 수', s.sessTotal]);
+  rows.push(['주관 통합교육 수', s.hostInteg.length]);
+  rows.push(['타 부서 지원 횟수', s.supportGiven]);
+  rows.push(['함께한 부서', s.partners.map(function(p){ return (DC[p]&&DC[p].short)||p; }).join(' / ')]);
+  rows.push([]);
+  rows.push(['■ 주관 교육 목록']);
+  rows.push(['교육명','유형','대상','교육일','정원','회차']);
+  s.host.forEach(function(e){
+    var dt=(e.sessions&&e.sessions[0]&&e.sessions[0].date)||e.date||'';
+    var sn=(e.sessions&&e.sessions.length)?e.sessions.length:1;
+    rows.push([e.title, e.type==='공동'?'통합교육':'부서교육', e.tgt||'', dt, e.cap||'', sn]);
+  });
+  if(s.supportList.length){
+    rows.push([]);
+    rows.push(['■ 타 부서 교육 지원 내역']);
+    rows.push(['주관 부서','교육명','지원 역할']);
+    s.supportList.forEach(function(x){
+      rows.push([(DC[x.host]&&DC[x.host].name)||x.host, x.title, x.role||'']);
+    });
+  }
+  var csv = rows.map(function(r){ return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(','); }).join('\r\n');
+  var blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'}); // BOM: 엑셀 한글 깨짐 방지
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = d.name+'_교육실적_'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('⬇ '+d.name+' 실적 CSV를 내려받았습니다');
+}
+// 부서별 보고서 드롭다운 채우기 (관리자 대시보드 렌더 시 호출)
+function fillDeptReportSelect(){
+  var sel=g('dept-report-sel'); if(!sel) return;
+  if(sel.dataset.filled) return; // 1회만
+  var pub=EDUS.filter(function(e){ return e.pub!==false; });
+  Object.keys(DC).forEach(function(dk){
+    var host=pub.filter(function(e){ return e.dk===dk; });
+    var support=0; pub.forEach(function(e){(e.coop||[]).forEach(function(c){if(c.dept===dk)support++;});});
+    if(host.length===0 && support===0) return; // 실적 없는 부서 제외
+    var opt=document.createElement('option');
+    opt.value=dk; opt.textContent='📋 '+DC[dk].name+' 실적 보고서';
+    sel.appendChild(opt);
+  });
+  sel.dataset.filled='1';
+}
 // ── 교육 일정을 개인 캘린더(.ics)로 다운로드 ──
 function downloadIcs(eid){
   var e = EDUS.find(function(x){ return x.id === eid; });
@@ -3896,6 +4069,7 @@ function renderDash() {
   var vtEl = g('dk-visitor-today');
   if (vtEl) vtEl.textContent = visitorData.today;
   updateQiMetrics();
+  fillDeptReportSelect();
   g('dk-apps').textContent = apps.length;
   g('dk-ppl').textContent = new Set(apps.map(a => a.name + a.tel)).size;
 
