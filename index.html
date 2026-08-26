@@ -56,6 +56,13 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 .hd-pill{font-size:12px;font-weight:600;color:var(--navy);background:var(--blue-lt);padding:5px 12px;border-radius:20px;cursor:pointer;display:none;border:none;font-family:inherit;transition:var(--ease)}
 .hd-pill:hover{background:#DBEAFE}
 .hd-btn{font-size:12px;font-weight:500;color:var(--tx3);background:none;border:1px solid var(--bd);padding:5px 12px;border-radius:var(--r-sm);cursor:pointer;font-family:inherit;transition:var(--ease)}
+.a11y-btn{font-size:12px;font-weight:600;color:var(--tx2);background:none;border:1px solid var(--bd);padding:5px 12px;border-radius:var(--r-sm);cursor:pointer;font-family:inherit;transition:var(--ease);margin-right:8px}
+.a11y-btn:hover{border-color:var(--navy);color:var(--navy)}
+.a11y-btn.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+/* 큰 글씨 모드: 본문 가독성 향상 (약 118%) */
+body.bigfont{font-size:118%}
+body.bigfont .hd-btn,body.bigfont .a11y-btn{font-size:13px}
+body.bigfont .card-title,body.bigfont .hn-txt,body.bigfont .g-sec p{line-height:1.7}
 .hd-btn:hover{color:var(--tx);border-color:var(--tx3)}
 
 /* ── NAV ── */
@@ -208,6 +215,15 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 .hq-t{font-size:21px;font-weight:800;color:var(--tx);letter-spacing:-.02em}
 .hq-d{font-size:15px;color:var(--tx2)}
 .home-quick-band{background:#EAF4E6;border-radius:16px;padding:20px;margin-bottom:30px}
+.aud-band{margin-bottom:22px}
+.aud-band-t{font-size:14px;font-weight:700;color:var(--navy);margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.aud-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.aud-btn{display:flex;align-items:center;gap:12px;padding:16px 18px;border-radius:12px;background:var(--surface);border:1.5px solid var(--bd);cursor:pointer;transition:box-shadow var(--ease),transform var(--ease),border-color var(--ease);text-align:left}
+.aud-btn:hover{box-shadow:0 4px 14px rgba(11,77,162,.12);transform:translateY(-2px);border-color:var(--navy)}
+.aud-btn .aud-ico{font-size:26px;flex-shrink:0}
+.aud-btn .aud-tt{font-size:15px;font-weight:700;color:var(--tx1)}
+.aud-btn .aud-dd{font-size:12px;color:var(--tx3);margin-top:2px}
+@media(max-width:820px){.aud-grid{grid-template-columns:1fr}}
 .home-quick-band .home-quick{margin-bottom:0}
 .home-quick-band .hq{border:1px solid #DCEBD4;padding:24px 22px;gap:10px}
 
@@ -461,6 +477,8 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 .qi-sub{font-size:12px;color:var(--tx2);margin-bottom:16px}
 .qi-kpi-row{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin-bottom:16px}
 .qi-kpi{background:var(--bg);border-radius:var(--r-sm);padding:14px;text-align:center}
+.qi-kpi.tentative{background:#FEF9E7;border:1px dashed #E0D5A8}
+.qi-kpi.tentative .qi-kpi-delta{color:#8A7A33}
 .qi-kpi-n{font-size:24px;font-weight:900}
 .qi-kpi-n.green{color:var(--green)}
 .qi-kpi-n.blue{color:#2563EB}
@@ -859,6 +877,7 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
       <span style="display:flex;flex-direction:column;line-height:1.15"><span style="font-size:12px;font-weight:700;color:#888;letter-spacing:.04em">NHIMC</span><span style="font-size:22px;font-weight:900;color:#1B3A6B;letter-spacing:-.03em">지역사회 통합 <span style="color:#2563EB">교육</span> 운영 시스템</span></span>
     </a>
     <div class="hd-r">
+      <button class="a11y-btn" id="bigfont-btn" onclick="toggleBigFont()" title="글자 크기를 키웁니다" aria-label="큰 글씨 모드">가+ 큰 글씨</button>
       <button class="hd-btn" onclick="showAdminLogin()">⚙ 관리</button>
     </div>
   </div>
@@ -1020,6 +1039,25 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
       <div class="hcat-t">응급대응교육</div>
       <div class="hcat-d">심폐소생술·KTAS·현장응급의료종사자 전문화 교육 및 재난응급의료 합동교육</div>
       <span class="hcat-n">교육 살펴보기 →</span>
+    </div>
+  </div>
+
+  <!-- 대상자별 바로가기 -->
+  <div class="aud-band">
+    <div class="aud-band-t">👥 대상별로 바로 찾기</div>
+    <div class="aud-grid">
+      <div class="aud-btn" onclick="goListByAudience('citizen')">
+        <span class="aud-ico">🧑‍🤝‍🧑</span>
+        <span><span class="aud-tt">일반 시민</span><span class="aud-dd">주민 누구나 참여 가능한 교육</span></span>
+      </div>
+      <div class="aud-btn" onclick="goListByAudience('medical')">
+        <span class="aud-ico">🩺</span>
+        <span><span class="aud-tt">의료인</span><span class="aud-dd">의사·간호사 등 의료 종사자</span></span>
+      </div>
+      <div class="aud-btn" onclick="goListByAudience('worker')">
+        <span class="aud-ico">👷</span>
+        <span><span class="aud-tt">돌봄·기관 종사자</span><span class="aud-dd">비의료 종사자·기관 인력</span></span>
+      </div>
     </div>
   </div>
 
@@ -1207,6 +1245,7 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
     <div class="stat" style="border-top:2px solid #059669"><div class="stat-n" id="sn-공동" style="color:#059669">0</div><div class="stat-l">🤝 공동교육</div></div>
     -->
   </div>
+  <div id="aud-active-bar" style="display:none;align-items:center;gap:6px;background:#EAF4E6;color:var(--navy);border-radius:10px;padding:10px 14px;margin-bottom:12px;font-size:13px;font-weight:600"></div>
   <div class="toolbar">
     <div class="srch">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="6" cy="6" r="4.5" stroke="#9CA3AF" stroke-width="1.3"/><path d="M9.5 9.5L12 12" stroke="#9CA3AF" stroke-width="1.3" stroke-linecap="round"/></svg>
@@ -1650,32 +1689,37 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
 
       <div class="qi-kpi-row">
         <div class="qi-kpi">
-          <div class="qi-kpi-n navy" id="qi-original">210</div>
-          <div class="qi-kpi-delta">(-6건)</div>
+          <div class="qi-kpi-n navy" id="qi-current">0</div>
+          <div class="qi-kpi-delta">= 실제 + 감소</div>
           <div class="qi-kpi-l">전체 교육 건수</div>
         </div>
         <div class="qi-kpi">
-          <div class="qi-kpi-n blue" id="qi-current">185</div>
-          <div class="qi-kpi-delta">(-2건)</div>
+          <div class="qi-kpi-n navy" id="qi-actual">0</div>
+          <div class="qi-kpi-delta">실제 운영 교육</div>
           <div class="qi-kpi-l">실제 교육 건수</div>
         </div>
         <div class="qi-kpi">
-          <div class="qi-kpi-n green" id="qi-reduced">25</div>
-          <div class="qi-kpi-delta">(-4건)</div>
-          <div class="qi-kpi-l">교육 감소 건수 <span class="qi-kpi-arrow">▼</span></div>
+          <div class="qi-kpi-n green" id="qi-reduced">0</div>
+          <div class="qi-kpi-delta">통합으로 감소</div>
+          <div class="qi-kpi-l">교육 감소 건수</div>
         </div>
-        <div class="qi-kpi">
-          <div class="qi-kpi-n orange" id="qi-integ">23</div>
-          <div class="qi-kpi-delta">&nbsp;</div>
+        <div class="qi-kpi" style="cursor:pointer" onclick="qiKpiIntegClick()" title="클릭하면 통합교육 전체 목록을 표시합니다">
+          <div class="qi-kpi-n orange" id="qi-integ">0</div>
+          <div class="qi-kpi-delta">두 개 이상 부서 협력</div>
           <div class="qi-kpi-l">통합교육 건수</div>
         </div>
         <div class="qi-kpi">
-          <div class="qi-kpi-n red" id="qi-rate">10.95%</div>
-          <div class="qi-kpi-delta">&nbsp;</div>
+          <div class="qi-kpi-n red" id="qi-rate">0%</div>
+          <div class="qi-kpi-delta">= 통합 × 100 / 전체</div>
           <div class="qi-kpi-l">통합교육 적용률</div>
         </div>
+        <div class="qi-kpi" style="cursor:pointer" onclick="qiKpiDeptsClick()" title="클릭하면 부서별 주관·지원 현황을 표시합니다">
+          <div class="qi-kpi-n blue" id="qi-depts">0</div>
+          <div class="qi-kpi-delta">주관 + 지원 부서</div>
+          <div class="qi-kpi-l">통합교육 참여 부서</div>
+        </div>
       </div>
-      <div style="font-size:11px;color:var(--tx3);margin:-6px 0 16px;line-height:1.7">※ 산출식: 통합교육 건수 × 100 / 전체 교육 프로그램 수(포털 등록 기준 자동 계산) &nbsp;|&nbsp; 전체·실제·감소 건수는 회의자료 기준 수기 산정값</div>
+      <div style="font-size:11px;color:var(--tx3);margin:-6px 0 16px;line-height:1.7">※ 지표 1) 지역사회 '통합교육' 적용률 &nbsp;|&nbsp; 산출식: 통합교육 건수 × 100 / 전체 교육 건수 &nbsp;|&nbsp; 전체 교육 건수 = 실제 교육 건수 + 통합으로 감소한 건수 &nbsp;|&nbsp; <b>2026-08-18 취합 현황 기준</b> &nbsp;|&nbsp; 부서 협력 건수(<span id="qi-links">0</span>) = 통합교육별 지원 부서 연결 수의 합</div>
 
       <div style="font-size:13px;font-weight:700;color:var(--navy);margin-bottom:8px">부서별 통합교육 참여 현황</div>
       <div id="qi-dept-bars"></div>
@@ -1683,6 +1727,11 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
       <div class="qi-toggle" onclick="toggleQiDetail()">▶ 통합교육 상세 보기</div>
       <div class="qi-detail" id="qi-detail">
         <div class="qi-collab-grid" id="qi-collab-grid"></div>
+      </div>
+
+      <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--bd);display:flex;gap:10px;flex-wrap:wrap">
+        <button class="hd-btn" style="background:var(--navy);color:#fff;border-color:var(--navy);padding:9px 16px;font-size:13px;font-weight:600" onclick="openPerfSummary()">📊 성과 요약 카드 (회의·보고용)</button>
+        <button class="hd-btn" style="padding:9px 16px;font-size:13px" onclick="exportQiCsv()">⬇ 통합교육 목록 CSV</button>
       </div>
     </div>
 
@@ -1693,6 +1742,18 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
     <div class="ch-card" style="background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:12px">
       <div class="ch-t">월별 신청 추이</div>
       <canvas id="ch-mon" height="80"></canvas>
+    </div>
+    <div class="dt-card">
+      <div class="dt-hd">
+        <div class="dt-hd-t">📊 교육별 신청 현황 (신청 있는 교육)</div>
+        <span style="font-size:11px;color:var(--tx3)">정원 대비 신청·마감 임박 확인</span>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="dt-table">
+          <thead><tr><th>교육명</th><th>부서</th><th>교육일</th><th>신청 마감</th><th>정원/신청</th><th>충원율</th></tr></thead>
+          <tbody id="dash-edu-status"></tbody>
+        </table>
+      </div>
     </div>
     <div class="dt-card">
       <div class="dt-hd">
@@ -1765,16 +1826,52 @@ body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100
   </div>
   <div class="pan-cta">
     <button class="pan-apply" id="pan-apply-btn" onclick="openApply(currentPanId)">신청하기</button>
+    <button class="pan-apply" style="background:#fff;color:var(--navy);border:1.5px solid var(--navy);margin-top:8px" onclick="downloadIcs(currentPanId)">📅 내 캘린더에 추가</button>
   </div>
 </div>
 
 <!-- ════ 신청 완료 알림 ════ -->
+<!-- ════ 성과 요약 카드 (관리자·회의용) ════ -->
+<div class="modal-bg" id="perf-modal" onclick="if(event.target===this)g('perf-modal').classList.remove('on')">
+  <div class="modal" style="max-width:720px;padding:0;overflow:hidden">
+    <div id="perf-print-area">
+      <div style="background:linear-gradient(135deg,#0B4DA2,#1B3A6B);color:#fff;padding:26px 30px">
+        <div style="font-size:12px;font-weight:600;opacity:.85;letter-spacing:.05em">국민건강보험 일산병원 · 지역사회 통합 교육 운영 시스템</div>
+        <div style="font-size:22px;font-weight:900;margin-top:6px">2026년 지역사회 통합교육 성과 요약</div>
+        <div id="perf-asof" style="font-size:12px;opacity:.85;margin-top:4px"></div>
+      </div>
+      <div style="padding:24px 30px">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:22px">
+          <div style="text-align:center;padding:16px 8px;background:#F8FAFC;border-radius:12px;border-top:3px solid #1B3A6B"><div id="pf-total" style="font-size:30px;font-weight:900;color:#1B3A6B">0</div><div style="font-size:12px;color:#64748B;margin-top:2px">전체 교육 건수</div></div>
+          <div style="text-align:center;padding:16px 8px;background:#F8FAFC;border-radius:12px;border-top:3px solid #0B7C4A"><div id="pf-actual" style="font-size:30px;font-weight:900;color:#0B7C4A">0</div><div style="font-size:12px;color:#64748B;margin-top:2px">실제 교육 건수</div></div>
+          <div style="text-align:center;padding:16px 8px;background:#F8FAFC;border-radius:12px;border-top:3px solid #16A34A"><div id="pf-reduced" style="font-size:30px;font-weight:900;color:#16A34A">0</div><div style="font-size:12px;color:#64748B;margin-top:2px">교육 감소 건수</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px">
+          <div style="text-align:center;padding:16px 8px;background:#FFF7ED;border-radius:12px;border-top:3px solid #C2410C"><div id="pf-integ" style="font-size:30px;font-weight:900;color:#C2410C">0</div><div style="font-size:12px;color:#64748B;margin-top:2px">통합교육 건수</div></div>
+          <div style="text-align:center;padding:16px 8px;background:#FEF2F2;border-radius:12px;border-top:3px solid #CC2936"><div id="pf-rate" style="font-size:30px;font-weight:900;color:#CC2936">0%</div><div style="font-size:12px;color:#64748B;margin-top:2px">통합교육 적용률</div></div>
+          <div style="text-align:center;padding:16px 8px;background:#EFF6FF;border-radius:12px;border-top:3px solid #0B4DA2"><div id="pf-depts" style="font-size:30px;font-weight:900;color:#0B4DA2">0</div><div style="font-size:12px;color:#64748B;margin-top:2px">참여 부서</div></div>
+        </div>
+        <div style="font-size:13px;font-weight:700;color:#1B3A6B;margin-bottom:10px">부서별 통합교육 참여 현황 (지원 연결 <span id="pf-links">0</span>건)</div>
+        <div id="pf-bars" style="margin-bottom:20px"></div>
+        <div style="font-size:11px;color:#94A3B8;line-height:1.7;border-top:1px solid #E5E7EB;padding-top:12px">
+          지표 1) 지역사회 통합교육 적용률 = 통합교육 건수 × 100 / 전체 교육 건수 &nbsp;·&nbsp; 전체 교육 건수 = 실제 교육 건수 + 통합으로 감소한 건수<br>
+          두 개 이상 부서가 함께 진행하는 교육을 통합교육으로 전환하여 중복을 줄이고 운영 효율을 높였습니다.
+        </div>
+      </div>
+    </div>
+    <div style="padding:14px 30px;background:#F8FAFC;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid #E5E7EB" class="perf-noprint">
+      <button class="hd-btn" onclick="printPerfSummary()" style="background:var(--navy);color:#fff;border-color:var(--navy);padding:9px 18px;font-size:13px;font-weight:600">🖨 인쇄 / PDF 저장</button>
+      <button class="hd-btn" onclick="g('perf-modal').classList.remove('on')" style="padding:9px 18px;font-size:13px">닫기</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-bg" id="done-modal">
   <div class="done-box">
     <div class="done-check">✓</div>
     <div class="done-title">신청이 정상적으로 접수되었습니다.</div>
     <div class="done-hr"></div>
-    <div class="done-body">신청 내역이 담당자에게 성공적으로 전달되었습니다.<br>접수 마감 후 <b>7일 이내</b>에 <b>확정 안내 문자</b>를 발송해 드립니다.</div>
+    <div class="done-body" id="done-body-text">신청 내역이 담당자에게 성공적으로 전달되었습니다.<br>접수 마감 후 <b>7일 이내</b>에 <b>확정 안내 문자</b>를 발송해 드립니다.</div>
     <div class="done-note">🎧 문자를 받지 못하신 경우, 교육 담당자에게 문의해 주세요.</div>
     <button class="done-ok" onclick="g('done-modal').classList.remove('on')">확인</button>
   </div>
@@ -1995,6 +2092,28 @@ function eduStatus(e){
   const dd=Math.round((up[0]-t0)/86400000);
   return {st: dd<=7?'soon':'open', dday:dd, next:up[0]};
 }
+// ── 신청 마감일 / 확정 안내 예정일 (하이브리드) ──
+// 규칙: 개별 e.deadline(YYYY-MM-DD)이 있으면 우선, 없으면 '교육일 N일 전' 공통 규칙
+const DEADLINE_DAYS_BEFORE = 1;   // 공통 규칙: 교육일 며칠 전 마감
+const CONFIRM_DAYS_AFTER = 7;     // 마감 후 며칠 이내 확정 안내
+function eduDeadline(e){
+  const t0=new Date(); t0.setHours(0,0,0,0);
+  const src=(e.sessions&&e.sessions.length)?e.sessions.map(s=>s.date):[e.date];
+  const ds=src.filter(Boolean).map(x=>new Date(x)).filter(x=>!isNaN(x));
+  if(!ds.length) return null;
+  const up=ds.filter(x=>x>=t0).sort((a,b)=>a-b);
+  const baseDate = up.length ? up[0] : null;
+  let deadline=null;
+  if(e.deadline){ var _d=new Date(e.deadline); if(!isNaN(_d)) deadline=_d; }
+  if(!deadline){
+    if(!baseDate) return null; // 지난 교육 & 개별 마감 없음 → 표시 안 함
+    deadline=new Date(baseDate); deadline.setDate(deadline.getDate()-DEADLINE_DAYS_BEFORE);
+  }
+  var confirmBy=new Date(deadline); confirmBy.setDate(confirmBy.getDate()+CONFIRM_DAYS_AFTER);
+  var closed = deadline < t0;
+  return {deadline:deadline, confirmBy:confirmBy, closed:closed, custom: !!e.deadline};
+}
+function fmtMD(d){ return d ? (d.getMonth()+1)+'.'+d.getDate() : ''; }
 function eduStBadge(s){
   if(s.st==='past') return '<span class="st-badge st-past">종료</span>';
   if(s.st==='tbd') return '<span class="st-badge st-tbd">일정 미정</span>';
@@ -2023,10 +2142,10 @@ const EDUS = [
   {"id":3,"type":"공동","dk":"책임","cat":"응급대응","sub":"현장응급의료종사자 전문화 교육","tgt":"종사자(의료인)","title":"뇌졸중","desc":"소방서 구급대원 대상 경기도의료원 파주병원 공동교육","date":"2026-06-18","time":"10:00","place":"-","min":60,"cap":38,"totalSessions":1,"pub":true,"code":"책임-응급-현장-2","sessions":[{"date":"2026-06-18","time":"10:00","place":"-","cap":38,"min":60,"title":"뇌졸중"}],"coop":[{"dept":"심뇌","role":"강사지원 다과,기념품 지원"}]},
   {"id":4,"type":"부서","dk":"책임","cat":"건강증진","sub":"통합돌봄","tgt":"종사자(의료인)","title":"낙상환자 관리와 환자안전 사고 보고 및 근본원인분석 사례","desc":"의료기관 환자안전 담당자 대상 교육","date":"2026-06-19","time":"14:30","place":"컨퍼런스룸1","min":60,"cap":26,"totalSessions":1,"pub":true,"code":"책임-건강-통합-1","sessions":[{"date":"2026-06-19","time":"14:30","place":"컨퍼런스룸1","cap":26,"min":60,"title":"낙상환자 관리와 환자안전 사고 보고 및 근본원인분석 사례"}]},
   {"id":5,"type":"부서","dk":"책임","cat":"감염예방","sub":"전문과정","tgt":"종사자(의료인)","title":"유행성 감염병 발생 시 대응전략(이론&실습)","desc":"의료기관 감염관리 담당자 대상 교육","date":"2026-06-19","time":"15:30","place":"컨퍼런스룸1","min":60,"cap":26,"totalSessions":2,"pub":true,"code":"책임-감염-전문-1","sessions":[{"date":"2026-06-19","time":"15:30","place":"컨퍼런스룸1","cap":26,"min":60,"title":"유행성 감염병 발생 시 대응전략(이론&실습)(1차)"},{"date":"2026-09-11","time":"13:00","place":"컨퍼런스룸1","cap":40,"min":60,"title":"감염관리 사례교육(2차)"}]},
-  {"id":6,"type":"공동","dk":"책임","cat":"감염예방","sub":"기본과정","tgt":"종사자","title":"요양기관에서 감염병 유행 시 대처방법","desc":"장기요양시설 및 의료기관 종사자 대상","date":"2026-06-30","time":"14:00","place":"대강당","min":60,"cap":100,"totalSessions":2,"pub":true,"code":"책임-감염-기본-1","sessions":[{"date":"2026-06-30","time":"14:00","place":"대강당","cap":100,"min":60,"title":"요양기관에서 감염병 유행 시 대처방법(1차)"},{"date":"2026-06-30","time":"15:00","place":"대강당","cap":0,"min":60,"title":"다학제 팀을 통한 노인 통합 관리(2차)"}],"coop":[{"dept":"일차","role":"강사지원"}]},
+  {"id":6,"type":"공동","dk":"책임","cat":"감염예방","sub":"기본과정","tgt":"종사자","title":"요양기관에서 감염병 유행 시 대처방법","desc":"장기요양시설 및 의료기관 종사자 대상","date":"2026-06-30","time":"14:00","place":"대강당","min":60,"cap":100,"totalSessions":2,"pub":true,"code":"책임-감염-기본-1","sessions":[{"date":"2026-06-30","time":"14:00","place":"대강당","cap":100,"min":60,"title":"요양기관에서 감염병 유행 시 대처방법(1차)"},{"date":"2026-06-30","time":"15:00","place":"대강당","cap":0,"min":60,"title":"다학제 팀을 통한 노인 통합 관리(2차)"}],"coop":[{"dept":"일차","role":"강사지원"},{"dept":"심뇌","role":"다과, 기념품지원"}]},
   {"id":7,"type":"부서","dk":"책임","cat":"감염예방","sub":"기본과정","tgt":"종사자","title":"감염관리 기본원칙","desc":"국민건강보험공단, 경기도북부 의료원 공동 수행, 장기요양시설 및 의료기관 종사자 대상. 공단에서 대상자 모집","date":"2026-09-18","time":"14:00","place":"대강당","min":60,"cap":250,"totalSessions":2,"pub":true,"code":"책임-감염-기본-2","sessions":[{"date":"2026-09-18","time":"14:00","place":"대강당","cap":250,"min":60,"title":"감염관리 기본원칙(1차)"},{"date":"2026-09-18","time":"15:10","place":"대강당","cap":0,"min":60,"title":"노인 구강 관리(2차)"}]},
   {"id":8,"type":"부서","dk":"책임","cat":"응급대응","sub":"현장응급의료종사자 전문화 교육","tgt":"종사자(의료인)","title":"외상 환자 평가 및 처치","desc":"소방서 구급대원 대상 경기도의료원 파주병원 공동교육","date":"2026-10-22","time":"10:00","place":"-","min":60,"cap":35,"totalSessions":1,"pub":true,"code":"책임-응급-현장-3","sessions":[{"date":"2026-10-22","time":"10:00","place":"-","cap":35,"min":60,"title":"외상 환자 평가 및 처치(2차)"}]},
-  {"id":9,"type":"공동","dk":"책임","cat":"응급대응","sub":"심폐소생술","tgt":"종사자","title":"일반인 심폐소생술 표준 교육 프로그램 심화과정","desc":"보건소 요청, '응급의료에 관한 법률' 의무교육 대상자,  보건소에서 대상자 모집","date":"2026-10-23","time":"13:00","place":"컨퍼런스룸1","min":240,"cap":25,"totalSessions":1,"pub":true,"code":"책임-응급-심폐-2","sessions":[{"date":"2026-10-23","time":"13:00","place":"컨퍼런스룸1","cap":25,"min":240,"title":"일반인 심폐소생술 표준 교육 프로그램 심화과정(2차)"}],"coop":[{"dept":"권역응급","role":"강사지원"}]},
+  {"id":9,"type":"공동","dk":"책임","cat":"응급대응","sub":"심폐소생술","tgt":"종사자","title":"일반인 심폐소생술 표준 교육 프로그램 심화과정","desc":"보건소 요청, '응급의료에 관한 법률' 의무교육 대상자,  보건소에서 대상자 모집","date":"2026-10-23","time":"13:00","place":"컨퍼런스룸1","min":240,"cap":25,"totalSessions":1,"pub":true,"code":"책임-응급-심폐-2","sessions":[{"date":"2026-10-23","time":"13:00","place":"컨퍼런스룸1","cap":25,"min":240,"title":"일반인 심폐소생술 표준 교육 프로그램 심화과정(2차)"}],"coop":[{"dept":"권역응급","role":"강사지원"},{"dept":"심뇌","role":"다과 지원"}]},
   {"id":10,"type":"공동","dk":"책임","cat":"응급대응","sub":"현장응급의료종사자 전문화 교육","tgt":"종사자(의료인)","title":"소아 CPR 및 응급처치","desc":"소방서 구급대원 대상 경기도의료원 파주병원 공동교육","date":"2026-10-27","time":"10:00","place":"-","min":60,"cap":35,"totalSessions":2,"pub":true,"code":"책임-응급-현장-4","sessions":[{"date":"2026-10-27","time":"10:00","place":"-","cap":35,"min":60,"title":"소아 CPR 및 응급처치(1차)"},{"date":"2026-10-27","time":"10:00","place":"미정","cap":0,"min":30,"title":"천식과 아나필락시스의 응급대처 방안(2차)"}],"coop":[{"dept":"아토피","role":"강사지원"}]},
   {"id":11,"type":"부서","dk":"아토피","cat":"건강증진","sub":"질환관리","tgt":"종사자(의료인)","title":"알레르기 질환 예방관리교육(보건의료인 대상)","desc":"보건의료인(의사직, 인턴) 대상 교육","date":"2026-01-21","time":"11:00","place":"교육정보센터상담실","min":30,"cap":2,"totalSessions":1,"pub":true,"code":"아토피-건강-질환-1","sessions":[{"date":"2026-01-21","time":"11:00","place":"교육정보센터상담실","cap":2,"min":30,"title":"알레르기 질환 예방관리교육(보건의료인 대상)(1차)"}]},
   {"id":12,"type":"부서","dk":"아토피","cat":"건강증진","sub":"질환관리","tgt":"종사자(의료인)","title":"알레르기 질환 예방관리교육(보건의료인 대상)","desc":"보건의료인(간호실습생) 대상 교육","date":"2026-02-03","time":"11:00","place":"교육정보센터상담실","min":30,"cap":3,"totalSessions":1,"pub":true,"code":"아토피-건강-질환-2","sessions":[{"date":"2026-02-03","time":"11:00","place":"교육정보센터상담실","cap":3,"min":30,"title":"알레르기 질환 예방관리교육(보건의료인 대상)(2차)"}]},
@@ -2115,11 +2234,11 @@ const EDUS = [
   {"id":95,"type":"부서","dk":"일차","cat":"건강증진","sub":"건강관리","tgt":"일반인","title":"만성질환자를 위한 맞춤운동교실-시상식","desc":"사후 인바디 검사 및 악력 측정 후 시상식","date":"2026-06-19","time":"14:00","place":"컨퍼런스룸","min":60,"cap":10,"totalSessions":1,"pub":true,"code":"일차-건강-건강-17","sessions":[{"date":"2026-06-19","time":"14:00","place":"컨퍼런스룸","cap":10,"min":60,"title":"만성질환자를 위한 맞춤운동교실-시상식"}]},
   {"id":187,"type":"공동","dk":"일차","cat":"건강증진","sub":"건강관리","tgt":"일반인","title":"천식 및 아나필락시스 예방관리교육","desc":"'만성질환자를 위한 맞춤운동교실' 시상식 내 교육으로 진행 (아토피·천식 교육정보센터 공동교육)","date":"2026-06-25","time":"15:30","place":"백석홀","min":20,"cap":10,"totalSessions":1,"pub":true,"code":"일차-건강-건강-17","sessions":[{"date":"2026-06-25","time":"15:30","place":"백석홀","cap":10,"min":20,"title":"천식 및 아나필락시스 예방관리교육"}],"coop":[{"dept":"아토피","role":"강사 지원"}]},
   {"id":96,"type":"부서","dk":"일차","cat":"건강증진","sub":"건강관리","tgt":"일반인","title":"성인의 영양관리 -상반기","desc":"60세이상 건강군 대상/ 다영역 중재를 통한 인지기능 저하 예방교육","date":"2026-04-23","time":"14:00","place":"-","min":60,"cap":10,"totalSessions":10,"pub":true,"code":"일차-건강-건강-18","sessions":[{"date":"2026-04-23","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -상반기(1차)"},{"date":"2026-04-30","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -상반기(2차)"},{"date":"2026-05-07","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -상반기(3차)"},{"date":"2026-05-14","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -상반기(4차)"},{"date":"2026-05-21","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -상반기(5차)"},{"date":"2026-05-28","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -상반기(6차)"},{"date":"2026-06-04","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -상반기(7차)"},{"date":"2026-06-11","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -상반기(8차)"},{"date":"2026-06-18","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -상반기(9차)"},{"date":"2026-06-25","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -상반기(10차)"}],"units":10,"courseUnit":true},
-  {"id":185,"type":"공동","dk":"일차","cat":"건강증진","sub":"건강관리","tgt":"일반인","title":"식품알레르기","desc":"'성인의 영양관리' 프로그램 내 교육으로 진행 (아토피·천식 교육정보센터 공동교육)","date":"2026-06-25","time":"14:30","place":"일산동구 보건소","min":60,"cap":10,"totalSessions":2,"pub":true,"code":"일차-건강-건강-27b","sessions":[{"date":"2026-06-25","time":"14:30","place":"일산동구 보건소","cap":0,"min":0,"title":"식품알레르기(2차)"},{"date":"2026-10-29","time":"14:30","place":"일산동구 보건소","cap":10,"min":60,"title":"식품알레르기(3차)"}],"coop":[{"dept":"아토피","role":"강사 지원 (식품알레르기 교육)"}]},
+  {"id":185,"type":"공동","dk":"일차","cat":"건강증진","sub":"건강관리","tgt":"일반인","title":"식품알레르기","desc":"'성인의 영양관리' 프로그램 내 교육으로 진행 (아토피·천식 교육정보센터 공동교육)","date":"2026-06-25","time":"14:30","place":"일산동구 보건소","min":60,"cap":10,"totalSessions":1,"pub":true,"code":"일차-건강-건강-27","sessions":[{"date":"2026-06-25","time":"14:30","place":"일산동구 보건소","cap":10,"min":60,"title":"식품알레르기"}],"coop":[{"dept":"아토피","role":"강사 지원 (식품알레르기 교육)"}]},
   {"id":106,"type":"부서","dk":"일차","cat":"건강증진","sub":"건강관리","tgt":"일반인","title":"성인의 영양관리 -하반기","desc":"60세이상 건강군 대상/ 다영역 중재를 통한 인지기능 저하 예방교육","date":"2026-09-02","time":"14:00","place":"-","min":60,"cap":10,"totalSessions":10,"pub":true,"code":"일차-건강-건강-28","sessions":[{"date":"2026-09-02","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -하반기(1차)"},{"date":"2026-09-09","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -하반기(2차)"},{"date":"2026-09-16","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -하반기(3차)"},{"date":"2026-09-23","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -하반기(4차)"},{"date":"2026-09-30","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -하반기(5차)"},{"date":"2026-10-07","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -하반기(6차)"},{"date":"2026-10-14","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -하반기(7차)"},{"date":"2026-10-21","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -하반기(8차)"},{"date":"2026-10-28","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -하반기(9차)"},{"date":"2026-11-04","time":"14:00","place":"-","cap":10,"min":60,"title":"성인의 영양관리 -하반기(10차)"}],"units":10,"courseUnit":true},
   {"id":116,"type":"부서","dk":"일차","cat":"건강증진","sub":"건강관리","tgt":"일반인","title":"텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영","desc":"25년 심리 사회정서 지지  프로그램 수료자 자조모임-대화체험공원","date":"2026-04-13","time":"10:00","place":"대화농업체험공원","min":90,"cap":10,"totalSessions":4,"pub":true,"code":"일차-건강-건강-38","sessions":[{"date":"2026-04-13","time":"10:00","place":"대화농업체험공원","cap":10,"min":90,"title":"텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영(1차)"},{"date":"2026-05-18","time":"10:00","place":"대화농업체험공원","cap":10,"min":90,"title":"텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영(2차)"},{"date":"2026-06-15","time":"10:00","place":"대화농업체험공원","cap":10,"min":90,"title":"텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영(3차)"},{"date":"2026-08-03","time":"10:00","place":"대화농업체험공원","cap":10,"min":90,"title":"텃밭 프로그램 연계 자조모임 기반 자기관리 교육 운영(4차)"}],"units":4,"courseUnit":true},
-  {"id":120,"type":"공동","dk":"일차","cat":"건강증진","sub":"건강관리","tgt":"종사자(비의료인)","title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램","desc":"텃밭 및 원예치료와 건강교육을 통한 돌봄제공자의 심리정서 지지 및 역량강화","date":"2026-07-14","time":"14:00","place":"일차 회의실","min":90,"cap":15,"totalSessions":7,"pub":true,"code":"일차-건강-건강-42","sessions":[{"date":"2026-07-14","time":"14:00","place":"일차 회의실","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(1차)"},{"date":"2026-07-20","time":"10:00","place":"대화농업체험공원","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(2차)"},{"date":"2026-07-28","time":"14:00","place":"일차 회의실","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(3차)"},{"date":"2026-08-03","time":"10:00","place":"대화농업체험공원","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(4차)"},{"date":"2026-08-11","time":"14:00","place":"일차 회의실","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(5차)"},{"date":"2026-08-18","time":"14:00","place":"일차 회의실","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(6차)"},{"date":"2026-08-25","time":"14:00","place":"일차 회의실","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(7차)"}],"units":7,"courseUnit":true,"coop":[{"dept":"아토피","role":"역량교육 진행(5차, 알레르기 질환 예방관리교육)"}]},
-  {"id":186,"type":"공동","dk":"일차","cat":"건강증진","sub":"질환관리","tgt":"종사자(의료인)","title":"알레르기 질환 예방관리교육","desc":"'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램' 내 역량교육으로 진행 (아토피·천식 교육정보센터 공동교육)","date":"2026-08-11","time":"14:00","place":"일차 회의실","min":30,"cap":15,"totalSessions":1,"pub":true,"code":"","sessions":[{"date":"2026-08-11","time":"14:00","place":"일차 회의실","cap":15,"min":30,"title":"알레르기 질환 예방관리교육"}],"coop":[{"dept":"아토피","role":"강의 지원"}]},
+  {"id":120,"type":"부서","dk":"일차","cat":"건강증진","sub":"건강관리","tgt":"종사자(비의료인)","title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램","desc":"텃밭 및 원예치료와 건강교육을 통한 돌봄제공자의 심리정서 지지 및 역량강화","date":"2026-07-14","time":"14:00","place":"일차 회의실","min":90,"cap":15,"totalSessions":7,"pub":true,"code":"일차-건강-건강-42","sessions":[{"date":"2026-07-14","time":"14:00","place":"일차 회의실","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(1차)"},{"date":"2026-07-20","time":"10:00","place":"대화농업체험공원","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(2차)"},{"date":"2026-07-28","time":"14:00","place":"일차 회의실","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(3차)"},{"date":"2026-08-03","time":"10:00","place":"대화농업체험공원","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(4차)"},{"date":"2026-08-11","time":"14:00","place":"일차 회의실","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(5차)"},{"date":"2026-08-18","time":"14:00","place":"일차 회의실","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(6차)"},{"date":"2026-08-25","time":"14:00","place":"일차 회의실","cap":15,"min":90,"title":"의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램(7차)"}],"units":7,"courseUnit":true},
+  {"id":186,"type":"공동","dk":"일차","cat":"건강증진","sub":"질환관리","tgt":"종사자(의료인)","title":"알레르기 질환 예방관리교육","desc":"'의료 종사자를 위한 텃밭 기반 사회정서 지지 프로그램' 내 역량교육으로 진행 (아토피·천식 교육정보센터 공동교육)","date":"2026-08-11","time":"14:00","place":"일차 회의실","min":30,"cap":15,"totalSessions":1,"pub":true,"code":"일차-건강-건강-48","sessions":[{"date":"2026-08-11","time":"14:00","place":"일차 회의실","cap":15,"min":30,"title":"알레르기 질환 예방관리교육"}],"coop":[{"dept":"아토피","role":"강의 지원"}]},
   {"id":127,"type":"부서","dk":"일차","cat":"건강증진","sub":"건강관리","tgt":"일반인","title":"만성질환 질병 완화 근력 운동 교육","desc":"국민건강보험공단 김포지사 요청 교육","date":"2026-05-28","time":"13:30","place":"김포 김포 한강신도시 아파트 경로당","min":120,"cap":15,"totalSessions":1,"pub":true,"code":"일차-건강-건강-49","sessions":[{"date":"2026-05-28","time":"13:30","place":"김포 김포 한강신도시 아파트 경로당","cap":15,"min":120,"title":"만성질환 질병 완화 근력 운동 교육"}]},
   {"id":128,"type":"부서","dk":"지장보","cat":"건강증진","sub":"통합돌봄","tgt":"일반인","title":"건강관리 및 낙상예방교육(시각장애인 대상)","desc":"시각장애인만을 대상으로 하는 교육으로 개별진행","date":"2026-05-18","time":"14:00","place":"-","min":60,"cap":28,"totalSessions":1,"pub":true,"code":"지장보-건강-통합-1","sessions":[{"date":"2026-05-18","time":"14:00","place":"-","cap":28,"min":60,"title":"건강관리 및 낙상예방교육(시각장애인 대상)(1차)"}]},
   {"id":129,"type":"부서","dk":"지장보","cat":"건강증진","sub":"통합돌봄","tgt":"일반인","title":"건강관리 교육(장애인 부모 대상)","desc":"발달장애부모교육 찾아가는 현장교육으로 개별진행","date":"2026-05-22","time":"10:00","place":"-","min":60,"cap":10,"totalSessions":1,"pub":true,"code":"지장보-건강-통합-2","sessions":[{"date":"2026-05-22","time":"10:00","place":"-","cap":10,"min":60,"title":"건강관리 교육(장애인 부모 대상)(1차)"}]},
@@ -2158,14 +2277,14 @@ const EDUS = [
   {"id":162,"type":"공동","dk":"공공","cat":"건강증진","sub":"질환관리","tgt":"일반인","title":"아토피 피부염(인형극) 교육(대안학교 학생 대상)","desc":"고양시 다문화 대안학교 학생 대상 교육","date":"2026-05-20","time":"14:00","place":"-","min":60,"cap":34,"totalSessions":2,"pub":true,"code":"공공-건강-질환-1","sessions":[{"date":"2026-05-20","time":"14:00","place":"-","cap":34,"min":60,"title":"아토피 피부염(인형극) 교육(대안학교 학생 대상)(1차)"},{"date":"2026-05-20","time":"15:00","place":"-","cap":0,"min":60,"title":"소방안전(체험)교육(대안학교 학생 대상)(2차)"}],"coop":[{"dept":"아토피","role":"강의 지원"}]},
   {"id":163,"type":"부서","dk":"공공","applyMode":"기관","cat":"건강증진","sub":"질환관리","tgt":"일반인","title":"폐렴으로부터 내몸 지키기(고양축협 조합원 대상)","desc":"고양축협 조합원 대상 원하는 강의 요청 후 진료과 교수 연계","date":"2026-05-29","time":"10:00","place":"-","min":90,"cap":90,"totalSessions":1,"pub":true,"code":"공공-건강-질환-2","sessions":[{"date":"2026-05-29","time":"10:00","place":"-","cap":90,"min":90,"title":"폐렴으로부터 내몸 지키기(고양축협 조합원 대상)"}]},
   {"id":164,"type":"공동","dk":"공공","cat":"건강증진","sub":"정신건강","tgt":"일반인","title":"아이를 돌보다 지친 나를 돌보는 법(1차_방과후교사 대상)","desc":"고양시 교육지원청 연계 유치원 방과후 교사 대상","date":"2026-06-09","time":"09:00","place":"대강당","min":60,"cap":67,"totalSessions":3,"pub":true,"code":"공공-건강-정신-1","sessions":[{"date":"2026-06-09","time":"09:00","place":"대강당","cap":67,"min":60,"title":"아이를 돌보다 지친 나를 돌보는 법(1차_방과후교사 대상)(1차)"},{"date":"2026-06-09","time":"10:00","place":"대강당","cap":0,"min":60,"title":"근골격계 질환 예방 운동(방과후교사 대상)(2차)"},{"date":"2026-06-09","time":"11:00","place":"대강당","cap":0,"min":60,"title":"스트레스 검사 측정(방과후교사 대상)(3차)"}],"coop":[{"dept":"어린이","role":"강의지원"}]},
-  {"id":165,"type":"공동","dk":"공공","cat":"건강증진","sub":"통합돌봄","tgt":"일반인","title":"사전연명의료의향서 안내 및 작성","desc":"연명의료에 대한 이해와 사전연명의료의향서 작성 안내 등","date":"2026-06-12","time":"10:00","place":"중산성당","min":0,"cap":87,"totalSessions":1,"pub":true,"code":"공공-건강-통합-1","sessions":[{"date":"2026-06-12","time":"10:00","place":"중산성당","cap":87,"min":0,"title":"사전연명의료의향서 안내 및 작성"}],"coop":[{"dept":"아토피","role":"강의지원"}]},
+  {"id":165,"type":"부서","dk":"공공","cat":"건강증진","sub":"통합돌봄","tgt":"일반인","title":"사전연명의료의향서 안내 및 작성","desc":"연명의료에 대한 이해와 사전연명의료의향서 작성 안내 등","date":"2026-06-12","time":"10:00","place":"중산성당","min":0,"cap":87,"totalSessions":1,"pub":true,"code":"공공-건강-통합-1","sessions":[{"date":"2026-06-12","time":"10:00","place":"중산성당","cap":87,"min":0,"title":"사전연명의료의향서 안내 및 작성"}]},
   {"id":166,"type":"공동","dk":"공공","cat":"건강증진","sub":"정신건강","tgt":"일반인","title":"아이를 돌보다 지친 나를 돌보는 법(2차_유치원교사 대상)","desc":"고양시 교육지원청 연계 유치원 사립, 공립 교사 대상","date":"2026-06-17","time":"14:00","place":"대강당","min":60,"cap":25,"totalSessions":3,"pub":true,"code":"공공-건강-정신-2","sessions":[{"date":"2026-06-17","time":"14:00","place":"대강당","cap":25,"min":60,"title":"아이를 돌보다 지친 나를 돌보는 법(2차_유치원교사 대상)(1차)"},{"date":"2026-06-17","time":"15:00","place":"대강당","cap":0,"min":60,"title":"근골격계 질환 예방 운동(유치원교사 대상)(2차)"},{"date":"2026-06-17","time":"16:00","place":"대강당","cap":0,"min":60,"title":"스트레스 검사 측정(유치원교사 대상)(3차)"}],"coop":[{"dept":"어린이","role":"강의지원"}]},
   {"id":167,"type":"공동","dk":"공공","cat":"건강증진","sub":"정신건강","tgt":"일반인","title":"아이를 돌보다 지친 나를 돌보는 법(3차_학부모 대상)","desc":"고양시 유치원 학부모 대상","date":"2026-06-30","time":"09:00","place":"대강당","min":60,"cap":30,"totalSessions":3,"pub":true,"code":"공공-건강-정신-3","sessions":[{"date":"2026-06-30","time":"09:00","place":"대강당","cap":30,"min":60,"title":"아이를 돌보다 지친 나를 돌보는 법(3차_학부모 대상)(1차)"},{"date":"2026-06-30","time":"10:00","place":"대강당","cap":0,"min":60,"title":"인지 발달을 위한 신체 놀이(학부모 대상)(2차)"},{"date":"2026-06-30","time":"11:00","place":"대강당","cap":0,"min":60,"title":"스트레스 검사 측정(학부모 대상)(3차)"}],"coop":[{"dept":"어린이","role":"강의지원"}]},
   {"id":168,"type":"공동","dk":"공공","cat":"건강증진","sub":"질환관리","tgt":"일반인","title":"내 뇌를 살리는 뇌혈관질환 바로알기(고양축협 조합원 대상)","desc":"고양축협 조합원 대상 원하는 강의 요청 후 진료과 교수 연계","date":"2026-07-23","time":"10:00","place":"-","min":100,"cap":100,"totalSessions":1,"pub":true,"code":"공공-건강-질환-3","sessions":[{"date":"2026-07-23","time":"10:00","place":"-","cap":100,"min":100,"title":"내 뇌를 살리는 뇌혈관질환 바로알기(고양축협 조합원 대상)"}],"coop":[{"dept":"심뇌","role":"기념품 지원"}]},
   {"id":169,"type":"공동","dk":"공공","cat":"건강증진","sub":"질환관리","tgt":"일반인","title":"아토피 피부염(인형극) 교육(지역아동센터 학생 대상)","desc":"지역아동센터 학생(초1~고등학생) 대상","date":"2026-07-29","time":"14:00","place":"-","min":60,"cap":40,"totalSessions":2,"pub":true,"code":"공공-정신-질환-4","sessions":[{"date":"2026-07-29","time":"14:00","place":"-","cap":40,"min":60,"title":"아토피 피부염(인형극) 교육(지역아동센터 학생 대상)(1차)"},{"date":"2026-07-29","time":"15:00","place":"-","cap":0,"min":60,"title":"소방안전(체험)교육(대안학교 학생 대상)(2차)"}],"coop":[{"dept":"아토피","role":"강의지원"}]},
   {"id":170,"type":"공동","dk":"공공","cat":"건강증진","sub":"질환관리","tgt":"일반인","title":"아토피 피부염(인형극) 교육(지역아동센터 학생 대상)","desc":"지역아동센터 학생(초1~고등학생) 대상","date":"2026-08-12","time":"14:00","place":"-","min":60,"cap":40,"totalSessions":2,"pub":true,"code":"공공-정신-질환-5","sessions":[{"date":"2026-08-12","time":"14:00","place":"-","cap":40,"min":60,"title":"아토피 피부염(인형극) 교육(지역아동센터 학생 대상)(1차)"},{"date":"2026-08-12","time":"15:00","place":"-","cap":0,"min":60,"title":"소방안전(체험)교육(대안학교 학생 대상)(2차)"}],"coop":[{"dept":"아토피","role":"강의지원"}]},
   {"id":171,"type":"부서","dk":"공공","applyMode":"기관","cat":"건강증진","sub":"질환관리","tgt":"일반인","title":"어르신을 위한 콩팥 건강교실(고양축협 조합원 대상)","desc":"고양축협 조합원 대상 원하는 강의 요청 후 진료과 교수 연계","date":"2026-08-19","time":"10:00","place":"-","min":100,"cap":100,"totalSessions":1,"pub":true,"code":"공공-건강-질환-6","sessions":[{"date":"2026-08-19","time":"10:00","place":"-","cap":100,"min":100,"title":"어르신을 위한 콩팥 건강교실(고양축협 조합원 대상)"}]},
-  {"id":172,"type":"부서","dk":"공공","applyMode":"기관","cat":"건강증진","sub":"질환관리","tgt":"일반인","title":"미정(지역주민 노인 대상)","desc":"지역심뇌혈관질환센터와 함께 성당 노인대상 건강강좌 실시","date":"2026-09-01","time":"10:00","place":"-","min":45,"cap":200,"totalSessions":1,"pub":true,"code":"공공-정신-질환-7","sessions":[{"date":"2026-09-01","time":"10:00","place":"-","cap":200,"min":45,"title":"미정(지역주민 노인 대상)"}]},
+  {"id":172,"type":"공동","dk":"공공","applyMode":"기관","cat":"건강증진","sub":"질환관리","tgt":"일반인","title":"노인 천식","desc":"지역주민 노인 대상 천식 예방관리 교육 (아토피·천식 교육정보센터 공동교육)","date":"2026-10-02","time":"10:00","place":"-","min":45,"cap":100,"totalSessions":1,"pub":true,"code":"공공-정신-질환-7","sessions":[{"date":"2026-10-02","time":"10:00","place":"-","cap":100,"min":45,"title":"노인 천식"}],"coop":[{"dept":"아토피","role":"강의지원"}]},
   {"id":173,"type":"부서","dk":"공공","applyMode":"기관","cat":"건강증진","sub":"통합돌봄","tgt":"일반인","title":"사회적고립가구 건강관리교육","desc":"복지관에서 발굴한 고립가구 대상 건강관리 및 정서관리 교육 진행","date":"2026-10-01","time":"","place":"흰돌종합사회복지관","min":0,"cap":10,"totalSessions":1,"pub":true,"code":"공공-건강-통합-2","sessions":[{"date":"2026-10-01","time":"","place":"흰돌종합사회복지관","cap":10,"min":0,"title":"사회적고립가구 건강관리교육(1차)"}]},
   {"id":174,"type":"부서","dk":"공공","applyMode":"기관","cat":"건강증진","sub":"통합돌봄","tgt":"일반인","title":"사회적고립가구 건강관리교육","desc":"복지관에서 발굴한 고립가구 대상 건강관리 및 정서관리 교육 진행","date":"2026-10-01","time":"","place":"흰돌종합사회복지관","min":0,"cap":10,"totalSessions":1,"pub":true,"code":"공공-건강-통합-3","sessions":[{"date":"2026-10-01","time":"","place":"흰돌종합사회복지관","cap":10,"min":0,"title":"사회적고립가구 건강관리교육(2차)"}]},
   {"id":175,"type":"부서","dk":"공공","applyMode":"기관","cat":"건강증진","sub":"통합돌봄","tgt":"일반인","title":"사회적고립가구 건강관리교육","desc":"복지관에서 발굴한 고립가구 대상 건강관리 및 정서관리 교육 진행","date":"2026-10-01","time":"","place":"흰돌종합사회복지관","min":0,"cap":10,"totalSessions":1,"pub":true,"code":"공공-건강-통합-4","sessions":[{"date":"2026-10-01","time":"","place":"흰돌종합사회복지관","cap":10,"min":0,"title":"사회적고립가구 건강관리교육(3차)"}]},
@@ -2177,7 +2296,9 @@ const EDUS = [
   {"id":181,"type":"부서","dk":"권역응급","cat":"응급대응","sub":"KTAS","tgt":"종사자(의료인)","title":"KTAS","desc":"한국형 응급환자 분류도구 (Korean Triage and Acuity Scale) 교육과정","date":"2026-04-14","time":"09:00","place":"세미나실1,2","min":270,"cap":16,"totalSessions":1,"pub":true,"code":"권역-응급-KT-1","sessions":[{"date":"2026-04-14","time":"09:00","place":"세미나실1,2","cap":16,"min":270,"title":"KTAS(1차)"}]},
   {"id":182,"type":"부서","dk":"권역응급","cat":"응급대응","sub":"KTAS","tgt":"종사자(의료인)","title":"KTAS","desc":"한국형 응급환자 분류도구 (Korean Triage and Acuity Scale) 교육과정","date":"","time":"","place":"미정","min":270,"cap":16,"totalSessions":1,"pub":true,"code":"권역-응급-KT-2","sessions":[{"date":"","time":"","place":"미정","cap":16,"min":270,"title":"KTAS(2차)"}]},
   {"id":183,"type":"공동","dk":"권역응급","cat":"응급대응","sub":"재난응급의료 합동교육","tgt":"종사자(비의료인)","title":"재난응급의료 합동교육","desc":"재난의료대응 체계 및 출동, 중증도분류, 도상훈련","date":"2026-07-10","time":"09:30","place":"컨퍼런스룸1","min":180,"cap":15,"totalSessions":1,"pub":true,"code":"권역-응급-재난-1","sessions":[{"date":"2026-07-10","time":"09:30","place":"컨퍼런스룸1","cap":15,"min":180,"title":"재난응급의료 합동교육(1차)"}],"coop":[{"dept":"책임","role":"기념품지원"}]},
-  {"id":184,"type":"공동","dk":"권역응급","cat":"응급대응","sub":"재난응급의료 합동교육","tgt":"종사자(비의료인)","title":"재난응급의료 합동교육","desc":"재난의료대응 체계 및 출동, 중증도분류, 도상훈련","date":"2026-08-21","time":"09:30","place":"컨퍼런스룸1","min":180,"cap":15,"totalSessions":1,"pub":true,"code":"권역-응급-재난-2","sessions":[{"date":"2026-08-21","time":"09:30","place":"컨퍼런스룸1","cap":15,"min":180,"title":"재난응급의료 합동교육(2차)"}],"coop":[{"dept":"책임","role":"기념품지원"}]}
+  {"id":184,"type":"공동","dk":"권역응급","cat":"응급대응","sub":"재난응급의료 합동교육","tgt":"종사자(비의료인)","title":"재난응급의료 합동교육","desc":"재난의료대응 체계 및 출동, 중증도분류, 도상훈련","date":"2026-08-21","time":"09:30","place":"컨퍼런스룸1","min":180,"cap":15,"totalSessions":1,"pub":true,"code":"권역-응급-재난-2","sessions":[{"date":"2026-08-21","time":"09:30","place":"컨퍼런스룸1","cap":15,"min":180,"title":"재난응급의료 합동교육(2차)"}],"coop":[{"dept":"책임","role":"기념품지원"}]},
+  {"id":188,"type":"공동","dk":"일차","cat":"건강증진","sub":"건강관리","tgt":"일반인","title":"식품 알레르기 교육","desc":"'성인의 영양관리 -하반기' 프로그램 내 교육으로 진행 (아토피·천식 교육정보센터 공동교육)","date":"2026-10-28","time":"14:30","place":"일산동구 보건소","min":20,"cap":10,"totalSessions":1,"pub":true,"code":"일차-건강-건강-37","sessions":[{"date":"2026-10-28","time":"14:30","place":"일산동구 보건소","cap":10,"min":20,"title":"식품 알레르기 교육"}],"coop":[{"dept":"아토피","role":"강사 지원 (식품알레르기 교육)"}]},
+  {"id":189,"type":"공동","dk":"일차","cat":"건강증진","sub":"통합돌봄","tgt":"종사자(의료인)","title":"재가 방문 시 감염관리 실무 가이드","desc":"'방문 노쇠 예방 재가돌봄 교육' 내 교육으로 진행 (책임의료사업부 공동교육)","date":"2026-06-10","time":"16:30","place":"일산동구 보건소","min":20,"cap":76,"totalSessions":1,"pub":true,"code":"일차-건강-통합-4","sessions":[{"date":"2026-06-10","time":"16:30","place":"일산동구 보건소","cap":76,"min":20,"title":"재가 방문 시 감염관리 실무 가이드"}],"coop":[{"dept":"책임","role":"감염예방"}]}
 ];
 /* ═══ [복구마커: 중복회차] ═══
    2026-08-07 정리: 엑셀 강사별 반복 입력행에서 생성된 중복 세션 39행 제거 (동일 날짜·시각 + 정원0·시간0).
@@ -2591,6 +2712,23 @@ function goCal(mode) {
 // RENDER LIST
 // ═══════════════════════════════
 let fltOpen = false; // 모집중 교육만 보기 (통계 카드 클릭으로 토글)
+let audFilter = ''; // 대상자별 바로가기 그룹 필터 ('citizen'|'medical'|'worker'|'')
+// 대상(tgt) 값을 그룹으로 매핑: 시민=일반인, 의료인=종사자(의료인), 종사자=종사자(비의료인)+종사자
+function _audMatch(tgt){
+  if(!audFilter) return true;
+  if(audFilter==='citizen') return tgt==='일반인';
+  if(audFilter==='medical') return tgt==='종사자(의료인)';
+  if(audFilter==='worker') return tgt==='종사자(비의료인)' || tgt==='종사자';
+  return true;
+}
+// 홈 대상자별 버튼 → 목록으로 이동하며 그룹 필터 적용
+function goListByAudience(group){
+  audFilter = group;
+  var ftEl = g('ft'); if(ftEl) ftEl.value=''; // 세부 대상 select는 초기화(그룹이 우선)
+  pg('list', document.querySelector('[data-nav=list]'));
+  var labels={citizen:'일반 시민',medical:'의료인',worker:'돌봄·기관 종사자'};
+  toast('👥 '+(labels[group]||'')+' 대상 교육을 표시합니다');
+}
 function toggleOpenFilter() {
   fltOpen = !fltOpen;
   const c = g('stat-open-card'), l = g('sn-open-l');
@@ -2604,6 +2742,18 @@ function rl() {
   const fd = g('fd').value;
   const ft = g('ft').value;
   const fm = g('fm').value;
+  if (ft) audFilter = ''; // 세부 대상을 직접 고르면 그룹 바로가기 필터는 해제
+  // 대상 그룹 필터 활성 안내 배너
+  var audBar = g('aud-active-bar');
+  if (audBar) {
+    if (audFilter) {
+      var _lbl = {citizen:'🧑‍🤝‍🧑 일반 시민',medical:'🩺 의료인',worker:'👷 돌봄·기관 종사자'}[audFilter] || '';
+      audBar.innerHTML = _lbl + ' 대상 교육만 표시 중 <button onclick="audFilter=\'\';rl();" style="margin-left:8px;border:none;background:#fff;color:var(--navy);border-radius:6px;padding:2px 10px;font-size:12px;font-weight:700;cursor:pointer">✕ 전체 보기</button>';
+      audBar.style.display = 'flex';
+    } else {
+      audBar.style.display = 'none';
+    }
+  }
 
   let list = EDUS.filter(e => {
     if (!adminMode && e.pub === false) return false;
@@ -2612,6 +2762,7 @@ function rl() {
     if (fd && e.dk !== fd) return false;
     if (fltOpen) { const _s = eduStatus(e); if (!(_s.st === 'open' || _s.st === 'soon')) return false; }
     if (ft && e.tgt !== ft) return false;
+    if (!_audMatch(e.tgt)) return false;
     if (fm) {
       const mset = ((e.sessions && e.sessions.length) ? e.sessions.map(s=>s.date) : [e.date]).filter(Boolean).map(x=>new Date(x).getMonth()+1);
       if (mset.length && !mset.includes(parseInt(fm))) return false;
@@ -2792,6 +2943,8 @@ function openPan(id) {
     <div class="pan-info"><div class="pan-info-l">장소</div><div class="pan-info-v">${e.place}</div></div>
     <div class="pan-info"><div class="pan-info-l">교육 시간</div><div class="pan-info-v">${fmtDur(e.min)}</div></div>
     <div class="pan-info"><div class="pan-info-l">정원 / 신청</div><div class="pan-info-v">${e.cap ? e.cap + '명' : '제한 없음'} / ${appCnt}명</div></div>
+    ${(function(){ var dl=eduDeadline(e); if(!dl) return ''; return '<div class="pan-info"><div class="pan-info-l">신청 마감</div><div class="pan-info-v"'+(dl.closed?' style="color:#CC2936"':'')+'>'+fmtMD(dl.deadline)+(dl.closed?' (마감)':'')+(dl.custom?'':' <span style="color:var(--tx3);font-size:11px">(교육일 '+DEADLINE_DAYS_BEFORE+'일 전)</span>')+'</div></div>'
+      + '<div class="pan-info"><div class="pan-info-l">확정 안내 예정</div><div class="pan-info-v">'+fmtMD(dl.deadline)+'~'+fmtMD(dl.confirmBy)+'경</div></div>'; })()}
     ${e.sessions && e.sessions.length > 1 ? '<div class="pan-info"><div class="pan-info-l">📅 회차</div><div class="pan-info-v" style="color:#2563EB;font-weight:700">총 ' + e.sessions.length + '회차 운영</div></div>' : ''}`;
 
   g('pan-qr-sec').style.display = adminMode ? 'block' : 'none';
@@ -2925,12 +3078,30 @@ function submitApply() {
   // localStorage에 먼저 저장 (네트워크 실패해도 데이터 보존)
   try { localStorage.setItem('ilsan_apps_v1', JSON.stringify(apps)); } catch(e){}
   updateMyCount();
+  // 신청 완료 안내에 해당 교육의 확정 안내 예정일 반영 (하이브리드 마감일)
+  (function(){
+    var bt=g('done-body-text'); if(!bt) return;
+    var dl=eduDeadline(e);
+    if(dl){
+      bt.innerHTML='신청 내역이 담당자에게 성공적으로 전달되었습니다.<br>'
+        +'신청 마감일(<b>'+fmtMD(dl.deadline)+'</b>) 이후 <b>'+fmtMD(dl.deadline)+'~'+fmtMD(dl.confirmBy)+'경</b>에 <b>확정 안내 문자</b>를 발송해 드립니다.';
+    } else {
+      bt.innerHTML='신청 내역이 담당자에게 성공적으로 전달되었습니다.<br>접수 마감 후 <b>'+CONFIRM_DAYS_AFTER+'일 이내</b>에 <b>확정 안내 문자</b>를 발송해 드립니다.';
+    }
+  })();
   g('done-modal').classList.add('on');
   rl();
 
   // EmailJS로 신청 내용 메일 발송 (비동기)
   if (window.emailjs) {
+    // 주관부서(dk) 접수 이메일 조회 → 없으면 총괄(betz1103)로 fallback
+    const ADMIN_EMAIL = 'betz1103@nhimc.or.kr';
+    const deptEmail = (DEPT_INFO[e.dk] && DEPT_INFO[e.dk].email) ? DEPT_INFO[e.dk].email : ADMIN_EMAIL;
+    // 부서 접수 + 총괄 참조(CC). 부서 이메일이 총괄과 같으면 CC 생략(중복 방지)
+    const ccEmail = (deptEmail === ADMIN_EMAIL) ? '' : ADMIN_EMAIL;
     emailjs.send('service_ckms85l', 'template_js78bin', {
+      to_email: deptEmail,
+      cc_email: ccEmail,
       name: name,
       tel: tel,
       org: org,
@@ -3114,6 +3285,8 @@ function submitProp() {
   if (!t || !d) { toast('⚠ 제목과 내용을 입력하세요'); return; }
   // EmailJS로 운영 담당자에게 접수 (신청 메일과 동일 채널, [기능제안] 접두어로 구분)
   emailjs.send('service_ckms85l', 'template_js78bin', {
+    to_email: 'betz1103@nhimc.or.kr',
+    cc_email: '',
     eduTitle: '[기능제안] ' + ptype + ' — ' + t,
     sessInfo: '기능제안 접수 (커뮤니티 페이지)',
     name: pname || '익명',
@@ -3412,6 +3585,7 @@ loadAppsFromStorage();
 // ═══════════════════════════════
 // QI 성과 지표 시스템
 // ═══════════════════════════════
+// [참고] 아래 두 목록은 회의자료 기준 스냅샷 (2026-08-08부터 미사용 — 막대·상세는 EDUS 실데이터 기반)
 var QI_COLLAB = [
   {code:'책임-응급-심폐-1',title:'심폐소생술 표준 교육 심화과정',dept:'책임의료사업부',partners:[{name:'응급',role:'강사지원'},{name:'심뇌',role:'다과지원'}]},
   {code:'책임-응급-현장-2',title:'뇌졸중 응급처치',dept:'책임의료사업부',partners:[{name:'심뇌',role:'강사지원'}]},
@@ -3449,41 +3623,62 @@ var QI_INTEG = [
   {code:'포털ID 186',title:'알레르기 질환 예방관리교육 (텃밭 프로그램 내 역량교육)',dept:'일차의료개발센터',partner:'아토피',topic:'강의 지원 · 8/11 일차 회의실'}
 ];
 
+// ══════════════════════════════════════════════════════════════
+// QI 정본 지표 — 부서별 연간 교육 계획 취합 현황 기준 (회의자료 정본)
+// 최종 갱신: 2026-08-18 취합본 (엑셀 "9-2 260820" 종합 수식 근거)
+//   전체 216 = 실제 188 + 감소 28  |  통합 26 = 협력표시 21 + 희망 5
+//   적용률 12.04% = 통합 26 × 100 / 전체 216
+//   감소 28 = 통합교육으로 통합·축소되어 사라진 교육 건수(데이터엔 없는 값이라 정본 입력)
+// ▶ 회의자료가 갱신되면 아래 QI_OFFICIAL 값만 수정하면 전 지표가 반영됩니다.
+// [복구마커: 감소지표] 이전 방식(회차 자동계산: 전체 205 · 통합 43 · 20.98%)은
+//   updateQiMetrics 하단 _AUTO 계산 블록에 그대로 보존됨. 회차기준 복귀 시 그 값을 KPI에 연결.
+var QI_OFFICIAL = {
+  total: 216,      // 전체 교육 건수 (실제 + 감소)
+  actual: 188,     // 실제 교육 건수
+  reduced: 28,     // 교육 감소 건수
+  integ: 26,       // 통합교육 건수
+  ratePct: '12.04',// 통합교육 적용률(%)
+  asOf: '2026-08-18'
+};
 function updateQiMetrics() {
-  // 회의자료 기준 고정값 (지표1: 지역사회 '통합교육' 적용률)
-  // 산출식: 통합교육 건수 × 100 / 전체 교육 건수 = 23 × 100 / 210 ≈ 10.95%
-  var originalCount = 210; // 전체 교육 건수
-  var currentCount = 185;  // 실제 교육 건수
-  var reducedCount = 25;   // 교육 감소 건수
-  // 통합교육 건수·적용률은 포털 등록 데이터에서 자동 계산 (2026-08-08부터)
-  var _pubE = EDUS.filter(function(e){ return e.pub !== false; });
-  var integCount = _pubE.filter(function(e){ return e.type === '공동'; }).length; // 내부 키는 '공동' 유지, 화면 표기는 통합교육
-  var _totalProg = _pubE.reduce(function(a,e){ return a + eduUnits(e); }, 0);
-  var rate = _totalProg ? (integCount * 100 / _totalProg).toFixed(2) : '0';
-
+  // ── QI 지표: 회의자료 취합 현황(정본) 기준 표기 (2026-08-18 통일) ──
+  // 상단 KPI 5칸은 QI_OFFICIAL 정본값을 표시. 산출식은 카드 하단·안내문에 명시.
   var el;
-  el = g('qi-original'); if(el) el.textContent = originalCount;
-  el = g('qi-current'); if(el) el.textContent = currentCount;
-  el = g('qi-reduced'); if(el) el.textContent = reducedCount;
-  el = g('qi-integ'); if(el) el.textContent = integCount;
-  el = g('qi-rate'); if(el) el.textContent = rate + '%';
+  el = g('qi-current'); if(el) el.textContent = QI_OFFICIAL.total;
+  el = g('qi-integ'); if(el) el.textContent = QI_OFFICIAL.integ;
+  el = g('qi-rate'); if(el) el.textContent = QI_OFFICIAL.ratePct + '%';
+  el = g('qi-reduced'); if(el) el.textContent = QI_OFFICIAL.reduced;
+  el = g('qi-actual'); if(el) el.textContent = QI_OFFICIAL.actual;
 
+  // ── 아래는 막대·클릭 상세용 실데이터 집계 (부서별 지원 현황 시각화) ──
+  var _pubE = EDUS.filter(function(e){ return e.pub !== false; });
+  function _sessN(e){ return (e.sessions && e.sessions.length) ? e.sessions.length : 1; }
+  var _integE = _pubE.filter(function(e){ return e.type === '공동'; }); // 내부 키 '공동' 유지, 화면 표기 통합교육
+  // [복구마커: 감소지표] 회차기준 자동계산값(복귀용) — 미표시, 참고 보존
+  var _AUTO_current = _pubE.reduce(function(a,e){ return a + _sessN(e); }, 0);
+  var _AUTO_integ = _integE.reduce(function(a,e){ return a + _sessN(e); }, 0);
+  var coopLinks = _integE.reduce(function(a,e){ return a + ((e.coop && e.coop.length) || 0); }, 0);
+  var _deptSet = {};
+  _integE.forEach(function(e){ _deptSet[e.dk] = 1; (e.coop||[]).forEach(function(c){ _deptSet[c.dept] = 1; }); });
+  var deptN = Object.keys(_deptSet).length;
+
+  el = g('qi-links'); if(el) el.textContent = coopLinks;
+  el = g('qi-depts'); if(el) el.textContent = deptN + '개';
+
+  // 막대 = 포털 실데이터 기준: 각 통합교육에서 지원 부서로 참여한 건수 (합계 = 부서 협력 건수 KPI)
   var deptCounts = {};
-  QI_COLLAB.forEach(function(c) {
-    c.partners.forEach(function(p) {
-      deptCounts[p.name] = (deptCounts[p.name] || 0) + 1;
+  _integE.forEach(function(e) {
+    (e.coop || []).forEach(function(c) {
+      deptCounts[c.dept] = (deptCounts[c.dept] || 0) + 1;
     });
   });
-  // 프로그램 내 진행 교육(QI_INTEG)의 지원 부서도 참여 현황에 포함 (막대 수치 = 클릭 상세의 '협력 지원' 수치)
-  QI_INTEG.forEach(function(c) {
-    if (c.partner) deptCounts[c.partner] = (deptCounts[c.partner] || 0) + 1;
-  });
+  window._qiIntegE = _integE; // 클릭 상세에서 동일 데이터 사용
 
   var barsEl = g('qi-dept-bars');
   if(barsEl) {
     var sorted = Object.entries(deptCounts).sort(function(a,b){return b[1]-a[1]});
     var maxC = sorted.length > 0 ? sorted[0][1] : 1;
-    var deptColors = {'책임':'#1B3A6B','어린이':'#059669','아토피':'#D97706','심뇌':'#DC2626','응급':'#9333EA','권역응급':'#9333EA','일차':'#2563EB'};
+    var deptColors = {'심뇌':'#B4185A'}; Object.keys(DC).forEach(function(k){ deptColors[k] = DC[k].c; });
     var barsHtml = '';
     sorted.forEach(function(item) {
       var dk = item[0], cnt = item[1];
@@ -3498,49 +3693,164 @@ function updateQiMetrics() {
   renderQiGrid();
 }
 
-// QI 상세 그리드: qiSelDept가 있으면 해당 부서가 주관·협력으로 참여한 교육만 표시
+// QI 상세 그리드: 포털 실데이터(통합교육 25건) 기반. qiSelDept가 있으면 해당 부서가 주관·지원으로 참여한 교육만 표시
 var qiSelDept = null;
-var QI_DEPT_FULL = {'책임':'책임의료사업부','일차':'일차의료개발센터','아토피':'아토피천식센터','공공':'공공의료사업부','응급':'권역응급의료센터','권역응급':'권역응급의료센터','어린이':'공공어린이재활병원','심뇌':'심뇌','지장보':'지역장애인보건의료센터'};
-function qiMatch(c, dk) {
-  if (!dk) return true;
-  var full = QI_DEPT_FULL[dk] || dk;
-  if (c.dept && c.dept.indexOf(full) >= 0) return true;
-  if (c.partners) return c.partners.some(function(p){ return p.name === dk; });
-  if (c.partner) return c.partner === dk;
-  return false;
+var qiDeptView = false; // 참여 부서 KPI 클릭 시 부서별 요약 표시
+function qiEduList() { return window._qiIntegE || EDUS.filter(function(e){ return e.pub !== false && e.type === '공동'; }); }
+
+// ── 성과 요약 카드 (관리자·회의용) ──
+function openPerfSummary(){
+  updateQiMetrics(); // 최신 값 보장
+  var o = QI_OFFICIAL;
+  g('pf-total').textContent = o.total;
+  g('pf-actual').textContent = o.actual;
+  g('pf-reduced').textContent = o.reduced;
+  g('pf-integ').textContent = o.integ;
+  g('pf-rate').textContent = o.ratePct + '%';
+  g('perf-asof') && (g('perf-asof').textContent = '기준일: ' + o.asOf + ' 취합 현황 · 출력일: ' + new Date().toLocaleDateString('ko-KR'));
+  // 실데이터 기반 막대·참여부서
+  var integE = qiEduList();
+  var bar = {}, dset = {};
+  integE.forEach(function(e){ dset[e.dk]=1; (e.coop||[]).forEach(function(c){ bar[c.dept]=(bar[c.dept]||0)+1; dset[c.dept]=1; }); });
+  var links = Object.values(bar).reduce(function(a,b){return a+b;},0);
+  g('pf-depts').textContent = Object.keys(dset).length + '개';
+  g('pf-links').textContent = links;
+  // 막대 렌더
+  var deptColors = {'심뇌':'#B4185A'}; Object.keys(DC).forEach(function(k){ deptColors[k]=DC[k].c; });
+  var sorted = Object.entries(bar).sort(function(a,b){return b[1]-a[1];});
+  var maxC = sorted.length ? sorted[0][1] : 1;
+  var html = '';
+  sorted.forEach(function(it){
+    var dk=it[0], cnt=it[1], pct=(cnt/maxC*100), col=deptColors[dk]||'#888';
+    var nm = (DC[dk] && DC[dk].short) || dk;
+    html += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:7px">'
+      + '<div style="width:64px;font-size:12px;font-weight:600;color:#334155;text-align:right;flex-shrink:0">'+nm+'</div>'
+      + '<div style="flex:1;background:#F1F5F9;border-radius:6px;height:22px;position:relative">'
+      + '<div style="width:'+pct+'%;background:'+col+';height:100%;border-radius:6px;min-width:26px"></div>'
+      + '<span style="position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:700;color:#334155">'+cnt+'</span>'
+      + '</div></div>';
+  });
+  g('pf-bars').innerHTML = html;
+  g('perf-modal').classList.add('on');
 }
-function qiIsHost(c, dk) { // 해당 부서가 이 교육의 주관인지
-  var full = QI_DEPT_FULL[dk] || dk;
-  return !!(c.dept && c.dept.indexOf(full) >= 0);
+function printPerfSummary(){
+  var area = g('perf-print-area');
+  if(!area) return;
+  var w = window.open('', '_blank');
+  if(!w){ toast('팝업이 차단되었습니다. 팝업 허용 후 다시 시도해 주세요.'); return; }
+  w.document.write('<!doctype html><html lang="ko"><head><meta charset="utf-8"><title>통합교육 성과 요약</title>'
+    + '<style>body{margin:0;font-family:"맑은 고딕","Malgun Gothic",sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}@page{size:A4;margin:14mm}</style>'
+    + '</head><body>' + area.innerHTML + '</body></html>');
+  w.document.close();
+  setTimeout(function(){ w.focus(); w.print(); }, 350);
 }
+// ── 통합교육 목록 CSV 내보내기 ──
+function exportQiCsv(){
+  var integE = qiEduList();
+  var rows = [['교육코드','주관부서','교육명','유형','일자','지원부서(역할)']];
+  integE.forEach(function(e){
+    var d = (e.sessions && e.sessions[0] && e.sessions[0].date) || e.date || '';
+    var sup = (e.coop||[]).map(function(c){ return ((DC[c.dept]&&DC[c.dept].short)||c.dept)+'('+(c.role||'')+')'; }).join(' / ');
+    var dkn = (DC[e.dk]&&DC[e.dk].name)||e.dk;
+    rows.push([e.code||'', dkn, e.title||'', '통합교육', d, sup]);
+  });
+  var csv = rows.map(function(r){ return r.map(function(c){ return '"'+String(c).replace(/"/g,'""')+'"'; }).join(','); }).join('\r\n');
+  var blob = new Blob(['\uFEFF'+csv], {type:'text/csv;charset=utf-8'}); // BOM으로 엑셀 한글 깨짐 방지
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = '통합교육_목록_'+new Date().toISOString().slice(0,10)+'.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('⬇ 통합교육 목록 CSV를 내려받았습니다');
+}
+// ── 교육 일정을 개인 캘린더(.ics)로 다운로드 ──
+function downloadIcs(eid){
+  var e = EDUS.find(function(x){ return x.id === eid; });
+  if(!e){ return; }
+  function pad(n){ return (n<10?'0':'')+n; }
+  function fmt(dt){ return dt.getFullYear()+pad(dt.getMonth()+1)+pad(dt.getDate())+'T'+pad(dt.getHours())+pad(dt.getMinutes())+'00'; }
+  var sess = (e.sessions && e.sessions.length) ? e.sessions : [{date:e.date,time:e.time,place:e.place,min:e.min,title:e.title}];
+  var lines = ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//일산병원 통합교육//KO','CALSCALE:GREGORIAN'];
+  var count = 0;
+  sess.forEach(function(s, i){
+    if(!s.date) return; // 일정 미정 회차는 제외
+    var t = (s.time || '09:00').split(':');
+    var start = new Date(s.date+'T'+pad(parseInt(t[0])||9)+':'+pad(parseInt(t[1])||0)+':00');
+    if(isNaN(start.getTime())) return;
+    var dur = (s.min || e.min || 60);
+    var endD = new Date(start.getTime() + dur*60000);
+    var uid = 'ilsan-'+e.id+'-'+i+'-'+Date.now()+'@nhimc';
+    var title = (s.title || e.title).replace(/[\r\n]+/g,' ');
+    var place = (s.place && s.place!=='-' && s.place!=='미정') ? s.place : '국민건강보험 일산병원';
+    var dept = (DC[e.dk] && DC[e.dk].name) || '';
+    var desc = (dept ? dept+' | ' : '') + (e.desc||'').replace(/[\r\n]+/g,' ');
+    lines.push('BEGIN:VEVENT','UID:'+uid,'DTSTAMP:'+fmt(new Date()),
+      'DTSTART:'+fmt(start),'DTEND:'+fmt(endD),
+      'SUMMARY:'+title,'LOCATION:'+place,'DESCRIPTION:'+desc,
+      'BEGIN:VALARM','TRIGGER:-P1D','ACTION:DISPLAY','DESCRIPTION:교육 하루 전 알림','END:VALARM',
+      'END:VEVENT');
+    count++;
+  });
+  lines.push('END:VCALENDAR');
+  if(!count){ toast('⚠ 일정이 확정된 회차가 없어 캘린더를 만들 수 없습니다'); return; }
+  var blob = new Blob([lines.join('\r\n')], {type:'text/calendar;charset=utf-8'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url; a.download = (e.title||'교육').replace(/[\\/:*?"<>|]/g,'_').slice(0,40)+'.ics';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('📅 캘린더 파일을 내려받았습니다 (하루 전 알림 포함)');
+}
+
+function qiIsHost(e, dk) { return e.dk === dk; }
+function qiIsPartner(e, dk) { return (e.coop || []).some(function(c){ return c.dept === dk; }); }
+function qiMatch(e, dk) { if (!dk) return true; return qiIsHost(e, dk) || qiIsPartner(e, dk); }
 function renderQiGrid() {
   var gridEl = g('qi-collab-grid');
   if(!gridEl) return;
+  var list = qiEduList();
   var cardsHtml = '';
+  if (!qiSelDept) {
+    var _sessTotal = list.reduce(function(a,e){ return a + ((e.sessions && e.sessions.length) || 1); }, 0);
+    cardsHtml += '<div style="grid-column:1/-1;font-size:12.5px;font-weight:700;color:#1B3A6B;padding:2px 0">🤝 통합교육 ' + list.length + '개 프로그램 · ' + _sessTotal + '회차 <span style="font-weight:400;color:var(--tx3)">— 카드를 클릭하면 교육 상세로 이동합니다</span></div>';
+  }
+  if (qiDeptView && !qiSelDept) {
+    // 부서별 주관·지원 요약 (칩 클릭 → 해당 부서 필터)
+    var _stat = {};
+    list.forEach(function(e){
+      _stat[e.dk] = _stat[e.dk] || {h:0,s:0}; _stat[e.dk].h++;
+      (e.coop||[]).forEach(function(c){ _stat[c.dept] = _stat[c.dept] || {h:0,s:0}; _stat[c.dept].s++; });
+    });
+    var _keys = Object.keys(_stat).sort(function(a,b){ return (_stat[b].h+_stat[b].s)-(_stat[a].h+_stat[a].s); });
+    var chips = _keys.map(function(dk){
+      var st = _stat[dk], color = (DC[dk] && DC[dk].c) || '#555', bg = (DC[dk] && DC[dk].bg) || '#F3F4F6';
+      return '<span onclick="qiBarClick(\'' + dk + '\')" style="cursor:pointer;display:inline-flex;align-items:center;gap:5px;background:' + bg + ';color:' + color + ';border:1px solid ' + color + '33;padding:4px 10px;border-radius:14px;font-size:11.5px;font-weight:700" title="클릭하면 이 부서의 참여 교육 목록을 표시합니다">' + dk + ' <span style="font-weight:500">주관 ' + st.h + ' · 지원 ' + st.s + '</span></span>';
+    }).join(' ');
+    cardsHtml += '<div style="grid-column:1/-1;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:2px 0"><span style="font-size:12px;font-weight:700;color:#1B3A6B">🏥 참여 부서 ' + _keys.length + '개:</span>' + chips + '</div>';
+  }
   if (qiSelDept) {
-    var all = QI_COLLAB.concat(QI_INTEG).filter(function(c){ return qiMatch(c, qiSelDept); });
-    var hostN = all.filter(function(c){ return qiIsHost(c, qiSelDept); }).length;
-    var coN = all.length - hostN;
+    var all = list.filter(function(e){ return qiMatch(e, qiSelDept); });
+    var hostN = all.filter(function(e){ return qiIsHost(e, qiSelDept); }).length;
+    var coN = all.filter(function(e){ return qiIsPartner(e, qiSelDept); }).length;
     cardsHtml += '<div style="grid-column:1/-1;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px;font-weight:700;color:#1B3A6B;padding:2px 0">'
       + '<span>🔍 ' + qiSelDept + ' 참여 통합교육 ' + all.length + '건</span>'
-      + '<span style="font-weight:600;color:#7C3AED;background:#F5F3FF;padding:2px 8px;border-radius:10px;font-size:11px">🤝 협력 지원 ' + coN + '건 <span style="color:#8B8FA3">← 막대그래프 수치</span></span>'
+      + '<span style="font-weight:600;color:#7C3AED;background:#F5F3FF;padding:2px 8px;border-radius:10px;font-size:11px">🤝 지원 ' + coN + '건 <span style="color:#8B8FA3">← 막대그래프 수치</span></span>'
       + '<span style="font-weight:600;color:#0B4DA2;background:#EFF6FF;padding:2px 8px;border-radius:10px;font-size:11px">📌 주관 ' + hostN + '건</span>'
       + '<button onclick="qiBarClick(qiSelDept)" style="font-size:11px;padding:3px 10px;border:1px solid var(--bd);background:#fff;border-radius:12px;cursor:pointer;font-family:inherit;color:var(--tx2)">✕ 전체 보기</button></div>';
   }
-  function roleBadge(c) {
+  function roleBadge(e) {
     if (!qiSelDept) return '';
-    return qiIsHost(c, qiSelDept)
-      ? ' <span style="font-size:10px;background:#EFF6FF;color:#0B4DA2;padding:2px 6px;border-radius:10px;font-weight:700">📌 주관</span>'
-      : ' <span style="font-size:10px;background:#F5F3FF;color:#7C3AED;padding:2px 6px;border-radius:10px;font-weight:700">🤝 협력</span>';
+    var b = '';
+    if (qiIsHost(e, qiSelDept)) b += ' <span style="font-size:10px;background:#EFF6FF;color:#0B4DA2;padding:2px 6px;border-radius:10px;font-weight:700">📌 주관</span>';
+    if (qiIsPartner(e, qiSelDept)) b += ' <span style="font-size:10px;background:#F5F3FF;color:#7C3AED;padding:2px 6px;border-radius:10px;font-weight:700">🤝 지원</span>';
+    return b;
   }
-  QI_COLLAB.forEach(function(c) {
-    if (!qiMatch(c, qiSelDept)) return;
-    var ph = c.partners.map(function(p) { return '<span class="qi-collab-dept">' + p.name + '</span>' + p.role; }).join(' / ');
-    cardsHtml += '<div class="qi-collab-card"><div class="qi-collab-title">' + c.title + roleBadge(c) + '</div><div class="qi-collab-meta">주관: ' + c.dept + '<br>협력: ' + ph + '</div></div>';
-  });
-  QI_INTEG.forEach(function(c) {
-    if (!qiMatch(c, qiSelDept)) return;
-    cardsHtml += '<div class="qi-collab-card"><div class="qi-collab-title">' + c.title + roleBadge(c) + '</div><div class="qi-collab-meta">주관: ' + c.dept + '<br>협력: <span class="qi-collab-dept">' + c.partner + '</span>' + c.topic + '</div></div>';
+  list.forEach(function(e) {
+    if (!qiMatch(e, qiSelDept)) return;
+    var host = DC[e.dk] ? DC[e.dk].name : e.dk;
+    var ph = (e.coop || []).map(function(c) { return '<span class="qi-collab-dept">' + c.dept + '</span>' + (c.role || ''); }).join(' / ');
+    var when = e.date ? (fmtDate(e.date) + (e.courseUnit && e.sessions ? ' 외 ' + (e.sessions.length - 1) + '회' : '')) : '일정 미정';
+    cardsHtml += '<div class="qi-collab-card" onclick="openPan(' + e.id + ')" style="cursor:pointer" title="클릭하면 교육 상세를 확인합니다"><div class="qi-collab-title">' + e.title + roleBadge(e) + '</div><div class="qi-collab-meta">주관: ' + host + ' · ' + when + '<br>지원: ' + (ph || '-') + '</div></div>';
   });
   gridEl.innerHTML = cardsHtml;
 }
@@ -3551,9 +3861,24 @@ function toggleQiDetail() {
   var t = document.querySelector('.qi-toggle');
   if (t) t.textContent = d.classList.contains('on') ? '▼ 통합교육 상세 접기' : '▶ 통합교육 상세 보기';
 }
+// KPI 카드 클릭: 통합교육 전체 목록 / 부서별 요약 표시
+function qiOpenDetail() {
+  var d = g('qi-detail');
+  if (d && !d.classList.contains('on')) toggleQiDetail();
+  if (d) d.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function qiKpiIntegClick() {
+  qiSelDept = null; qiDeptView = false;
+  updateQiMetrics(); qiOpenDetail();
+}
+function qiKpiDeptsClick() {
+  qiSelDept = null; qiDeptView = true;
+  updateQiMetrics(); qiOpenDetail();
+}
 // 부서 막대 클릭: 해당 부서 필터 토글 + 상세 자동 펼침
 function qiBarClick(dk) {
   qiSelDept = (qiSelDept === dk) ? null : dk;
+  qiDeptView = false;
   updateQiMetrics();
   var d = g('qi-detail');
   if (d && qiSelDept && !d.classList.contains('on')) toggleQiDetail();
@@ -3625,6 +3950,46 @@ function renderDash() {
       tb.appendChild(tr);
     });
   }
+
+  // ── 교육별 신청 현황 (정원 대비·마감 임박) ──
+  const es = g('dash-edu-status');
+  if (es) {
+    es.innerHTML = '';
+    // 신청이 1건 이상 있는 교육만 집계
+    const cntMap = {};
+    apps.forEach(a => { cntMap[a.eid] = (cntMap[a.eid]||0) + 1; });
+    const rows = Object.keys(cntMap).map(eid => EDUS.find(x => x.id === parseInt(eid))).filter(Boolean);
+    if (!rows.length) {
+      es.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--tx3)">신청이 접수된 교육이 없습니다</td></tr>';
+    } else {
+      // 마감 임박·충원율 높은 순 정렬
+      rows.sort((a,b) => {
+        const ca = cntMap[a.id]/(a.cap||1), cb = cntMap[b.id]/(b.cap||1);
+        return cb - ca;
+      });
+      rows.forEach(e => {
+        const d = DC[e.dk];
+        const cnt = cntMap[e.id];
+        const cap = e.cap || 0;
+        const pct = cap ? Math.round(cnt/cap*100) : null;
+        const dl = eduDeadline(e);
+        let barColor = '#16A34A';
+        if (pct !== null) { if (pct >= 100) barColor = '#CC2936'; else if (pct >= 80) barColor = '#C2410C'; }
+        const dlTxt = dl ? (fmtMD(dl.deadline) + (dl.closed ? ' <span style="color:#CC2936">(마감)</span>' : '')) : '—';
+        const eduDate = (e.sessions && e.sessions[0] && e.sessions[0].date) || e.date || '미정';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td style="max-width:200px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${e.title}</td>
+          <td><span style="font-size:10px;padding:2px 6px;border-radius:3px;background:${d.bg};color:${d.c};font-weight:700">${d.short}</span></td>
+          <td style="white-space:nowrap">${fmtMD(new Date(eduDate)) || eduDate}</td>
+          <td style="white-space:nowrap">${dlTxt}</td>
+          <td style="white-space:nowrap">${cap ? cap+'명' : '제한없음'} / <b>${cnt}명</b></td>
+          <td style="min-width:110px">${pct !== null
+            ? '<div style="display:flex;align-items:center;gap:6px"><div style="flex:1;background:#F1F5F9;border-radius:4px;height:14px;position:relative"><div style="width:'+Math.min(pct,100)+'%;background:'+barColor+';height:100%;border-radius:4px"></div></div><span style="font-size:11px;font-weight:700;color:'+barColor+'">'+pct+'%</span></div>'
+            : '<span style="color:var(--tx3);font-size:11px">—</span>'}</td>`;
+        es.appendChild(tr);
+      });
+    }
+  }
 }
 
 function exportCSV() {
@@ -3653,16 +4018,15 @@ const DEPT_INFO = {
     target: '고양권 지방자치단체, 보건·복지기관, 소방서, 의료기관 및 노인장기요양시설, 지역사회 보건의료인력',
     business: ['지역·필수의료 협력체계 구축 사업', '퇴원환자 지역사회 연계', '중증응급 이송·전원 및 진료협력', '감염 및 환자안전 관리 협력', '인력 양성'],
     roles: ['지역 필수보건의료 제공','원외 협의체 운영','감염관리 교육','응급·만성질환 교육','지역사회 연계'],
-    recent: '경기도의료원(의정부·파주·포천병원)과 책임의료기관 공동 심포지엄을 통해 중증응급 이송·전원 및 진료협력 성과 공유',
     contact: '031-900-3903', email: '946682@nhimc.or.kr', site: 'https://www.nhimc.or.kr'
   },
   일차: {
-    summary: '2023년 4월 국민건강보험공단이 한국형 주치의 모델 실증을 위해 설치한 부서입니다. 의사·간호사·사회복지사 등 다학제팀을 통한 환자 중심 일차의료를 실증하며, 등록 환자에게 건강관리부터 방문진료, 비대면 관리·교육 상담, 지역사회 자원 연계까지 제공합니다. 본 통합 교육 포털의 운영 주관 부서입니다.',
+    summary: '2023년 4월 국민건강보험공단이 한국형 주치의 모델 실증을 위해 설치한 부서입니다. 의사·간호사·사회복지사 등 다학제팀을 통한 환자 중심 일차의료를 실증하며, 등록 환자에게 건강관리부터 방문진료, 비대면 관리·교육 상담, 지역사회 자원 연계까지 제공합니다.',
     target: '고혈압·당뇨 등 만성질환자, 지역 의원·보건소 종사자, 지역주민',
     business: ['지역기반 환자중심 일차의료 모형 실증', '만성질환자 맞춤 건강관리·방문진료', '일차의료 통합관리 플랫폼·매뉴얼 개발', '통합돌봄 연계 및 지역 네트워크 구축'],
     roles: ['통합 교육 포털 운영','만성질환자 맞춤운동교실','노쇠예방 교육','영양관리 교육','일차의료 종사자 역량강화'],
     recent: '통합돌봄과 일차의료 시범사업 연계 전략을 추진하고, 인터랙티브 일차의료지원 매뉴얼·혈당지킴이 앱 등 플랫폼 개발',
-    contact: '031-900-4108', site: 'https://www.nhimc.or.kr'
+    contact: '031-900-4108', email: 'betz1103@nhimc.or.kr', site: 'https://primarycare.kr'
   },
   아토피: {
     summary: '질병관리청·경기도 지정, 경기도북부 아토피·천식 교육정보센터입니다. 전문 상담과 체계적인 교육으로 경기 북부 알레르기 질환 관리의 중추적 역할을 수행합니다.',
@@ -3670,7 +4034,7 @@ const DEPT_INFO = {
     business: ['아토피·천식 안심학교 운영 지원', '알레르기 질환 예방관리 교육', '교육·홍보 콘텐츠 제작 및 배포', '지역사회 상담서비스 및 지역 네트워크 구축'],
     roles: ['알레르기 질환 예방관리 교육','보건의료인 정기교육','안심학교 학생·교사 교육','보건교사 연수','1:1 상담 및 환자 교육'],
     recent: '구급대원 대상 아나필락시스 응급대응 교육으로 인지도를 30점대에서 90점대로 향상시키는 성과 달성',
-    contact: '1577-6013', email: 'allergy@nhimc.or.kr', site: 'https://www.nhimc.or.kr'
+    contact: '1577-6013', email: 'allergy@nhimc.or.kr', site: 'https://www.allergyeducenter.org'
   },
   공공: {
     summary: '지역사회-일산병원-공공기관 및 공기업과 연계협력을 통해 지역주민을 위해 보건교육을 실시하고, 취약계층에 대한 의료지원을 위한 사업을 수행합니다.',
@@ -3794,7 +4158,7 @@ function renderDeptInfo(dk) {
       ${targetHtml}
       ${bizHtml}
       <div class="dept-role-wrap">${rolesHtml}</div>
-      <div class="dept-recent" style="border-left:3px solid ${d.c}">💡 ${info.recent}</div>
+      ${info.recent ? `<div class="dept-recent" style="border-left:3px solid ${d.c}">💡 ${info.recent}</div>` : ''}
       <div class="dept-contact">${info.contact ? `📞 대표번호 ${info.contact} &nbsp;·&nbsp; ` : ''}✉️ <a href="mailto:${info.email || DEPT_EMAIL}" style="color:var(--tx2)">${info.email || DEPT_EMAIL}</a></div>
     </div>`;
 }
@@ -4236,6 +4600,24 @@ function homeSearch() {
 }
 
 // ═══════════════════════════════
+// ── 큰 글씨 모드 (접근성) ──
+function toggleBigFont(){
+  var on = document.body.classList.toggle('bigfont');
+  var btn = g('bigfont-btn');
+  if(btn) btn.classList.toggle('on', on);
+  try{ localStorage.setItem('ilsan_bigfont', on ? '1' : '0'); }catch(e){}
+  toast(on ? '가+ 큰 글씨 모드를 켰습니다' : '큰 글씨 모드를 껐습니다');
+}
+// 저장된 큰 글씨 설정 복원
+(function(){
+  try{
+    if(localStorage.getItem('ilsan_bigfont')==='1'){
+      document.body.classList.add('bigfont');
+      var b=g('bigfont-btn'); if(b) b.classList.add('on');
+    }
+  }catch(e){}
+})();
+
 // INIT
 // ═══════════════════════════════
 // Fix typo in cats
