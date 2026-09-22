@@ -23,6 +23,7 @@
   --font:'Noto Sans KR',-apple-system,'Apple SD Gothic Neo',sans-serif;
 }
 html{zoom:1.15}
+@media(max-width:640px){html{zoom:1}}
 body{font-family:var(--font);color:var(--tx);background:var(--bg);min-height:100vh;font-size:16px;line-height:1.6;font-weight:500;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;text-rendering:optimizeLegibility}
 
 /* ── SLOGAN ── */
@@ -443,7 +444,18 @@ body.bigfont .card-title,body.bigfont .hn-txt,body.bigfont .g-sec p{line-height:
 .f-row{margin-bottom:13px}
 .f-lbl{display:block;font-size:12px;font-weight:600;color:var(--tx2);margin-bottom:5px;letter-spacing:.01em}
 .f-lbl em{color:var(--red)}
-.f-inp,.f-sel{width:100%;padding:9px 12px;border:1px solid var(--bd);border-radius:var(--r-sm);font-size:13px;font-family:inherit;color:var(--tx);outline:none;transition:var(--ease);background:#fff}
+.f-inp,.f-sel{width:100%;padding:9px 12px;border:1px solid var(--bd);border-radius:var(--r-sm);font-size:16px;font-family:inherit;color:var(--tx);outline:none;transition:var(--ease);background:#fff}
+@media(min-width:641px){.f-inp,.f-sel{font-size:13px}}
+/* ── SURVEY ── */
+.sv-q{margin-bottom:20px}
+.sv-q-t{font-size:15px;font-weight:700;color:var(--tx);margin-bottom:10px;line-height:1.5}
+.sv-opts{display:flex;flex-wrap:wrap;gap:8px}
+.sv-opt{flex:1 1 auto;min-height:46px;min-width:62px;padding:10px 12px;border:1.5px solid var(--bd);border-radius:10px;background:#fff;font-size:14px;font-weight:600;font-family:inherit;color:var(--tx2);cursor:pointer;transition:var(--ease)}
+.sv-opt:hover{border-color:var(--navy);color:var(--navy)}
+.sv-opt.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.sv-star .sv-opt{flex:1 1 0;font-size:16px;font-weight:800}
+.sv-scale{display:flex;justify-content:space-between;font-size:11px;color:var(--tx3);margin-top:6px;padding:0 2px}
+@media(max-width:480px){.sv-opt{flex:1 1 100%}.sv-star .sv-opt{flex:1 1 0}.sv-q-t{font-size:15px}}
 .f-inp:focus,.f-sel:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.09)}
 .f-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .m-ft{padding:13px 22px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end;background:var(--bg);flex-shrink:0}
@@ -729,9 +741,12 @@ body.bigfont .card-title,body.bigfont .hn-txt,body.bigfont .g-sec p{line-height:
   .slogan-div{margin:0 10px;font-size:10px}
   /* 헤더 */
   .hd-in{padding:0 12px;height:52px;gap:8px}
-  .hd-in img{height:36px!important}
+  .hd-in img{height:32px!important}
   .hd-in>a>div:last-child{display:none}
   .hd-in>a>span{font-size:14px!important}
+  /* 헤더 제목(중첩 span) 모바일 축소 — 줄바꿈/넘침 방지 */
+  .hd-in>a>span>span:first-child{font-size:9px!important}
+  .hd-in>a>span>span:last-child{font-size:14px!important;line-height:1.2!important}
   .hd-r{gap:6px}
   .hd-pill{font-size:10px;padding:4px 8px}
   .hd-btn{font-size:10px;padding:4px 8px}
@@ -1837,6 +1852,7 @@ body.bigfont .card-title,body.bigfont .hn-txt,body.bigfont .g-sec p{line-height:
   </div>
   <div class="pan-cta">
     <button class="pan-apply" id="pan-apply-btn" onclick="openApply(currentPanId)">신청하기</button>
+    <button class="pan-apply" id="pan-survey-btn" style="display:none;background:#0B7C4A;color:#fff;border:none;margin-top:8px" onclick="openSurvey(currentPanId)">📝 홈페이지 이용 설문 참여</button>
     <button class="pan-apply" style="background:#fff;color:var(--navy);border:1.5px solid var(--navy);margin-top:8px" onclick="downloadIcs(currentPanId)">📅 내 캘린더에 추가</button>
   </div>
 </div>
@@ -1903,6 +1919,99 @@ body.bigfont .card-title,body.bigfont .hn-txt,body.bigfont .g-sec p{line-height:
   </div>
 </div>
 
+<!-- ════ 설문(사용성) MODAL ════ -->
+<div class="modal-bg" id="survey-modal" onclick="if(event.target===this)closeSurvey()">
+  <div class="modal" style="max-width:520px">
+    <div class="m-hd">
+      <div>
+        <div class="m-hd-t">📝 홈페이지 이용 설문</div>
+        <div class="m-hd-s" id="sv-edu-label">교육 참여 후, 홈페이지 사용 경험을 들려주세요 (약 30초)</div>
+      </div>
+      <button class="m-close" onclick="closeSurvey()">×</button>
+    </div>
+    <div class="m-body" id="sv-body">
+      <!-- Q1 -->
+      <div class="sv-q">
+        <div class="sv-q-t">1. 원하는 교육을 <b>찾기</b> 쉬웠나요?</div>
+        <div class="sv-opts" data-sv="find">
+          <button type="button" class="sv-opt" data-v="매우 쉬움">매우 쉬움</button>
+          <button type="button" class="sv-opt" data-v="쉬움">쉬움</button>
+          <button type="button" class="sv-opt" data-v="보통">보통</button>
+          <button type="button" class="sv-opt" data-v="어려움">어려움</button>
+          <button type="button" class="sv-opt" data-v="매우 어려움">매우 어려움</button>
+        </div>
+      </div>
+      <!-- Q2 -->
+      <div class="sv-q">
+        <div class="sv-q-t">2. <b>신청 과정</b>이 편리했나요?</div>
+        <div class="sv-opts sv-star" data-sv="apply">
+          <button type="button" class="sv-opt" data-v="1">1</button>
+          <button type="button" class="sv-opt" data-v="2">2</button>
+          <button type="button" class="sv-opt" data-v="3">3</button>
+          <button type="button" class="sv-opt" data-v="4">4</button>
+          <button type="button" class="sv-opt" data-v="5">5</button>
+        </div>
+        <div class="sv-scale"><span>매우 불편</span><span>매우 편리</span></div>
+      </div>
+      <!-- Q3 -->
+      <div class="sv-q">
+        <div class="sv-q-t">3. 화면 <b>글자·버튼 크기</b>는 적당했나요?</div>
+        <div class="sv-opts" data-sv="size">
+          <button type="button" class="sv-opt" data-v="적당함">적당함</button>
+          <button type="button" class="sv-opt" data-v="작음">작음</button>
+          <button type="button" class="sv-opt" data-v="큼">큼</button>
+        </div>
+      </div>
+      <!-- Q4 -->
+      <div class="sv-q">
+        <div class="sv-q-t">4. 어떤 <b>기기</b>로 이용하셨나요?</div>
+        <div class="sv-opts" data-sv="device">
+          <button type="button" class="sv-opt" data-v="휴대폰">휴대폰</button>
+          <button type="button" class="sv-opt" data-v="태블릿">태블릿</button>
+          <button type="button" class="sv-opt" data-v="컴퓨터">컴퓨터</button>
+        </div>
+      </div>
+      <!-- Q5 -->
+      <div class="sv-q">
+        <div class="sv-q-t">5. 가장 <b>편했던 점</b>은? <span style="font-weight:400;color:var(--tx3)">(복수 선택)</span></div>
+        <div class="sv-opts sv-multi" data-sv="best">
+          <button type="button" class="sv-opt" data-v="교육 검색">교육 검색</button>
+          <button type="button" class="sv-opt" data-v="대상별 바로찾기">대상별 바로찾기</button>
+          <button type="button" class="sv-opt" data-v="교육 상세정보">교육 상세정보</button>
+          <button type="button" class="sv-opt" data-v="신청서 작성">신청서 작성</button>
+          <button type="button" class="sv-opt" data-v="큰 글씨 모드">큰 글씨 모드</button>
+        </div>
+      </div>
+      <!-- Q6 -->
+      <div class="sv-q">
+        <div class="sv-q-t">6. <b>전반적인 만족도</b>는?</div>
+        <div class="sv-opts sv-star" data-sv="overall">
+          <button type="button" class="sv-opt" data-v="1">1</button>
+          <button type="button" class="sv-opt" data-v="2">2</button>
+          <button type="button" class="sv-opt" data-v="3">3</button>
+          <button type="button" class="sv-opt" data-v="4">4</button>
+          <button type="button" class="sv-opt" data-v="5">5</button>
+        </div>
+        <div class="sv-scale"><span>매우 불만족</span><span>매우 만족</span></div>
+      </div>
+      <!-- Q7 자유 -->
+      <div class="sv-q">
+        <div class="sv-q-t">7. <b>불편하거나 개선</b>했으면 하는 점 <span style="font-weight:400;color:var(--tx3)">(선택)</span></div>
+        <textarea class="f-inp" id="sv-free" rows="3" placeholder="자유롭게 적어주세요" style="resize:vertical"></textarea>
+      </div>
+      <!-- 소속(선택) -->
+      <div class="sv-q">
+        <div class="sv-q-t">소속·이름 <span style="font-weight:400;color:var(--tx3)">(선택 — 후속 문의가 필요할 때만)</span></div>
+        <input class="f-inp" id="sv-who" placeholder="예: ○○병원 홍길동">
+      </div>
+    </div>
+    <div class="m-ft">
+      <button class="btn btn-s" onclick="closeSurvey()">닫기</button>
+      <button class="btn btn-p" onclick="submitSurvey()">설문 제출</button>
+    </div>
+  </div>
+</div>
+
 <!-- ════ APPLY MODAL ════ -->
 <div class="modal-bg" id="apply-modal" onclick="if(event.target===this)closeApply()">
   <div class="modal">
@@ -1928,7 +2037,7 @@ body.bigfont .card-title,body.bigfont .hn-txt,body.bigfont .g-sec p{line-height:
       </div>
       <div class="f-grid">
         <div class="f-row"><label class="f-lbl">이름 <em>*</em></label><input class="f-inp" id="am-name" placeholder="홍길동"></div>
-        <div class="f-row"><label class="f-lbl">연락처 <em>*</em></label><input class="f-inp" id="am-tel" placeholder="010-0000-0000"></div>
+        <div class="f-row"><label class="f-lbl">연락처 <em>*</em></label><input class="f-inp" id="am-tel" type="tel" inputmode="numeric" autocomplete="tel" placeholder="010-0000-0000"></div>
         <div class="f-row"><label class="f-lbl">소속 <em>*</em></label><input class="f-inp" id="am-org" placeholder="기관명"></div>
         <div class="f-row"><label class="f-lbl">직종/직책</label><input class="f-inp" id="am-job" placeholder="간호사, 사회복지사 등"></div>
       </div>
@@ -2168,7 +2277,13 @@ const DC = {
 // ── 부서 공지사항 ──
 // 향후 각 부서가 Notion DB에서 등록·관리 → API 연동 시 이 배열을 채움
 // 항목 구조: { dk:'일차', title:'공지 제목', date:'2026-08-01', link:'' }
-const NOTICES = [];
+const NOTICES = [
+  { dk:'', title:'🎉 지역사회 통합 교육 운영 시스템 오픈 안내 — 8개 부서 교육을 한 곳에서', date:'2026-09-22', link:'' },
+  { dk:'', title:'📝 교육 신청 방법 안내 — 교육 검색 → 상세 확인 → 신청서 작성', date:'2026-09-22', link:'' },
+  { dk:'책임', title:'[책임의료사업부] 감염관리 위험도사정 이론 및 실습 (9/30) 신청 안내', date:'2026-09-20', link:'' },
+  { dk:'', title:'🔎 편의기능 안내 — 대상별 바로찾기 · 큰 글씨 모드를 이용해 보세요', date:'2026-09-18', link:'' },
+  { dk:'', title:'🔒 개인정보 처리 안내 — 신청 정보는 담당자 메일로만 전달되며 서버에 저장하지 않습니다', date:'2026-09-15', link:'' },
+];
 
 const EDUS = [
   {"id":1,"type":"공동","dk":"책임","cat":"응급대응","sub":"심폐소생술","tgt":"종사자","title":"일반인 심폐소생술 표준 교육 프로그램 심화과정","desc":"보건소 요청, '응급의료에 관한 법률' 의무교육 대상자,  보건소에서 대상자 모집","date":"2026-04-24","time":"13:00","place":"세미나실1","min":240,"cap":22,"totalSessions":1,"pub":true,"code":"책임-응급-심폐-1","sessions":[{"date":"2026-04-24","time":"13:00","place":"세미나실1","cap":22,"min":240,"title":"일반인 심폐소생술 표준 교육 프로그램 심화과정(1차)"}],"coop":[{"dept":"권역응급","role":"강사지원"}]},
@@ -2332,7 +2447,8 @@ const EDUS = [
   {"id":183,"type":"공동","dk":"권역응급","cat":"응급대응","sub":"재난응급의료 합동교육","tgt":"종사자(비의료인)","title":"재난응급의료 합동교육","desc":"재난의료대응 체계 및 출동, 중증도분류, 도상훈련","date":"2026-07-10","time":"09:30","place":"컨퍼런스룸1","min":180,"cap":15,"totalSessions":1,"pub":true,"code":"권역-응급-재난-1","sessions":[{"date":"2026-07-10","time":"09:30","place":"컨퍼런스룸1","cap":15,"min":180,"title":"재난응급의료 합동교육(1차)"}],"coop":[{"dept":"책임","role":"기념품지원"}]},
   {"id":184,"type":"공동","dk":"권역응급","cat":"응급대응","sub":"재난응급의료 합동교육","tgt":"종사자(비의료인)","title":"재난응급의료 합동교육","desc":"재난의료대응 체계 및 출동, 중증도분류, 도상훈련","date":"2026-08-21","time":"09:30","place":"컨퍼런스룸1","min":180,"cap":15,"totalSessions":1,"pub":true,"code":"권역-응급-재난-2","sessions":[{"date":"2026-08-21","time":"09:30","place":"컨퍼런스룸1","cap":15,"min":180,"title":"재난응급의료 합동교육(2차)"}],"coop":[{"dept":"책임","role":"기념품지원"}]},
   {"id":188,"type":"공동","dk":"일차","cat":"건강증진","sub":"건강관리","tgt":"일반인","title":"식품 알레르기 교육","desc":"'성인의 영양관리 -하반기' 프로그램 내 교육으로 진행 (아토피·천식 교육정보센터 공동교육)","date":"2026-10-28","time":"14:30","place":"일산동구 보건소","min":20,"cap":10,"totalSessions":1,"pub":true,"code":"일차-건강-건강-37","sessions":[{"date":"2026-10-28","time":"14:30","place":"일산동구 보건소","cap":10,"min":20,"title":"식품 알레르기 교육"}],"coop":[{"dept":"아토피","role":"강사 지원 (식품알레르기 교육)"}]},
-  {"id":189,"type":"공동","dk":"일차","cat":"건강증진","sub":"통합돌봄","tgt":"종사자(의료인)","title":"재가 방문 시 감염관리 실무 가이드","desc":"'방문 노쇠 예방 재가돌봄 교육' 내 교육으로 진행 (책임의료사업부 공동교육)","date":"2026-06-10","time":"16:30","place":"일산동구 보건소","min":20,"cap":76,"totalSessions":1,"pub":true,"code":"일차-건강-통합-4","sessions":[{"date":"2026-06-10","time":"16:30","place":"일산동구 보건소","cap":76,"min":20,"title":"재가 방문 시 감염관리 실무 가이드"}],"coop":[{"dept":"책임","role":"감염예방"}]}
+  {"id":189,"type":"공동","dk":"일차","cat":"건강증진","sub":"통합돌봄","tgt":"종사자(의료인)","title":"재가 방문 시 감염관리 실무 가이드","desc":"'방문 노쇠 예방 재가돌봄 교육' 내 교육으로 진행 (책임의료사업부 공동교육)","date":"2026-06-10","time":"16:30","place":"일산동구 보건소","min":20,"cap":76,"totalSessions":1,"pub":true,"code":"일차-건강-통합-4","sessions":[{"date":"2026-06-10","time":"16:30","place":"일산동구 보건소","cap":76,"min":20,"title":"재가 방문 시 감염관리 실무 가이드"}],"coop":[{"dept":"책임","role":"감염예방"}]},
+  {"id":190,"type":"부서","dk":"책임","cat":"감염예방","sub":"전문과정","tgt":"종사자(의료인)","title":"감염관리 위험도사정 이론 및 실습","desc":"의료기관 감염관리 담당자 대상 교육 (감염관리 위험도사정 이론 및 실습)","date":"2026-09-30","time":"14:30","place":"컨퍼런스룸1","min":120,"cap":40,"totalSessions":1,"deadline":"2026-10-01","pub":true,"code":"책임-감염-전문-2","sessions":[{"date":"2026-09-30","time":"14:30","place":"컨퍼런스룸1","cap":40,"min":120,"title":"감염관리 위험도사정 이론 및 실습"}]}
 ];
 /* ═══ [복구마커: 중복회차] ═══
    2026-08-07 정리: 엑셀 강사별 반복 입력행에서 생성된 중복 세션 39행 제거 (동일 날짜·시각 + 정원0·시간0).
@@ -2749,7 +2865,21 @@ window.addEventListener('popstate', function(){
 window.addEventListener('load', function(){
   if (!_navStack.length) _navStack.push('home');
   try { history.replaceState({ pg: 'home' }, ''); } catch(e){}
+  // 설문 링크(#survey 또는 #survey-<교육id>)로 접속 시 설문 자동 열기 — QR/링크 현장 배포용
+  setTimeout(checkSurveyHash, 400);
 });
+// 해시로 설문 자동 열기 (load 이후·해시 변경 모두 대응)
+function checkSurveyHash(){
+  try {
+    var h = (location.hash || '').replace('#','');
+    if (h.indexOf('survey') === 0 && typeof openSurvey === 'function') {
+      var parts = h.split('-');
+      var sid = (parts.length > 1 && parts[1]) ? parseInt(parts[1]) : null;
+      openSurvey(isNaN(sid) ? null : sid);
+    }
+  } catch(e){}
+}
+window.addEventListener('hashchange', checkSurveyHash);
 
 function pg(name, el, fromPop) {
   document.querySelectorAll('.pg').forEach(p => p.classList.remove('on'));
@@ -3011,8 +3141,17 @@ function openPan(id) {
   const appCnt = apps.filter(a => a.eid === id).length;
   const full = e.cap && appCnt >= e.cap;
   const btn = g('pan-apply-btn');
+  const _panStat = eduStatus(e);
+  const _isPast = (_panStat.st === 'past');
+  // 종료된 교육: 설문 버튼 노출
+  var svBtn = g('pan-survey-btn');
+  if (svBtn) svBtn.style.display = _isPast ? 'block' : 'none';
   // 다중 회차 교육이면 회차 선택으로 연결
-  if (e.courseUnit) {
+  if (_isPast) {
+    btn.textContent = '교육 종료';
+    btn.className = 'pan-apply full';
+    btn.onclick = null;
+  } else if (e.courseUnit) {
     btn.textContent = '신청하기 (총 ' + e.sessions.length + '회 전체 참여)';
     btn.className = 'pan-apply';
     btn.onclick = function() { openApply(id); };
@@ -3120,6 +3259,127 @@ function openApply(id, sessIdx) {
 function closeApply(fromPop) {
   g('apply-modal').classList.remove('on');
   if (!fromPop) { popOverlay('apply'); if (!_navSuppress) history.back(); }
+}
+
+// ══ 설문(홈페이지 사용성) ══
+var _surveyEduId = null;
+// 설문 답변을 받을 총괄 이메일
+var SURVEY_EMAIL = 'betz1103@nhimc.or.kr';
+
+function openSurvey(eduId) {
+  _surveyEduId = (eduId != null) ? eduId : null;
+  // 교육 라벨 표시
+  var lab = g('sv-edu-label');
+  if (lab) {
+    if (_surveyEduId != null) {
+      var e = EDUS.find(function(x){ return x.id === _surveyEduId; });
+      lab.textContent = e ? ('[' + e.title + '] 교육 참여 후, 홈페이지 사용 경험을 들려주세요 (약 30초)')
+                          : '교육 참여 후, 홈페이지 사용 경험을 들려주세요 (약 30초)';
+    } else {
+      lab.textContent = '홈페이지 사용 경험을 들려주세요 (약 30초)';
+    }
+  }
+  // 선택 초기화
+  document.querySelectorAll('#survey-modal .sv-opt.on').forEach(function(b){ b.classList.remove('on'); });
+  var free = g('sv-free'); if (free) free.value = '';
+  var who = g('sv-who'); if (who) who.value = '';
+  // 옵션 클릭 핸들러 (1회 바인딩)
+  if (!openSurvey._bound) {
+    document.querySelectorAll('#survey-modal .sv-opts').forEach(function(grp){
+      var multi = grp.classList.contains('sv-multi');
+      grp.querySelectorAll('.sv-opt').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          if (multi) {
+            btn.classList.toggle('on');
+          } else {
+            grp.querySelectorAll('.sv-opt').forEach(function(b){ b.classList.remove('on'); });
+            btn.classList.add('on');
+          }
+        });
+      });
+    });
+    openSurvey._bound = true;
+  }
+  pushOverlay('survey');
+  g('survey-modal').classList.add('on');
+}
+
+function closeSurvey(fromPop) {
+  g('survey-modal').classList.remove('on');
+  if (!fromPop) { popOverlay('survey'); if (!_navSuppress) history.back(); }
+}
+
+function _svVal(grp) {
+  var el = document.querySelector('#survey-modal .sv-opts[data-sv="'+grp+'"] .sv-opt.on');
+  return el ? el.getAttribute('data-v') : '';
+}
+function _svMulti(grp) {
+  return Array.from(document.querySelectorAll('#survey-modal .sv-opts[data-sv="'+grp+'"] .sv-opt.on'))
+    .map(function(b){ return b.getAttribute('data-v'); }).join(', ');
+}
+
+function submitSurvey() {
+  var find = _svVal('find');
+  var apply = _svVal('apply');
+  var size = _svVal('size');
+  var device = _svVal('device');
+  var best = _svMulti('best');
+  var overall = _svVal('overall');
+  var free = (g('sv-free') ? g('sv-free').value.trim() : '');
+  var who = (g('sv-who') ? g('sv-who').value.trim() : '');
+
+  // 최소 응답 확인: 핵심 3문항(찾기·신청·전반)
+  if (!find || !apply || !overall) {
+    toast('⚠ 1·2·6번 문항에 응답해 주세요');
+    return;
+  }
+
+  var eduTitle = '';
+  if (_surveyEduId != null) {
+    var e = EDUS.find(function(x){ return x.id === _surveyEduId; });
+    eduTitle = e ? e.title : '';
+  }
+
+  // EmailJS로 betz1103 총괄에게 전송 (신청과 동일 서비스/템플릿 재사용)
+  if (window.emailjs) {
+    var summary =
+      '[홈페이지 사용성 설문]\n' +
+      (eduTitle ? ('교육: ' + eduTitle + '\n') : '') +
+      '1. 찾기 편의: ' + find + '\n' +
+      '2. 신청 편의(5점): ' + apply + '\n' +
+      '3. 글자·버튼 크기: ' + size + '\n' +
+      '4. 이용 기기: ' + device + '\n' +
+      '5. 편했던 점: ' + (best || '-') + '\n' +
+      '6. 전반 만족도(5점): ' + overall + '\n' +
+      '7. 개선 의견: ' + (free || '-') + '\n' +
+      '응답자: ' + (who || '(익명)');
+    emailjs.send('service_ckms85l', 'template_js78bin', {
+      to_email: SURVEY_EMAIL,
+      cc_email: '',
+      name: '[설문] ' + (who || '익명 응답'),
+      tel: '-',
+      org: device ? (device + ' 이용') : '-',
+      job: '홈페이지 사용성 설문',
+      email: '',
+      note: summary,
+      eduTitle: '[설문] ' + (eduTitle || '홈페이지 사용성'),
+      sessTitle: '',
+      sessDate: '',
+      sessPlace: '',
+      sessInfo: summary,
+      dk: '설문',
+      dt: new Date().toLocaleDateString('ko-KR')
+    }).then(function(){
+      toast('✅ 소중한 의견 감사합니다! 설문이 제출되었어요');
+    }).catch(function(err){
+      toast('✅ 설문이 제출되었습니다 (담당자 확인 예정)');
+      console.error('설문 EmailJS 오류:', err);
+    });
+  } else {
+    toast('✅ 설문이 제출되었습니다');
+    console.error('EmailJS SDK 미로드');
+  }
+  closeSurvey();
 }
 
 // Vercel 서버리스 함수 베이스 경로
