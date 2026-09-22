@@ -501,6 +501,15 @@ body.bigfont .card-title,body.bigfont .hn-txt,body.bigfont .g-sec p{line-height:
 .nd-feat b{font-size:13.5px;color:var(--tx)}
 .nd-feat span{font-size:12.5px;color:var(--tx2);line-height:1.6}
 .nd-note{font-size:12.5px;color:#6B5B33;background:#FFF9EC;border:1px solid #F1E3C0;border-radius:8px;padding:11px 14px;line-height:1.7;margin-top:4px}
+/* ── NOTICE DETAIL VIEW (페이지 내 게시판형) ── */
+.nd-back{font-size:13px;font-weight:600;color:var(--tx2);background:var(--surface);border:1px solid var(--bd);border-radius:8px;padding:9px 16px;cursor:pointer;font-family:inherit;margin:20px 0 16px;transition:var(--ease)}
+.nd-back:hover{border-color:var(--navy);color:var(--navy)}
+.ndv-head{padding-bottom:16px;border-bottom:2px solid var(--bd);margin-bottom:20px}
+.ndv-meta{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ndv-date{font-size:12.5px;color:var(--tx3)}
+.ndv-title{font-size:20px;font-weight:800;color:var(--navy);line-height:1.4;letter-spacing:-.02em}
+.ndv-body{max-width:760px}
+@media(max-width:480px){.ndv-title{font-size:17px}}
 .f-inp:focus,.f-sel:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(37,99,235,.09)}
 .f-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .m-ft{padding:13px 22px;border-top:1px solid var(--bd);display:flex;gap:8px;justify-content:flex-end;background:var(--bg);flex-shrink:0}
@@ -836,8 +845,8 @@ body.bigfont .card-title,body.bigfont .hn-txt,body.bigfont .g-sec p{line-height:
   .m-body{padding:14px}
   /* 부서별 */
   .dept-layout{flex-direction:column}
-  .dept-sidebar{width:100%;position:static;flex-direction:row;flex-wrap:wrap;gap:4px}
-  .dsb-btn{padding:6px 10px;font-size:11px}
+  .dept-sidebar{width:100%;position:static;display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .dsb-btn{padding:10px 12px;font-size:11px}
   #dept-cards{grid-template-columns:1fr!important}
   /* 대시보드 */
   .qi-kpi-row{grid-template-columns:repeat(2,1fr)}
@@ -929,7 +938,7 @@ body.bigfont .card-title,body.bigfont .hn-txt,body.bigfont .g-sec p{line-height:
 .dept-role-tag{font-size:12.5px;padding:3px 11px;border-radius:20px;font-weight:600}
 .dept-recent{font-size:13.5px;color:var(--tx2);background:var(--bg);border-radius:8px;padding:9px 13px;margin-top:8px}
 .dept-contact{font-size:13px;color:var(--tx3);margin-top:10px}
-@media(max-width:680px){.dept-layout{flex-direction:column}.dept-sidebar{width:100%;position:static;flex-direction:row;flex-wrap:wrap}.dsb-btn{width:auto;flex:0 0 auto}}
+@media(max-width:680px){.dept-layout{flex-direction:column}.dept-sidebar{width:100%;position:static;display:grid;grid-template-columns:1fr 1fr;gap:8px}.dsb-btn{width:auto;flex:0 0 auto}.dsb-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dsb-btn>div:last-child{min-width:0;flex:1}}
 
 @media(max-width:900px){.stats,.kpi-g{grid-template-columns:repeat(2,1fr)}.ch-g{grid-template-columns:1fr}.steps::before{display:none}}
 @media(max-width:640px){.hd-in{padding:0 14px}.a11y-btn{display:none}.main,.nav{padding-left:14px;padding-right:14px}.home-top,.home-hero,.home-hero-in,.hh-desc{min-width:0;max-width:100%}.home-hero{overflow:hidden}.hh-desc{overflow-wrap:break-word;word-break:keep-all}.grid{grid-template-columns:1fr}.grid.lv .card{flex-direction:column}.grid.lv .card::before{width:100%;height:3px;bottom:auto;right:0}.grid.lv .card-foot{border-top:1px solid var(--bd2);border-left:none;width:100%;flex-direction:row;flex-wrap:wrap}.grid.lv .card-meta{flex-direction:row}.pan{max-width:100%}.f-grid{grid-template-columns:1fr}}
@@ -1440,8 +1449,16 @@ body.bigfont .card-title,body.bigfont .hn-txt,body.bigfont .g-sec p{line-height:
 
 <!-- ════ 공지사항 ════ -->
 <div class="pg" id="pg-notice">
-  <div class="pg-title"><h2>공지사항</h2><p>교육 운영 관련 공지 및 부서별 홍보 자료를 확인하세요</p></div>
-  <div id="notice-list"></div>
+  <!-- 목록 뷰 -->
+  <div id="notice-list-view">
+    <div class="pg-title"><h2>공지사항</h2><p>교육 운영 관련 공지 및 부서별 홍보 자료를 확인하세요</p></div>
+    <div id="notice-list"></div>
+  </div>
+  <!-- 상세 뷰 -->
+  <div id="notice-detail-view" style="display:none">
+    <button class="nd-back" onclick="closeNoticeView()">← 목록으로</button>
+    <div id="notice-detail-content"></div>
+  </div>
 </div>
 
 <!-- ════ 자료실 ════ -->
@@ -1971,72 +1988,6 @@ body.bigfont .card-title,body.bigfont .hn-txt,body.bigfont .g-sec p{line-height:
     <div class="done-body" id="done-body-text">신청 내역이 담당자에게 성공적으로 전달되었습니다.<br>접수 마감 후 <b>7일 이내</b>에 <b>확정 안내 문자</b>를 발송해 드립니다.</div>
     <div class="done-note">🎧 문자를 받지 못하신 경우, 교육 담당자에게 문의해 주세요.</div>
     <button class="done-ok" onclick="g('done-modal').classList.remove('on')">확인</button>
-  </div>
-</div>
-
-<!-- ════ 공지 상세 MODAL ════ -->
-<div class="modal-bg" id="notice-modal" onclick="if(event.target===this)closeNotice()">
-  <div class="modal" style="max-width:560px">
-    <div class="m-hd">
-      <div>
-        <div class="m-hd-t" id="nd-title">공지</div>
-        <div class="m-hd-s" id="nd-date"></div>
-      </div>
-      <button class="m-close" onclick="closeNotice()">×</button>
-    </div>
-    <div class="m-body" id="nd-body"></div>
-    <div class="m-ft">
-      <button class="btn btn-p" onclick="closeNotice()">확인</button>
-    </div>
-  </div>
-</div>
-
-<!-- ════ 사용 설명서(오픈 안내) MODAL ════ -->
-<div class="modal-bg" id="guide-modal" onclick="if(event.target===this)closeGuide()">
-  <div class="modal" style="max-width:600px">
-    <div class="m-hd">
-      <div>
-        <div class="m-hd-t">이용 안내</div>
-        <div class="m-hd-s">지역사회 통합 교육 운영 시스템 사용 방법</div>
-      </div>
-      <button class="m-close" onclick="closeGuide()">×</button>
-    </div>
-    <div class="m-body">
-      <!-- 환영 -->
-      <div class="gd-intro">
-        <div class="gd-intro-t">국민건강보험 일산병원 8개 부서의 교육을 한 곳에 모았습니다.</div>
-        <div class="gd-intro-d">시민·의료인·종사자 누구나 교육을 검색하고 신청할 수 있습니다.</div>
-      </div>
-
-      <!-- 사용법 -->
-      <div class="gd-block">
-        <div class="gd-block-t">사용 방법</div>
-        <ol class="gd-list">
-          <li><b>교육 찾기</b><span>홈 화면 검색창, 또는 대상별 바로찾기(시민·의료인·종사자)에서 원하는 교육을 찾습니다.</span></li>
-          <li><b>신청하기</b><span>교육을 눌러 상세 내용을 확인한 뒤 신청하기 → 이름·연락처·소속을 입력합니다.</span></li>
-          <li><b>일정 확인</b><span>상단 메뉴 교육안내 › 연간·월간 교육일정에서 전체 일정을 볼 수 있습니다.</span></li>
-          <li><b>큰 글씨</b><span>우측 상단 큰 글씨 버튼을 누르면 화면 글자가 커집니다.</span></li>
-          <li><b>신청 이후</b><span>신청 내역은 담당 부서로 전달되며, 마감 후 확정 안내 문자를 보내드립니다.</span></li>
-        </ol>
-      </div>
-
-      <!-- 로드맵 -->
-      <div class="gd-block">
-        <div class="gd-block-t">발전 로드맵</div>
-        <div class="gd-block-d">이용자 의견을 반영하여 단계적으로 발전시켜 갑니다.</div>
-        <div class="rm-list" id="gd-roadmap"></div>
-      </div>
-
-      <!-- 문의 -->
-      <div class="gd-block gd-block-last">
-        <div class="gd-block-t">문의</div>
-        <div class="gd-block-d">교육 담당 부서 또는 통합 운영 일차의료개발센터로 연락 주세요.</div>
-        <button class="gd-contact-btn" onclick="closeGuide();pg('contact',document.querySelector('[data-nav=dept]'))">담당자 연락처 보기 →</button>
-      </div>
-    </div>
-    <div class="m-ft">
-      <button class="btn btn-p" onclick="closeGuide()">확인</button>
-    </div>
   </div>
 </div>
 
@@ -3416,27 +3367,44 @@ function closeApply(fromPop) {
   if (!fromPop) { popOverlay('apply'); if (!_navSuppress) history.back(); }
 }
 
-// ══ 공지 상세 ══
+// ══ 공지 상세 (페이지 내 전환) ══
 function openNotice(id) {
   var n = NOTICES.find(function(x){ return x.id === id; });
   if (!n || !n.body) return;
+  // 공지 페이지가 아니면 먼저 공지 페이지로 이동
+  var np = g('pg-notice');
+  if (np && !np.classList.contains('on')) {
+    pg('notice', document.querySelector('[data-nav=prop]'));
+  }
   var dep = DC[n.dk];
-  // 제목에서 이모지·태그 유지, 날짜 표시
-  g('nd-title').textContent = n.title.replace(/\s—.*$/, '');
   var d = new Date(n.date);
-  g('nd-date').textContent = d.getFullYear() + '.' + (d.getMonth()+1) + '.' + d.getDate() + (dep ? ' · ' + dep.name : '');
-  g('nd-body').innerHTML = n.body;
-  pushOverlay('notice', closeNotice);
-  g('notice-modal').classList.add('on');
+  var dateStr = d.getFullYear() + '.' + (d.getMonth()+1) + '.' + d.getDate();
+  var tag = dep ? '<span class="hn-tag" style="background:'+dep.bg+';color:'+dep.c+'">'+dep.short+'</span>' : '<span class="hn-tag" style="background:#F1F5F9;color:#64748B">공지</span>';
+  g('notice-detail-content').innerHTML =
+    '<div class="ndv-head">'
+    + '<div class="ndv-meta">'+tag+'<span class="ndv-date">'+dateStr+(dep?' · '+dep.name:'')+'</span></div>'
+    + '<h2 class="ndv-title">'+n.title.replace(/\s—.*$/, '')+'</h2>'
+    + '</div>'
+    + '<div class="ndv-body">'+n.body+'</div>';
+  g('notice-list-view').style.display = 'none';
+  g('notice-detail-view').style.display = 'block';
+  window.scrollTo(0, 0);
+  pushOverlay('noticeview', closeNoticeView);
 }
-function closeNotice(fromPop) {
-  g('notice-modal').classList.remove('on');
-  if (!fromPop) { popOverlay('notice'); if (!_navSuppress) history.back(); }
+function closeNoticeView(fromPop) {
+  g('notice-detail-view').style.display = 'none';
+  g('notice-list-view').style.display = 'block';
+  window.scrollTo(0, 0);
+  if (!fromPop) { popOverlay('noticeview'); if (!_navSuppress) history.back(); }
 }
 
-// ══ 사용 설명서(오픈 안내) ══
+// ══ 사용 설명서(오픈 안내) — 공지 상세 뷰와 통일 ══
 function openGuide() {
-  // 로드맵 렌더 (설명서 안)
+  // 공지 페이지가 아니면 먼저 이동
+  var np = g('pg-notice');
+  if (np && !np.classList.contains('on')) {
+    pg('notice', document.querySelector('[data-nav=prop]'));
+  }
   var ROADMAP = [
     { step:'1', label:'완료', state:'done', title:'통합 교육 신청 시스템 오픈', desc:'8개 부서 교육을 한 곳에서 검색·신청' },
     { step:'2', label:'진행중', state:'now', title:'온라인 신청 · 사용성 설문 운영', desc:'교육 신청 접수 + 이용자 피드백 수집' },
@@ -3446,25 +3414,38 @@ function openGuide() {
   ];
   var stColor = { done:'#0B7C4A', now:'#0B4DA2', plan:'#94A3B8', idea:'#94A3B8' };
   var stBg = { done:'#EEF6F1', now:'#EEF2F9', plan:'#F1F5F9', idea:'#F1F5F9' };
-  var rm = g('gd-roadmap');
-  if (rm) {
-    rm.innerHTML = ROADMAP.map(function(r){
-      var c = stColor[r.state], bg = stBg[r.state];
-      return '<div class="rm-item">'
-        + '<div class="rm-line"><div class="rm-dot" style="background:'+c+'">'+ (r.state==='done'?'✓':r.step) +'</div></div>'
-        + '<div class="rm-body">'
-        + '<div class="rm-top"><span class="rm-title">'+r.title+'</span>'
-        + '<span class="rm-badge" style="background:'+bg+';color:'+c+'">'+r.label+'</span></div>'
-        + '<div class="rm-desc">'+r.desc+'</div>'
-        + '</div></div>';
-    }).join('');
-  }
-  pushOverlay('guide', closeGuide);
-  g('guide-modal').classList.add('on');
-}
-function closeGuide(fromPop) {
-  g('guide-modal').classList.remove('on');
-  if (!fromPop) { popOverlay('guide'); if (!_navSuppress) history.back(); }
+  var roadmapHtml = ROADMAP.map(function(r){
+    var c = stColor[r.state], bg = stBg[r.state];
+    return '<div class="rm-item"><div class="rm-line"><div class="rm-dot" style="background:'+c+'">'+ (r.state==='done'?'✓':r.step) +'</div></div>'
+      + '<div class="rm-body"><div class="rm-top"><span class="rm-title">'+r.title+'</span>'
+      + '<span class="rm-badge" style="background:'+bg+';color:'+c+'">'+r.label+'</span></div>'
+      + '<div class="rm-desc">'+r.desc+'</div></div></div>';
+  }).join('');
+  var body =
+    '<div class="gd-intro"><div class="gd-intro-t">국민건강보험 일산병원 8개 부서의 교육을 한 곳에 모았습니다.</div>'
+    + '<div class="gd-intro-d">시민·의료인·종사자 누구나 교육을 검색하고 신청할 수 있습니다.</div></div>'
+    + '<div class="gd-block"><div class="gd-block-t">사용 방법</div><ol class="gd-list">'
+    + '<li><b>교육 찾기</b><span>홈 화면 검색창, 또는 대상별 바로찾기(시민·의료인·종사자)에서 원하는 교육을 찾습니다.</span></li>'
+    + '<li><b>신청하기</b><span>교육을 눌러 상세 내용을 확인한 뒤 신청하기 → 이름·연락처·소속을 입력합니다.</span></li>'
+    + '<li><b>일정 확인</b><span>상단 메뉴 교육안내 › 연간·월간 교육일정에서 전체 일정을 볼 수 있습니다.</span></li>'
+    + '<li><b>큰 글씨</b><span>우측 상단 큰 글씨 버튼을 누르면 화면 글자가 커집니다. (PC·태블릿)</span></li>'
+    + '<li><b>신청 이후</b><span>신청 내역은 담당 부서로 전달되며, 마감 후 확정 안내 문자를 보내드립니다.</span></li>'
+    + '</ol></div>'
+    + '<div class="gd-block"><div class="gd-block-t">발전 로드맵</div>'
+    + '<div class="gd-block-d">이용자 의견을 반영하여 단계적으로 발전시켜 갑니다.</div>'
+    + '<div class="rm-list">'+roadmapHtml+'</div></div>'
+    + '<div class="gd-block gd-block-last"><div class="gd-block-t">문의</div>'
+    + '<div class="gd-block-d">교육 담당 부서 또는 통합 운영 일차의료개발센터로 연락 주세요.</div>'
+    + '<button class="gd-contact-btn" onclick="closeNoticeView();pg(\'contact\',document.querySelector(\'[data-nav=dept]\'))">담당자 연락처 보기 →</button></div>';
+  g('notice-detail-content').innerHTML =
+    '<div class="ndv-head"><div class="ndv-meta"><span class="hn-tag" style="background:#EEF2F9;color:#0B4DA2">안내</span>'
+    + '<span class="ndv-date">이용 안내</span></div>'
+    + '<h2 class="ndv-title">지역사회 통합 교육 운영 시스템 이용 안내</h2></div>'
+    + '<div class="ndv-body">'+body+'</div>';
+  g('notice-list-view').style.display = 'none';
+  g('notice-detail-view').style.display = 'block';
+  window.scrollTo(0, 0);
+  pushOverlay('noticeview', closeNoticeView);
 }
 
 // ══ 설문(홈페이지 사용성) ══
